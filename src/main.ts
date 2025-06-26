@@ -6,18 +6,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS with multiple origins for React Native development
-  const corsOrigins = process.env.CORS_ORIGIN 
-    ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
-    : ['http://localhost:8081'];
-  
-  app.enableCors({
-    origin: process.env.NODE_ENV === 'development' 
-      ? true // Allow all origins in development
-      : corsOrigins,
-    credentials: true,
-  });
-
   // Global prefix
   app.setGlobalPrefix(process.env.API_PREFIX || 'api');
 
