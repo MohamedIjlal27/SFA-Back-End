@@ -18,16 +18,6 @@ async function bootstrap() {
     }),
   );
 
-  // Simple health check endpoint
-  app.get('/health', (req, res) => {
-    res.json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      env: process.env.NODE_ENV,
-      database: process.env.DATABASE_URL ? 'configured' : 'missing'
-    });
-  });
-
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Smartrix Mobile API')
@@ -44,7 +34,6 @@ async function bootstrap() {
   
   console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 Swagger documentation: http://localhost:${port}/docs`);
-  console.log(`🏥 Health check: http://localhost:${port}/health`);
 }
 
 bootstrap(); 
