@@ -1,16 +1,16 @@
 {
   "version": 2,
   "builds": [
-    { 
-      "src": "api/**/*.ts", 
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["generated/**/*"]
-      }
+    {
+      "src": "src/main.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
-    { "src": "/api/login/location/store", "dest": "/api/login-location-store.ts" }
+    {
+      "src": "/(.*)",
+      "dest": "src/main.ts"
+    }
   ],
   "env": {
     "NODE_ENV": "production"
