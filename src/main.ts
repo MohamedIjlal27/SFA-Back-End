@@ -6,7 +6,19 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   console.log('🚀 Starting NestJS application...');
   console.log('Environment:', process.env.NODE_ENV);
+  
+  // Validate required environment variables
+  const requiredEnvVars = ['DATABASE_URL'];
+  const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+  
+  if (missingEnvVars.length > 0) {
+    console.error('❌ Missing required environment variables:', missingEnvVars);
+    console.error('Please ensure these are set in your Vercel environment variables');
+    process.exit(1);
+  }
+  
   console.log('Database URL configured:', !!process.env.DATABASE_URL);
+  console.log('Database URL preview:', process.env.DATABASE_URL?.substring(0, 50) + '...');
   
   const app = await NestFactory.create(AppModule);
 
