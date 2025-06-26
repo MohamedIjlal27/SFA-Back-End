@@ -4,10 +4,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  console.log('🚀 Starting NestJS application...');
+  console.log('Environment:', process.env.NODE_ENV);
+  console.log('Database URL configured:', !!process.env.DATABASE_URL);
+  
   const app = await NestFactory.create(AppModule);
 
   // Global prefix
-  app.setGlobalPrefix(process.env.API_PREFIX || 'api');
+  const apiPrefix = process.env.API_PREFIX || 'api';
+  app.setGlobalPrefix(apiPrefix);
+  console.log('API Prefix:', apiPrefix);
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -28,12 +34,17 @@ async function bootstrap() {
   
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
+  console.log('📚 Swagger documentation configured at /docs');
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
   
   console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 Swagger documentation: http://localhost:${port}/docs`);
+  console.log(`🏥 Health check: http://localhost:${port}/${apiPrefix}/health`);
 }
 
-bootstrap(); 
+bootstrap().catch(error => {
+  console.error('❌ Failed to start application:', error);
+  process.exit(1);
+}); 
