@@ -45,7 +45,21 @@ async function bootstrap() {
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  
+  // Use CDN assets for Swagger UI to avoid 404 errors on Vercel
+  SwaggerModule.setup('docs', app, document, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Smartrix Mobile API Documentation',
+    customfavIcon: '/favicon.ico',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+    },
+  });
+  
   console.log('📚 Swagger documentation configured at /docs');
 
   const port = process.env.PORT || 3000;
