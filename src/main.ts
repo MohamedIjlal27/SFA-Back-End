@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
   console.log('🚀 Starting NestJS application...');
@@ -20,7 +22,7 @@ async function bootstrap() {
   console.log('Database URL configured:', !!process.env.DATABASE_URL);
   console.log('Database URL preview:', process.env.DATABASE_URL?.substring(0, 50) + '...');
   
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Global prefix
   const apiPrefix = process.env.API_PREFIX || 'api';
@@ -46,11 +48,11 @@ async function bootstrap() {
   
   const document = SwaggerModule.createDocument(app, config);
   
-  // Use CDN assets for Swagger UI to avoid 404 errors on Vercel
-  SwaggerModule.setup('docs', app, document, {
-    customCss: '.swagger-ui .topbar { display: none }',
+  // Custom Swagger HTML with CDN assets
+  const customOptions = {
     customSiteTitle: 'Smartrix Mobile API Documentation',
     customfavIcon: '/favicon.ico',
+    customCss: '.swagger-ui .topbar { display: none }',
     swaggerOptions: {
       persistAuthorization: true,
       displayRequestDuration: true,
@@ -58,8 +60,16 @@ async function bootstrap() {
       showExtensions: true,
       showCommonExtensions: true,
     },
-  });
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+    ],
+    customCssUrl: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    ],
+  };
   
+  SwaggerModule.setup('docs', app, document, customOptions);
   console.log('📚 Swagger documentation configured at /docs');
 
   const port = process.env.PORT || 3000;
