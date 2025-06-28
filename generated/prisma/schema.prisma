@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   output        = "../generated/prisma"
@@ -15,37 +9,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User/Executive model for authentication
 model User {
-  id              String   @id @default(cuid())
-  exeId           String   @unique // Executive ID from Sage 300
-  companyId       String   @default("LGLMKT")
-  password        String
-  leader          String?
-  areaCode        String?
-  exeName         String?
-  exeNameOrig     String?
-  role            String?
-  areaName        String?
-  region          String?
-  subdivisionCode String?
-  imageLocation   String?
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
+  id                String             @id @default(cuid())
+  exeId             String             @unique
+  companyId         String             @default("LGLMKT")
+  password          String
+  leader            String?
+  areaCode          String?
+  exeName           String?
+  exeNameOrig       String?
+  role              String?
+  areaName          String?
+  region            String?
+  subdivisionCode   String?
+  imageLocation     String?
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   customers         Customer[]
+  documentNumbering DocumentNumbering?
   orders            Order[]
-  documentNumbering DocumentNumbering[]
 
   @@map("users")
 }
 
-// Customer model
 model Customer {
   id              String    @id @default(cuid())
-  customerId      String    @unique // Customer ID from Sage 300
+  customerId      String    @unique
   exeId           String
   customerName    String
   addr1           String?
@@ -72,64 +62,55 @@ model Customer {
   isInactive      Boolean   @default(false)
   isHold          Boolean   @default(false)
   followupStatus  String?
-  location        String? // Format: "latitude,longitude"
+  location        String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-
-  // Relations
-  user     User      @relation(fields: [exeId], references: [exeId])
-  orders   Order[]
-  invoices Invoice[]
-  payments Payment[]
+  user            User      @relation(fields: [exeId], references: [exeId])
+  invoices        Invoice[]
+  orders          Order[]
+  payments        Payment[]
 
   @@map("customers")
 }
 
-// Product/Item model
 model Product {
-  id                 String   @id @default(cuid())
-  itemCode           String   @unique
+  id                 String      @id @default(cuid())
+  itemCode           String      @unique
   description        String
   category           String?
   subCategory        String?
   categoryCode       String?
   uom                String?
-  price              Decimal  @db.Decimal(15, 2)
-  qty                Int      @default(0)
+  price              Decimal     @db.Decimal(15, 2)
+  qty                Int         @default(0)
   imageUrl           String?
-  discountAmount     Decimal  @default(0) @db.Decimal(15, 2)
-  discountPercentage Decimal  @default(0) @db.Decimal(5, 2)
-  isActive           Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  // Relations
-  orderItems OrderItem[]
+  discountAmount     Decimal     @default(0) @db.Decimal(15, 2)
+  discountPercentage Decimal     @default(0) @db.Decimal(5, 2)
+  isActive           Boolean     @default(true)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  orderItems         OrderItem[]
 
   @@map("products")
 }
 
-// Order model
 model Order {
-  id            String   @id @default(cuid())
-  orderNumber   String   @unique
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
   customerId    String
   salespersonId String
-  status        String   @default("Pending") // Pending, Processed, Failed
+  status        String      @default("Pending")
   errorMessage  String?
-  jsonPayload   String // JSON string of order details
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // Relations
-  customer   Customer    @relation(fields: [customerId], references: [customerId])
-  user       User        @relation(fields: [salespersonId], references: [exeId], onDelete: NoAction, onUpdate: NoAction)
-  orderItems OrderItem[]
+  jsonPayload   String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  orderItems    OrderItem[]
+  customer      Customer    @relation(fields: [customerId], references: [customerId])
+  user          User        @relation(fields: [salespersonId], references: [exeId], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("orders")
 }
 
-// Order Item model
 model OrderItem {
   id          String   @id @default(cuid())
   orderId     String
@@ -139,15 +120,12 @@ model OrderItem {
   discount    Decimal  @default(0) @db.Decimal(15, 2)
   totalAmount Decimal  @db.Decimal(15, 2)
   createdAt   DateTime @default(now())
-
-  // Relations
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id])
 
   @@map("order_items")
 }
 
-// Invoice model for customer invoices
 model Invoice {
   id         String   @id @default(cuid())
   customerId String
@@ -161,14 +139,11 @@ model Invoice {
   refNo      String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  // Relations
-  customer Customer @relation(fields: [customerId], references: [customerId])
+  customer   Customer @relation(fields: [customerId], references: [customerId])
 
   @@map("invoices")
 }
 
-// Payment model for customer payments
 model Payment {
   id         String   @id @default(cuid())
   customerId String
@@ -178,42 +153,35 @@ model Payment {
   remUnappl  Decimal  @db.Decimal(15, 2)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  // Relations
-  customer Customer @relation(fields: [customerId], references: [customerId])
+  customer   Customer @relation(fields: [customerId], references: [customerId])
 
   @@map("payments")
 }
 
-// Document Numbering model for order generation
 model DocumentNumbering {
   id            String   @id @default(cuid())
   salespersonId String   @unique
   prefix        String
   currentNumber Int      @default(1)
   lastUpdated   DateTime @default(now())
-
-  // Relations
-  user User @relation(fields: [salespersonId], references: [exeId])
+  user          User     @relation(fields: [salespersonId], references: [exeId])
 
   @@map("document_numbering")
 }
 
-// User Location model for tracking user locations
 model UserLocation {
   id          String   @id @default(cuid())
-  userCode    String // Executive ID
+  userCode    String
   latitude    Float
   longitude   Float
   description String?
   timestamp   DateTime @default(now())
-  type        String   @default("login") // login, logout, visit, etc.
+  type        String   @default("login")
   createdAt   DateTime @default(now())
 
   @@map("user_locations")
 }
 
-// Sales Report model for analytics
 model SalesReport {
   id           String   @id @default(cuid())
   date         DateTime
