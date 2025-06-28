@@ -14,5 +14,18 @@
       "src": "/(.*)",
       "dest": "src/main.ts"
     }
-  ]
+  ],
+  "functions": {
+    "src/main.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "PRISMA_GENERATE_DATAPROXY": "true"
+  },
+  "build": {
+    "env": {
+      "PRISMA_GENERATE_DATAPROXY": "true"
+    }
+  }
 } 

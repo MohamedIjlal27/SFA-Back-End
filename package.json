@@ -5,7 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "nest build",
-    "build:vercel": "prisma generate && nest build",
+    "build:vercel": "node vercel-build.js",
+    "postinstall": "prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
