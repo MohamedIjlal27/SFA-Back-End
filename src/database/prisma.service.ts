@@ -11,7 +11,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
           url: process.env.DATABASE_URL,
         },
       },
-      // Add connection pooling for Vercel serverless
+      // Add connection pooling for serverless environments
       ...(process.env.NODE_ENV === 'production' && {
         datasources: {
           db: {
@@ -36,15 +36,17 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       
       // In production, we might want to retry or handle this differently
       if (process.env.NODE_ENV === 'production') {
-        console.log('🔄 Retrying database connection in 5 seconds...');
+        console.log('🔄 Retrying database connection in 3 seconds...');
         setTimeout(async () => {
           try {
             await this.$connect();
             console.log('✅ Successfully connected to database on retry');
           } catch (retryError) {
             console.error('❌ Failed to connect to database on retry:', retryError);
+            // Don't throw error in production to allow app to start
+            console.log('⚠️ Continuing without database connection...');
           }
-        }, 5000);
+        }, 3000);
       } else {
         throw error;
       }
@@ -57,6 +59,17 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       console.log('🔌 Disconnected from database');
     } catch (error) {
       console.error('❌ Error disconnecting from database:', error);
+    }
+  }
+
+  // Add a method to check database health
+  async healthCheck() {
+    try {
+      await this.$queryRaw`SELECT 1`;
+      return true;
+    } catch (error) {
+      console.error('Database health check failed:', error);
+      return false;
     }
   }
 } 
