@@ -53,9 +53,9 @@ export class ReportsService {
     const previousPeriodEnd = new Date(currentPeriodStart);
     previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
 
-    // Get current period customers
+    // Get current period customers - group only by customerId to avoid duplicates
     const currentCustomers = await this.prisma.salesReport.groupBy({
-      by: ['customerId', 'customerName', 'city', 'province'],
+      by: ['customerId'],
       where: {
         netSales: { gt: 0 },
         date: {
@@ -99,22 +99,53 @@ export class ReportsService {
       previousDataMap.set(customer.customerId, Number(customer._sum.netSales));
     });
 
+    // Get metadata for each customer (most common values)
+    const customerMetadata = await Promise.all(
+      currentCustomers.map(async (customer) => {
+        const metadata = await this.prisma.salesReport.findFirst({
+          where: {
+            customerId: customer.customerId,
+            netSales: { gt: 0 },
+            date: {
+              gte: currentPeriodStart,
+              lte: currentPeriodEnd,
+            },
+          },
+          select: {
+            customerName: true,
+            city: true,
+            province: true,
+          },
+          orderBy: {
+            netSales: 'desc',
+          },
+        });
+        return {
+          customerId: customer.customerId,
+          customerName: metadata?.customerName || 'Unknown Customer',
+          city: metadata?.city || 'Unknown City',
+          province: metadata?.province || 'Unknown Province',
+        };
+      })
+    );
+
     // Calculate total sales for percentage calculation
     const totalSales = currentCustomers.reduce(
       (sum, customer) => sum + Number(customer._sum.netSales),
       0,
     );
 
-    return currentCustomers.map(customer => {
+    return currentCustomers.map((customer, index) => {
       const currentSales = Number(customer._sum.netSales);
       const previousSales = previousDataMap.get(customer.customerId) || 0;
       const growth = previousSales > 0 ? ((currentSales - previousSales) / previousSales) * 100 : 0;
+      const metadata = customerMetadata[index];
 
       return {
         customerId: customer.customerId,
-        customerName: customer.customerName,
-        city: customer.city,
-        province: customer.province,
+        customerName: metadata.customerName,
+        city: metadata.city,
+        province: metadata.province,
         totalSales: currentSales,
         totalPurchases: customer._count.id,
         percentageOfTotal: totalSales > 0 ? (currentSales / totalSales) * 100 : 0,
@@ -138,9 +169,9 @@ export class ReportsService {
     const previousPeriodEnd = new Date(currentPeriodStart);
     previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
 
-    // Get current period products
+    // Get current period products - group only by productId to avoid duplicates
     const currentProducts = await this.prisma.salesReport.groupBy({
-      by: ['productId', 'productName', 'category', 'subCategory'],
+      by: ['productId'],
       where: {
         netSales: { gt: 0 },
         date: {
@@ -184,22 +215,53 @@ export class ReportsService {
       previousDataMap.set(product.productId, Number(product._sum.netSales));
     });
 
+    // Get metadata for each product (most common values)
+    const productMetadata = await Promise.all(
+      currentProducts.map(async (product) => {
+        const metadata = await this.prisma.salesReport.findFirst({
+          where: {
+            productId: product.productId,
+            netSales: { gt: 0 },
+            date: {
+              gte: currentPeriodStart,
+              lte: currentPeriodEnd,
+            },
+          },
+          select: {
+            productName: true,
+            category: true,
+            subCategory: true,
+          },
+          orderBy: {
+            netSales: 'desc',
+          },
+        });
+        return {
+          productId: product.productId,
+          productName: metadata?.productName || 'Unknown Product',
+          category: metadata?.category || 'Unknown Category',
+          subCategory: metadata?.subCategory || 'Unknown Subcategory',
+        };
+      })
+    );
+
     // Calculate total sales for percentage calculation
     const totalSales = currentProducts.reduce(
       (sum, product) => sum + Number(product._sum.netSales),
       0,
     );
 
-    return currentProducts.map(product => {
+    return currentProducts.map((product, index) => {
       const currentSales = Number(product._sum.netSales);
       const previousSales = previousDataMap.get(product.productId) || 0;
       const growth = previousSales > 0 ? ((currentSales - previousSales) / previousSales) * 100 : 0;
+      const metadata = productMetadata[index];
 
       return {
         productId: product.productId,
-        productName: product.productName,
-        category: product.category,
-        subCategory: product.subCategory,
+        productName: metadata.productName,
+        category: metadata.category,
+        subCategory: metadata.subCategory,
         quantity: Number(product._sum.quantity),
         totalSales: currentSales,
         percentageOfTotal: totalSales > 0 ? (currentSales / totalSales) * 100 : 0,
