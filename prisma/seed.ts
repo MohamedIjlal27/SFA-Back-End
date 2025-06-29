@@ -1358,6 +1358,568 @@ async function main() {
   }
   console.log('✅ Products created:', products.length);
 
+  // Build a map from itemCode to id
+  const productMap: Record<string, string> = {};
+  for (const product of products) {
+    productMap[product.itemCode] = product.id;
+  }
+
+  // Create sample orders (50 total records)
+  const orderData = [
+    // June 2025 Orders (20 orders)
+    {
+      orderNumber: 'ORD-1001',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'pending',
+      createdAt: new Date('2025-06-01T09:00:00Z'),
+      items: [
+        { productId: 'HW001', quantity: 10, unitPrice: 500, discount: 0, totalAmount: 5000 },
+        { productId: 'LT001', quantity: 5, unitPrice: 250, discount: 0, totalAmount: 1250 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1002',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-06-02T10:00:00Z'),
+      items: [
+        { productId: 'HW002', quantity: 3, unitPrice: 1200, discount: 0, totalAmount: 3600 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1003',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'processing',
+      createdAt: new Date('2025-06-03T11:00:00Z'),
+      items: [
+        { productId: 'LT002', quantity: 8, unitPrice: 180, discount: 0, totalAmount: 1440 },
+        { productId: 'EL001', quantity: 2, unitPrice: 150, discount: 0, totalAmount: 300 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1004',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'cancelled',
+      createdAt: new Date('2025-06-04T12:00:00Z'),
+      items: [
+        { productId: 'HW003', quantity: 1, unitPrice: 850, discount: 0, totalAmount: 850 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1005',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-06-05T13:00:00Z'),
+      items: [
+        { productId: 'EL002', quantity: 4, unitPrice: 450, discount: 0, totalAmount: 1800 },
+        { productId: 'PL001', quantity: 2, unitPrice: 1200, discount: 0, totalAmount: 2400 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1006',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'pending',
+      createdAt: new Date('2025-06-06T14:00:00Z'),
+      items: [
+        { productId: 'PA001', quantity: 1, unitPrice: 4500, discount: 0, totalAmount: 4500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1007',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'processing',
+      createdAt: new Date('2025-06-07T15:00:00Z'),
+      items: [
+        { productId: 'SG001', quantity: 6, unitPrice: 350, discount: 0, totalAmount: 2100 },
+        { productId: 'TL001', quantity: 2, unitPrice: 950, discount: 0, totalAmount: 1900 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1008',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-06-08T16:00:00Z'),
+      items: [
+        { productId: 'BM001', quantity: 1, unitPrice: 3500, discount: 0, totalAmount: 3500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1009',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'pending',
+      createdAt: new Date('2025-06-09T17:00:00Z'),
+      items: [
+        { productId: 'LT003', quantity: 3, unitPrice: 3500, discount: 0, totalAmount: 10500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1010',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'cancelled',
+      createdAt: new Date('2025-06-10T18:00:00Z'),
+      items: [
+        { productId: 'FA001', quantity: 2, unitPrice: 600, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1011',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'processing',
+      createdAt: new Date('2025-06-11T19:00:00Z'),
+      items: [
+        { productId: 'AD001', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+        { productId: 'FL001', quantity: 1, unitPrice: 3200, discount: 0, totalAmount: 3200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1012',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-06-12T20:00:00Z'),
+      items: [
+        { productId: 'RF001', quantity: 5, unitPrice: 1800, discount: 0, totalAmount: 9000 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1013',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'pending',
+      createdAt: new Date('2025-06-13T21:00:00Z'),
+      items: [
+        { productId: 'EL004', quantity: 2, unitPrice: 2200, discount: 0, totalAmount: 4400 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1014',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'processing',
+      createdAt: new Date('2025-06-14T22:00:00Z'),
+      items: [
+        { productId: 'PL002', quantity: 1, unitPrice: 850, discount: 0, totalAmount: 850 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1015',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-06-15T23:00:00Z'),
+      items: [
+        { productId: 'PA002', quantity: 1, unitPrice: 120, discount: 0, totalAmount: 120 },
+        { productId: 'SG002', quantity: 2, unitPrice: 280, discount: 0, totalAmount: 560 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1016',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'cancelled',
+      createdAt: new Date('2025-06-16T08:00:00Z'),
+      items: [
+        { productId: 'TL007', quantity: 1, unitPrice: 6500, discount: 0, totalAmount: 6500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1017',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'pending',
+      createdAt: new Date('2025-06-17T09:00:00Z'),
+      items: [
+        { productId: 'HW004', quantity: 4, unitPrice: 450, discount: 0, totalAmount: 1800 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1018',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'processing',
+      createdAt: new Date('2025-06-18T10:00:00Z'),
+      items: [
+        { productId: 'BM002', quantity: 100, unitPrice: 25, discount: 0, totalAmount: 2500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1019',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-06-19T11:00:00Z'),
+      items: [
+        { productId: 'EL005', quantity: 3, unitPrice: 650, discount: 0, totalAmount: 1950 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-1020',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'pending',
+      createdAt: new Date('2025-06-20T12:00:00Z'),
+      items: [
+        { productId: 'SG004', quantity: 5, unitPrice: 350, discount: 0, totalAmount: 1750 },
+      ]
+    },
+    // May 2025 Orders (15 orders)
+    {
+      orderNumber: 'ORD-2001',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-01T13:00:00Z'),
+      items: [
+        { productId: 'HW001', quantity: 8, unitPrice: 500, discount: 0, totalAmount: 4000 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2002',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-02T14:00:00Z'),
+      items: [
+        { productId: 'HW002', quantity: 2, unitPrice: 1200, discount: 0, totalAmount: 2400 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2003',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-03T15:00:00Z'),
+      items: [
+        { productId: 'LT001', quantity: 3, unitPrice: 250, discount: 0, totalAmount: 750 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2004',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-04T16:00:00Z'),
+      items: [
+        { productId: 'EL001', quantity: 1, unitPrice: 150, discount: 0, totalAmount: 150 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2005',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-05T17:00:00Z'),
+      items: [
+        { productId: 'HW003', quantity: 2, unitPrice: 850, discount: 0, totalAmount: 1700 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2006',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-06T18:00:00Z'),
+      items: [
+        { productId: 'LT002', quantity: 5, unitPrice: 180, discount: 0, totalAmount: 900 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2007',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-07T19:00:00Z'),
+      items: [
+        { productId: 'EL002', quantity: 3, unitPrice: 450, discount: 0, totalAmount: 1350 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2008',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-08T20:00:00Z'),
+      items: [
+        { productId: 'PL001', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2009',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-09T21:00:00Z'),
+      items: [
+        { productId: 'PA001', quantity: 1, unitPrice: 4500, discount: 0, totalAmount: 4500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2010',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-10T22:00:00Z'),
+      items: [
+        { productId: 'SG001', quantity: 4, unitPrice: 350, discount: 0, totalAmount: 1400 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2011',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-11T23:00:00Z'),
+      items: [
+        { productId: 'TL001', quantity: 1, unitPrice: 950, discount: 0, totalAmount: 950 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2012',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-12T08:00:00Z'),
+      items: [
+        { productId: 'BM001', quantity: 1, unitPrice: 3500, discount: 0, totalAmount: 3500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2013',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-13T09:00:00Z'),
+      items: [
+        { productId: 'LT003', quantity: 2, unitPrice: 3500, discount: 0, totalAmount: 7000 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2014',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-05-14T10:00:00Z'),
+      items: [
+        { productId: 'FA001', quantity: 1, unitPrice: 600, discount: 0, totalAmount: 600 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-2015',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-05-15T11:00:00Z'),
+      items: [
+        { productId: 'AD001', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    // April 2025 Orders (10 orders)
+    {
+      orderNumber: 'ORD-3001',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-01T12:00:00Z'),
+      items: [
+        { productId: 'HW001', quantity: 6, unitPrice: 500, discount: 0, totalAmount: 3000 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3002',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-02T13:00:00Z'),
+      items: [
+        { productId: 'HW002', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3003',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-04-03T14:00:00Z'),
+      items: [
+        { productId: 'LT001', quantity: 2, unitPrice: 250, discount: 0, totalAmount: 500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3004',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-04-04T15:00:00Z'),
+      items: [
+        { productId: 'EL001', quantity: 1, unitPrice: 150, discount: 0, totalAmount: 150 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3005',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-05T16:00:00Z'),
+      items: [
+        { productId: 'HW003', quantity: 1, unitPrice: 850, discount: 0, totalAmount: 850 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3006',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-06T17:00:00Z'),
+      items: [
+        { productId: 'LT002', quantity: 3, unitPrice: 180, discount: 0, totalAmount: 540 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3007',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-04-07T18:00:00Z'),
+      items: [
+        { productId: 'EL002', quantity: 2, unitPrice: 450, discount: 0, totalAmount: 900 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3008',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-04-08T19:00:00Z'),
+      items: [
+        { productId: 'PL001', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3009',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-09T20:00:00Z'),
+      items: [
+        { productId: 'PA001', quantity: 1, unitPrice: 4500, discount: 0, totalAmount: 4500 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-3010',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-04-10T21:00:00Z'),
+      items: [
+        { productId: 'SG001', quantity: 3, unitPrice: 350, discount: 0, totalAmount: 1050 },
+      ]
+    },
+    // March 2025 Orders (5 orders)
+    {
+      orderNumber: 'ORD-4001',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-03-01T10:00:00Z'),
+      items: [
+        { productId: 'HW001', quantity: 4, unitPrice: 500, discount: 0, totalAmount: 2000 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-4002',
+      customerId: 'CUST002',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-03-02T11:00:00Z'),
+      items: [
+        { productId: 'HW002', quantity: 1, unitPrice: 1200, discount: 0, totalAmount: 1200 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-4003',
+      customerId: 'CUST001',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-03-03T12:00:00Z'),
+      items: [
+        { productId: 'LT001', quantity: 1, unitPrice: 250, discount: 0, totalAmount: 250 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-4004',
+      customerId: 'CUST002',
+      salespersonId: 'EXE002',
+      status: 'completed',
+      createdAt: new Date('2025-03-04T13:00:00Z'),
+      items: [
+        { productId: 'EL001', quantity: 1, unitPrice: 150, discount: 0, totalAmount: 150 },
+      ]
+    },
+    {
+      orderNumber: 'ORD-4005',
+      customerId: 'CUST001',
+      salespersonId: 'EXE001',
+      status: 'completed',
+      createdAt: new Date('2025-03-05T14:00:00Z'),
+      items: [
+        { productId: 'HW003', quantity: 1, unitPrice: 850, discount: 0, totalAmount: 850 },
+      ]
+    },
+  ];
+
+  // Map productId in order items from itemCode to UUID
+  const fixedOrderData = orderData.map(order => ({
+    ...order,
+    items: order.items.map(item => ({
+      ...item,
+      productId: productMap[item.productId],
+    })),
+  }));
+
+  // Create orders sequentially to avoid connection pool timeout
+  const orders: any[] = [];
+  for (const orderData of fixedOrderData) {
+    const order = await prisma.order.upsert({
+      where: { orderNumber: orderData.orderNumber },
+      update: {
+        customerId: orderData.customerId,
+        salespersonId: orderData.salespersonId,
+        status: orderData.status,
+        createdAt: orderData.createdAt,
+        jsonPayload: JSON.stringify(orderData),
+        // Update order items by deleting existing ones and creating new ones
+        orderItems: {
+          deleteMany: {},
+          create: orderData.items,
+        },
+      },
+      create: {
+        orderNumber: orderData.orderNumber,
+        customerId: orderData.customerId,
+        salespersonId: orderData.salespersonId,
+        status: orderData.status,
+        createdAt: orderData.createdAt,
+        jsonPayload: JSON.stringify(orderData),
+        orderItems: {
+          create: orderData.items,
+        },
+      },
+    });
+    orders.push(order);
+  }
+  console.log('✅ Orders created:', orders.length);
+
   // Create sample invoices
   const invoices = await Promise.all([
     prisma.invoice.upsert({
