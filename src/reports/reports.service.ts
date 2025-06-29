@@ -40,10 +40,28 @@ export class ReportsService {
   }
 
   async getTopCustomers(limit: number = 20) {
-    const customers = await this.prisma.salesReport.groupBy({
+    // Get current period data
+    const currentPeriodStart = new Date();
+    currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
+    
+    const currentPeriodEnd = new Date();
+    
+    // Get previous period data for growth calculation
+    const previousPeriodStart = new Date(currentPeriodStart);
+    previousPeriodStart.setMonth(previousPeriodStart.getMonth() - 1);
+    
+    const previousPeriodEnd = new Date(currentPeriodStart);
+    previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
+
+    // Get current period customers
+    const currentCustomers = await this.prisma.salesReport.groupBy({
       by: ['customerId', 'customerName', 'city', 'province'],
       where: {
         netSales: { gt: 0 },
+        date: {
+          gte: currentPeriodStart,
+          lte: currentPeriodEnd,
+        },
       },
       _sum: {
         netSales: true,
@@ -60,23 +78,75 @@ export class ReportsService {
       take: limit,
     });
 
-    return customers.map(customer => ({
-      customerId: customer.customerId,
-      customerName: customer.customerName,
-      city: customer.city,
-      province: customer.province,
-      totalSales: Number(customer._sum.netSales),
-      totalPurchases: customer._count.id,
-      percentageOfTotal: 0, // Will be calculated in controller
-      growth: 0, // Will be calculated in controller
-    }));
+    // Get previous period data for growth calculation
+    const previousCustomers = await this.prisma.salesReport.groupBy({
+      by: ['customerId'],
+      where: {
+        netSales: { gt: 0 },
+        date: {
+          gte: previousPeriodStart,
+          lte: previousPeriodEnd,
+        },
+      },
+      _sum: {
+        netSales: true,
+      },
+    });
+
+    // Create a map for previous period data
+    const previousDataMap = new Map();
+    previousCustomers.forEach(customer => {
+      previousDataMap.set(customer.customerId, Number(customer._sum.netSales));
+    });
+
+    // Calculate total sales for percentage calculation
+    const totalSales = currentCustomers.reduce(
+      (sum, customer) => sum + Number(customer._sum.netSales),
+      0,
+    );
+
+    return currentCustomers.map(customer => {
+      const currentSales = Number(customer._sum.netSales);
+      const previousSales = previousDataMap.get(customer.customerId) || 0;
+      const growth = previousSales > 0 ? ((currentSales - previousSales) / previousSales) * 100 : 0;
+
+      return {
+        customerId: customer.customerId,
+        customerName: customer.customerName,
+        city: customer.city,
+        province: customer.province,
+        totalSales: currentSales,
+        totalPurchases: customer._count.id,
+        percentageOfTotal: totalSales > 0 ? (currentSales / totalSales) * 100 : 0,
+        growth: growth,
+        categories: {}, // Will be populated if needed
+      };
+    });
   }
 
   async getTopProducts(limit: number = 20) {
-    const products = await this.prisma.salesReport.groupBy({
+    // Get current period data
+    const currentPeriodStart = new Date();
+    currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
+    
+    const currentPeriodEnd = new Date();
+    
+    // Get previous period data for growth calculation
+    const previousPeriodStart = new Date(currentPeriodStart);
+    previousPeriodStart.setMonth(previousPeriodStart.getMonth() - 1);
+    
+    const previousPeriodEnd = new Date(currentPeriodStart);
+    previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
+
+    // Get current period products
+    const currentProducts = await this.prisma.salesReport.groupBy({
       by: ['productId', 'productName', 'category', 'subCategory'],
       where: {
         netSales: { gt: 0 },
+        date: {
+          gte: currentPeriodStart,
+          lte: currentPeriodEnd,
+        },
       },
       _sum: {
         netSales: true,
@@ -93,23 +163,74 @@ export class ReportsService {
       take: limit,
     });
 
-    return products.map(product => ({
-      productId: product.productId,
-      productName: product.productName,
-      category: product.category,
-      subCategory: product.subCategory,
-      quantity: Number(product._sum.quantity),
-      totalSales: Number(product._sum.netSales),
-      percentageOfTotal: 0, // Will be calculated in controller
-      growth: 0, // Will be calculated in controller
-    }));
+    // Get previous period data for growth calculation
+    const previousProducts = await this.prisma.salesReport.groupBy({
+      by: ['productId'],
+      where: {
+        netSales: { gt: 0 },
+        date: {
+          gte: previousPeriodStart,
+          lte: previousPeriodEnd,
+        },
+      },
+      _sum: {
+        netSales: true,
+      },
+    });
+
+    // Create a map for previous period data
+    const previousDataMap = new Map();
+    previousProducts.forEach(product => {
+      previousDataMap.set(product.productId, Number(product._sum.netSales));
+    });
+
+    // Calculate total sales for percentage calculation
+    const totalSales = currentProducts.reduce(
+      (sum, product) => sum + Number(product._sum.netSales),
+      0,
+    );
+
+    return currentProducts.map(product => {
+      const currentSales = Number(product._sum.netSales);
+      const previousSales = previousDataMap.get(product.productId) || 0;
+      const growth = previousSales > 0 ? ((currentSales - previousSales) / previousSales) * 100 : 0;
+
+      return {
+        productId: product.productId,
+        productName: product.productName,
+        category: product.category,
+        subCategory: product.subCategory,
+        quantity: Number(product._sum.quantity),
+        totalSales: currentSales,
+        percentageOfTotal: totalSales > 0 ? (currentSales / totalSales) * 100 : 0,
+        growth: growth,
+      };
+    });
   }
 
   async getCategorySales() {
-    const categories = await this.prisma.salesReport.groupBy({
+    // Get current period data
+    const currentPeriodStart = new Date();
+    currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
+    
+    const currentPeriodEnd = new Date();
+    
+    // Get previous period data for growth calculation
+    const previousPeriodStart = new Date(currentPeriodStart);
+    previousPeriodStart.setMonth(previousPeriodStart.getMonth() - 1);
+    
+    const previousPeriodEnd = new Date(currentPeriodStart);
+    previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
+
+    // Get current period categories
+    const currentCategories = await this.prisma.salesReport.groupBy({
       by: ['category'],
       where: {
         netSales: { gt: 0 },
+        date: {
+          gte: currentPeriodStart,
+          lte: currentPeriodEnd,
+        },
       },
       _sum: {
         netSales: true,
@@ -121,17 +242,44 @@ export class ReportsService {
       },
     });
 
-    const totalSales = categories.reduce(
+    // Get previous period data for growth calculation
+    const previousCategories = await this.prisma.salesReport.groupBy({
+      by: ['category'],
+      where: {
+        netSales: { gt: 0 },
+        date: {
+          gte: previousPeriodStart,
+          lte: previousPeriodEnd,
+        },
+      },
+      _sum: {
+        netSales: true,
+      },
+    });
+
+    // Create a map for previous period data
+    const previousDataMap = new Map();
+    previousCategories.forEach(category => {
+      previousDataMap.set(category.category, Number(category._sum.netSales));
+    });
+
+    const totalSales = currentCategories.reduce(
       (sum, cat) => sum + Number(cat._sum.netSales),
       0,
     );
 
-    return categories.map(category => ({
-      category: category.category,
-      totalSales: Number(category._sum.netSales),
-      percentageOfTotal: totalSales > 0 ? (Number(category._sum.netSales) / totalSales) * 100 : 0,
-      growth: 0, // Will be calculated in controller
-    }));
+    return currentCategories.map(category => {
+      const currentSales = Number(category._sum.netSales);
+      const previousSales = previousDataMap.get(category.category) || 0;
+      const growth = previousSales > 0 ? ((currentSales - previousSales) / previousSales) * 100 : 0;
+
+      return {
+        category: category.category,
+        totalSales: currentSales,
+        percentageOfTotal: totalSales > 0 ? (currentSales / totalSales) * 100 : 0,
+        growth: growth,
+      };
+    });
   }
 
   async getCityWiseSales(limit: number = 10) {
@@ -228,47 +376,79 @@ export class ReportsService {
   }
 
   async getRangeCoverageInsights() {
-    // Get all categories and their product counts
+    // Get current period data
+    const currentPeriodStart = new Date();
+    currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
+    
+    const currentPeriodEnd = new Date();
+
+    // Get all unique products by category from sales data
     const categoryStats = await this.prisma.salesReport.groupBy({
       by: ['category'],
+      where: {
+        date: {
+          gte: currentPeriodStart,
+          lte: currentPeriodEnd,
+        },
+      },
       _count: {
         productId: true,
       },
     });
 
-    // Get sold products by category
+    // Get sold products by category (products with sales > 0)
     const soldProductsByCategory = await this.prisma.salesReport.groupBy({
       by: ['category'],
       where: {
         quantity: { gt: 0 },
+        netSales: { gt: 0 },
+        date: {
+          gte: currentPeriodStart,
+          lte: currentPeriodEnd,
+        },
       },
       _count: {
         productId: true,
       },
+      _sum: {
+        netSales: true,
+      },
     });
 
+    // Get total sales for potential increase calculation
+    const totalSales = soldProductsByCategory.reduce(
+      (sum, category) => sum + Number(category._sum.netSales),
+      0,
+    );
+
     const insights = categoryStats.map(category => {
-      const soldCount = soldProductsByCategory.find(
+      const soldCategory = soldProductsByCategory.find(
         sold => sold.category === category.category,
-      )?._count.productId || 0;
+      );
+      
+      const soldCount = soldCategory?._count.productId || 0;
+      const categorySales = soldCategory ? Number(soldCategory._sum.netSales) : 0;
       
       const coverage = category._count.productId > 0 
         ? (soldCount / category._count.productId) * 100 
         : 0;
       
-      const potentialIncrease = coverage < 100 
-        ? ((100 - coverage) / 100) * 100 
-        : 0;
+      // Calculate potential increase based on unsold products
+      const unsoldProducts = category._count.productId - soldCount;
+      const avgProductSales = soldCount > 0 ? categorySales / soldCount : 0;
+      const potentialIncrease = unsoldProducts * avgProductSales;
 
       let recommendation = '';
-      if (coverage < 30) {
-        recommendation = 'Focus on promoting this category to increase sales';
-      } else if (coverage < 60) {
-        recommendation = 'Consider targeted marketing for underperforming products';
+      if (coverage < 25) {
+        recommendation = 'Low coverage - Focus on promoting this category and training sales team';
+      } else if (coverage < 50) {
+        recommendation = 'Moderate coverage - Consider targeted marketing and product bundling';
+      } else if (coverage < 75) {
+        recommendation = 'Good coverage - Focus on remaining products and cross-selling';
       } else if (coverage < 90) {
-        recommendation = 'Good coverage, focus on remaining products';
+        recommendation = 'Very good coverage - Optimize pricing for remaining products';
       } else {
-        recommendation = 'Excellent coverage, maintain current strategy';
+        recommendation = 'Excellent coverage - Maintain current strategy and explore new markets';
       }
 
       return {
@@ -276,10 +456,14 @@ export class ReportsService {
         coverage: Math.round(coverage * 100) / 100,
         potentialIncrease: Math.round(potentialIncrease * 100) / 100,
         recommendation,
+        totalProducts: category._count.productId,
+        soldProducts: soldCount,
+        categorySales: Math.round(categorySales * 100) / 100,
       };
     });
 
-    return insights;
+    // Sort by coverage (ascending) to show areas needing attention first
+    return insights.sort((a, b) => a.coverage - b.coverage);
   }
 
   async getCustomerDetails() {
