@@ -106,7 +106,7 @@ model Order {
   updatedAt     DateTime    @updatedAt
   orderItems    OrderItem[]
   customer      Customer    @relation(fields: [customerId], references: [customerId])
-  user          User        @relation(fields: [salespersonId], references: [exeId], onDelete: NoAction, onUpdate: NoAction)
+  user          User        @relation(fields: [salespersonId], references: [exeId])
 
   @@map("orders")
 }
