@@ -12,6 +12,16 @@ interface Room {
   receiver: Socket | null;
 }
 
+interface ProductDetails {
+  id: string;
+  name: string;
+  image: string;
+  quantity: number;
+  price: number;
+  category?: string;
+  description?: string;
+}
+
 @WebSocketGateway({
   namespace: 'discovery',
   cors: {
@@ -33,6 +43,9 @@ export class MirrorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Clean up rooms when clients disconnect
     this.rooms.forEach((room, roomCode) => {
       if (room.initiator?.id === client.id || room.receiver?.id === client.id) {
+        // Notify the other client in the room about the disconnection
+        const otherClient = room.initiator?.id === client.id ? room.receiver : room.initiator;
+        otherClient?.emit('peerDisconnected');
         this.rooms.delete(roomCode);
       }
     });
@@ -56,6 +69,17 @@ export class MirrorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } else {
       // Room is full
       client.emit('roomFull', { roomCode });
+    }
+  }
+
+  @SubscribeMessage('productDetails')
+  handleProductDetails(client: Socket, payload: { roomCode: string; productDetails: ProductDetails }) {
+    const room = this.rooms.get(payload.roomCode);
+    if (!room) return;
+
+    // Only allow the initiator to send product details
+    if (room.initiator?.id === client.id && room.receiver) {
+      room.receiver.emit('productDetails', { productDetails: payload.productDetails });
     }
   }
 
