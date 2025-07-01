@@ -24,9 +24,8 @@ interface ProductDetails {
 
 @WebSocketGateway({
   namespace: 'discovery',
-  cors: {
-    origin: '*',
-  },
+  transports: ['websocket', 'polling'],
+  allowEIO3: true
 })
 export class MirrorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
