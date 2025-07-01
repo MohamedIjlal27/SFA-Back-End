@@ -15,6 +15,10 @@
       "dest": "src/main.ts"
     },
     {
+      "src": "/discovery/(.*)",
+      "dest": "src/main.ts"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/main.ts"
     }
