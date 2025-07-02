@@ -52,38 +52,60 @@ export class MirrorGateway implements OnGatewayConnection, OnGatewayDisconnect, 
 
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    // Clean up rooms when clients disconnect
-    this.rooms.forEach((room, roomCode) => {
-      if (room.initiator?.id === client.id || room.receiver?.id === client.id) {
-        // Notify the other client in the room about the disconnection
-        const otherClient = room.initiator?.id === client.id ? room.receiver : room.initiator;
-        otherClient?.emit('peerDisconnected');
-        this.rooms.delete(roomCode);
-        this.logger.log(`Room ${roomCode} cleaned up due to client disconnect`);
-      }
-    });
+    // Don't immediately clean up rooms on disconnect, give time for reconnection
+    setTimeout(() => {
+      this.rooms.forEach((room, roomCode) => {
+        if (room.initiator?.id === client.id || room.receiver?.id === client.id) {
+          // Check if the client has already reconnected
+          const isClientReconnected = Array.from(this.server.sockets.sockets.values()).some(
+            socket => socket.id === client.id
+          );
+          
+          if (!isClientReconnected) {
+            // Notify the other client in the room about the disconnection
+            const otherClient = room.initiator?.id === client.id ? room.receiver : room.initiator;
+            otherClient?.emit('peerDisconnected');
+            this.rooms.delete(roomCode);
+            this.logger.log(`Room ${roomCode} cleaned up due to client disconnect`);
+          } else {
+            this.logger.log(`Client ${client.id} reconnected, keeping room ${roomCode}`);
+          }
+        }
+      });
+    }, 30000); // Wait 30 seconds before cleaning up
   }
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, roomCode: string) {
     this.logger.log(`Client ${client.id} attempting to join room ${roomCode}`);
+    this.logger.debug(`Client transport: ${client.conn.transport.name}`);
+    this.logger.debug(`Current rooms: ${Array.from(this.rooms.keys()).join(', ')}`);
+    
     let room = this.rooms.get(roomCode);
 
     if (!room) {
+      this.logger.log(`Creating new room ${roomCode}`);
       // Create new room if it doesn't exist
       room = { initiator: client, receiver: null };
       this.rooms.set(roomCode, room);
+      this.logger.log(`Room ${roomCode} created. Emitting roomCreated event`);
       client.emit('roomCreated', { roomCode });
       this.logger.log(`Room ${roomCode} created with initiator ${client.id}`);
+      // Also emit joinedRoom for the initiator
+      client.emit('joinedRoom', { roomCode });
+      this.logger.log(`Initiator ${client.id} joined room ${roomCode}`);
     } else if (!room.receiver) {
+      this.logger.log(`Adding receiver ${client.id} to room ${roomCode}`);
       // Join as receiver if spot is available
       room.receiver = client;
       this.rooms.set(roomCode, room);
+      this.logger.log(`Notifying initiator ${room.initiator?.id} about peer connection`);
       room.initiator?.emit('peerConnected', { peerId: client.id });
+      this.logger.log(`Emitting joinedRoom event to receiver ${client.id}`);
       client.emit('joinedRoom', { roomCode });
       this.logger.log(`Client ${client.id} joined room ${roomCode} as receiver`);
     } else {
-      // Room is full
+      this.logger.warn(`Room ${roomCode} is full. Initiator: ${room.initiator?.id}, Receiver: ${room.receiver?.id}`);
       client.emit('roomFull', { roomCode });
       this.logger.warn(`Room ${roomCode} is full, rejected client ${client.id}`);
     }
