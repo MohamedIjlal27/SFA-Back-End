@@ -29,8 +29,8 @@ interface ProductDetails {
   transports: ['websocket', 'polling'],
   path: '/socket.io/',
   serveClient: false,
-  pingInterval: 10000,
-  pingTimeout: 5000,
+  pingInterval: 25000,
+  pingTimeout: 60000,
   allowEIO3: true
 })
 export class MirrorGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
