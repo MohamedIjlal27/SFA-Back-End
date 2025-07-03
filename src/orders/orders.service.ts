@@ -289,4 +289,189 @@ export class OrdersService {
       },
     };
   }
+
+  // New method for saving draft orders
+  async saveDraftOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
+    const { customerId, salespersonId, items, jsonPayload } = createOrderDto;
+
+    // Validate customer exists
+    const customer = await this.prisma.customer.findUnique({
+      where: { customerId },
+    });
+
+    if (!customer) {
+      throw new NotFoundException(`Customer ${customerId} not found`);
+    }
+
+    // Validate salesperson exists
+    const salesperson = await this.prisma.user.findUnique({
+      where: { exeId: salespersonId },
+    });
+
+    if (!salesperson) {
+      throw new NotFoundException(`Salesperson ${salespersonId} not found`);
+    }
+
+    // Get or create document numbering
+    let documentNumbering = await this.prisma.documentNumbering.findUnique({
+      where: { salespersonId },
+    });
+
+    if (!documentNumbering) {
+      documentNumbering = await this.prisma.documentNumbering.create({
+        data: {
+          salespersonId,
+          prefix: 'DRF',
+          currentNumber: 1,
+        },
+      });
+    }
+
+    // Generate draft order number
+    const orderNumber = `${documentNumbering.prefix}${documentNumbering.currentNumber.toString().padStart(6, '0')}`;
+
+    // Create draft order with items
+    const order = await this.prisma.order.create({
+      data: {
+        orderNumber,
+        customerId,
+        salespersonId,
+        status: 'Draft',
+        isDraft: true,
+        jsonPayload: jsonPayload || JSON.stringify(createOrderDto),
+        orderItems: {
+          create: items.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            discount: item.discount || 0,
+            totalAmount: (item.unitPrice * item.quantity) - (item.discount || 0),
+          })),
+        },
+      },
+      include: {
+        orderItems: true,
+      },
+    });
+
+    // Increment document numbering
+    await this.prisma.documentNumbering.update({
+      where: { salespersonId },
+      data: {
+        currentNumber: documentNumbering.currentNumber + 1,
+        lastUpdated: new Date(),
+      },
+    });
+
+    return {
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      status: order.status,
+    };
+  }
+
+  // New method for getting draft orders by salesperson
+  async getDraftOrdersBySalesperson(salespersonId: string) {
+    const orders = await this.prisma.order.findMany({
+      where: { 
+        salespersonId,
+        isDraft: true,
+      },
+      include: {
+        customer: {
+          select: {
+            customerId: true,
+            customerName: true,
+            city: true,
+          },
+        },
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                itemCode: true,
+                description: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return orders.map(order => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      customerId: order.customerId,
+      customerName: order.customer.customerName,
+      city: order.customer.city,
+      status: order.status,
+      createdAt: order.createdAt,
+      totalAmount: order.orderItems.reduce(
+        (sum, item) => sum + Number(item.totalAmount),
+        0,
+      ),
+      itemCount: order.orderItems.length,
+    }));
+  }
+
+  // New method for converting draft order to regular order
+  async convertDraftToOrder(orderId: string): Promise<OrderResponseDto> {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        orderItems: true,
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    if (!order.isDraft) {
+      throw new BadRequestException('Order is not a draft');
+    }
+
+    // Get new order number for regular order
+    let documentNumbering = await this.prisma.documentNumbering.findUnique({
+      where: { salespersonId: order.salespersonId },
+    });
+
+    if (!documentNumbering) {
+      documentNumbering = await this.prisma.documentNumbering.create({
+        data: {
+          salespersonId: order.salespersonId,
+          prefix: 'ORD',
+          currentNumber: 1,
+        },
+      });
+    }
+
+    const newOrderNumber = `${documentNumbering.prefix}${documentNumbering.currentNumber.toString().padStart(6, '0')}`;
+
+    // Update the order
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: {
+        orderNumber: newOrderNumber,
+        status: 'Pending',
+        isDraft: false,
+      },
+    });
+
+    // Increment document numbering
+    await this.prisma.documentNumbering.update({
+      where: { salespersonId: order.salespersonId },
+      data: {
+        currentNumber: documentNumbering.currentNumber + 1,
+        lastUpdated: new Date(),
+      },
+    });
+
+    return {
+      orderId: updatedOrder.id,
+      orderNumber: updatedOrder.orderNumber,
+      status: updatedOrder.status,
+    };
+  }
 } 

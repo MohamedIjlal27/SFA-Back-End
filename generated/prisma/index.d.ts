@@ -5385,6 +5385,7 @@ export namespace Prisma {
     customerId: string | null
     salespersonId: string | null
     status: string | null
+    isDraft: boolean | null
     errorMessage: string | null
     jsonPayload: string | null
     createdAt: Date | null
@@ -5397,6 +5398,7 @@ export namespace Prisma {
     customerId: string | null
     salespersonId: string | null
     status: string | null
+    isDraft: boolean | null
     errorMessage: string | null
     jsonPayload: string | null
     createdAt: Date | null
@@ -5409,6 +5411,7 @@ export namespace Prisma {
     customerId: number
     salespersonId: number
     status: number
+    isDraft: number
     errorMessage: number
     jsonPayload: number
     createdAt: number
@@ -5423,6 +5426,7 @@ export namespace Prisma {
     customerId?: true
     salespersonId?: true
     status?: true
+    isDraft?: true
     errorMessage?: true
     jsonPayload?: true
     createdAt?: true
@@ -5435,6 +5439,7 @@ export namespace Prisma {
     customerId?: true
     salespersonId?: true
     status?: true
+    isDraft?: true
     errorMessage?: true
     jsonPayload?: true
     createdAt?: true
@@ -5447,6 +5452,7 @@ export namespace Prisma {
     customerId?: true
     salespersonId?: true
     status?: true
+    isDraft?: true
     errorMessage?: true
     jsonPayload?: true
     createdAt?: true
@@ -5532,6 +5538,7 @@ export namespace Prisma {
     customerId: string
     salespersonId: string
     status: string
+    isDraft: boolean
     errorMessage: string | null
     jsonPayload: string
     createdAt: Date
@@ -5561,6 +5568,7 @@ export namespace Prisma {
     customerId?: boolean
     salespersonId?: boolean
     status?: boolean
+    isDraft?: boolean
     errorMessage?: boolean
     jsonPayload?: boolean
     createdAt?: boolean
@@ -5577,6 +5585,7 @@ export namespace Prisma {
     customerId?: boolean
     salespersonId?: boolean
     status?: boolean
+    isDraft?: boolean
     errorMessage?: boolean
     jsonPayload?: boolean
     createdAt?: boolean
@@ -5591,6 +5600,7 @@ export namespace Prisma {
     customerId?: boolean
     salespersonId?: boolean
     status?: boolean
+    isDraft?: boolean
     errorMessage?: boolean
     jsonPayload?: boolean
     createdAt?: boolean
@@ -5621,6 +5631,7 @@ export namespace Prisma {
       customerId: string
       salespersonId: string
       status: string
+      isDraft: boolean
       errorMessage: string | null
       jsonPayload: string
       createdAt: Date
@@ -6026,6 +6037,7 @@ export namespace Prisma {
     readonly customerId: FieldRef<"Order", 'String'>
     readonly salespersonId: FieldRef<"Order", 'String'>
     readonly status: FieldRef<"Order", 'String'>
+    readonly isDraft: FieldRef<"Order", 'Boolean'>
     readonly errorMessage: FieldRef<"Order", 'String'>
     readonly jsonPayload: FieldRef<"Order", 'String'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
@@ -12548,6 +12560,7 @@ export namespace Prisma {
     customerId: 'customerId',
     salespersonId: 'salespersonId',
     status: 'status',
+    isDraft: 'isDraft',
     errorMessage: 'errorMessage',
     jsonPayload: 'jsonPayload',
     createdAt: 'createdAt',
@@ -13187,6 +13200,7 @@ export namespace Prisma {
     customerId?: StringFilter<"Order"> | string
     salespersonId?: StringFilter<"Order"> | string
     status?: StringFilter<"Order"> | string
+    isDraft?: BoolFilter<"Order"> | boolean
     errorMessage?: StringNullableFilter<"Order"> | string | null
     jsonPayload?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -13202,6 +13216,7 @@ export namespace Prisma {
     customerId?: SortOrder
     salespersonId?: SortOrder
     status?: SortOrder
+    isDraft?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
     jsonPayload?: SortOrder
     createdAt?: SortOrder
@@ -13220,6 +13235,7 @@ export namespace Prisma {
     customerId?: StringFilter<"Order"> | string
     salespersonId?: StringFilter<"Order"> | string
     status?: StringFilter<"Order"> | string
+    isDraft?: BoolFilter<"Order"> | boolean
     errorMessage?: StringNullableFilter<"Order"> | string | null
     jsonPayload?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -13235,6 +13251,7 @@ export namespace Prisma {
     customerId?: SortOrder
     salespersonId?: SortOrder
     status?: SortOrder
+    isDraft?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
     jsonPayload?: SortOrder
     createdAt?: SortOrder
@@ -13253,6 +13270,7 @@ export namespace Prisma {
     customerId?: StringWithAggregatesFilter<"Order"> | string
     salespersonId?: StringWithAggregatesFilter<"Order"> | string
     status?: StringWithAggregatesFilter<"Order"> | string
+    isDraft?: BoolWithAggregatesFilter<"Order"> | boolean
     errorMessage?: StringNullableWithAggregatesFilter<"Order"> | string | null
     jsonPayload?: StringWithAggregatesFilter<"Order"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -14261,6 +14279,7 @@ export namespace Prisma {
     id?: string
     orderNumber: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -14276,6 +14295,7 @@ export namespace Prisma {
     customerId: string
     salespersonId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -14287,6 +14307,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderNumber?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14302,6 +14323,7 @@ export namespace Prisma {
     customerId?: StringFieldUpdateOperationsInput | string
     salespersonId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14315,6 +14337,7 @@ export namespace Prisma {
     customerId: string
     salespersonId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -14325,6 +14348,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderNumber?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14337,6 +14361,7 @@ export namespace Prisma {
     customerId?: StringFieldUpdateOperationsInput | string
     salespersonId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15417,6 +15442,7 @@ export namespace Prisma {
     customerId?: SortOrder
     salespersonId?: SortOrder
     status?: SortOrder
+    isDraft?: SortOrder
     errorMessage?: SortOrder
     jsonPayload?: SortOrder
     createdAt?: SortOrder
@@ -15429,6 +15455,7 @@ export namespace Prisma {
     customerId?: SortOrder
     salespersonId?: SortOrder
     status?: SortOrder
+    isDraft?: SortOrder
     errorMessage?: SortOrder
     jsonPayload?: SortOrder
     createdAt?: SortOrder
@@ -15441,6 +15468,7 @@ export namespace Prisma {
     customerId?: SortOrder
     salespersonId?: SortOrder
     status?: SortOrder
+    isDraft?: SortOrder
     errorMessage?: SortOrder
     jsonPayload?: SortOrder
     createdAt?: SortOrder
@@ -16653,6 +16681,7 @@ export namespace Prisma {
     id?: string
     orderNumber: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -16666,6 +16695,7 @@ export namespace Prisma {
     orderNumber: string
     customerId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -16786,6 +16816,7 @@ export namespace Prisma {
     customerId?: StringFilter<"Order"> | string
     salespersonId?: StringFilter<"Order"> | string
     status?: StringFilter<"Order"> | string
+    isDraft?: BoolFilter<"Order"> | boolean
     errorMessage?: StringNullableFilter<"Order"> | string | null
     jsonPayload?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -16881,6 +16912,7 @@ export namespace Prisma {
     id?: string
     orderNumber: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -16894,6 +16926,7 @@ export namespace Prisma {
     orderNumber: string
     salespersonId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -17444,6 +17477,7 @@ export namespace Prisma {
     id?: string
     orderNumber: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -17458,6 +17492,7 @@ export namespace Prisma {
     customerId: string
     salespersonId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -17525,6 +17560,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderNumber?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17539,6 +17575,7 @@ export namespace Prisma {
     customerId?: StringFieldUpdateOperationsInput | string
     salespersonId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18050,6 +18087,7 @@ export namespace Prisma {
     orderNumber: string
     customerId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -18165,6 +18203,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderNumber?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18178,6 +18217,7 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     customerId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18190,6 +18230,7 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     customerId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18215,6 +18256,7 @@ export namespace Prisma {
     orderNumber: string
     salespersonId: string
     status?: string
+    isDraft?: boolean
     errorMessage?: string | null
     jsonPayload: string
     createdAt?: Date | string
@@ -18277,6 +18319,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     orderNumber?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18290,6 +18333,7 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     salespersonId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18302,6 +18346,7 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     salespersonId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    isDraft?: BoolFieldUpdateOperationsInput | boolean
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     jsonPayload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

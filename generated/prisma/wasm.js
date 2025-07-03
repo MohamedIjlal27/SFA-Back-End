@@ -199,6 +199,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   customerId: 'customerId',
   salespersonId: 'salespersonId',
   status: 'status',
+  isDraft: 'isDraft',
   errorMessage: 'errorMessage',
   jsonPayload: 'jsonPayload',
   createdAt: 'createdAt',

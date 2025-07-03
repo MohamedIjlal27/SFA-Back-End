@@ -115,4 +115,48 @@ export class OrdersController {
   async validateOrderItems(@Body() items: any[]) {
     return this.ordersService.validateOrderItems(items);
   }
+
+  @Post('draft')
+  @ApiOperation({ summary: 'Save order as draft' })
+  @ApiResponse({
+    status: 201,
+    description: 'Draft order saved successfully',
+    type: OrderResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid order data',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Customer or salesperson not found',
+  })
+  async saveDraftOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
+    return this.ordersService.saveDraftOrder(createOrderDto);
+  }
+
+  @Get('draft/salesperson/:salespersonId')
+  @ApiOperation({ summary: 'Get draft orders by salesperson' })
+  @ApiResponse({
+    status: 200,
+    description: 'Draft orders retrieved successfully',
+  })
+  async getDraftOrdersBySalesperson(@Param('salespersonId') salespersonId: string) {
+    return this.ordersService.getDraftOrdersBySalesperson(salespersonId);
+  }
+
+  @Put('draft/:orderId/convert')
+  @ApiOperation({ summary: 'Convert draft order to regular order' })
+  @ApiResponse({
+    status: 200,
+    description: 'Draft order converted successfully',
+    type: OrderResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Order not found',
+  })
+  async convertDraftToOrder(@Param('orderId') orderId: string): Promise<OrderResponseDto> {
+    return this.ordersService.convertDraftToOrder(orderId);
+  }
 } 
