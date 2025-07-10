@@ -52,6 +52,7 @@ export class AuthService {
       subdivisionCode: user.subdivisionCode || '',
       imageLocation: user.imageLocation || '',
       token: token,
+      companyId: companyId
     };
   }
 
@@ -66,12 +67,13 @@ export class AuthService {
   async syncUserData(userData: any) {
     try {
       // For now, just log the sync attempt
-      console.log('User data sync requested for:', userData.exeId);
+      console.log('User data sync requested for:', userData.exeId, 'companyId:', userData.companyId);
       
       return {
         success: true,
         message: 'User data synced successfully',
         exeId: userData.exeId,
+        companyId: userData.companyId,
       };
     } catch (error) {
       console.error('Error syncing user data:', error);
@@ -85,12 +87,13 @@ export class AuthService {
   async syncUserAvatar(avatarData: any) {
     try {
       // For now, just log the sync attempt
-      console.log('User avatar sync requested for:', avatarData.exeId);
+      console.log('User avatar sync requested for:', avatarData.exeId, 'companyId:', avatarData.companyId);
       
       return {
         success: true,
         message: 'User avatar synced successfully',
         exeId: avatarData.exeId,
+        companyId: avatarData.companyId,
       };
     } catch (error) {
       console.error('Error syncing user avatar:', error);
@@ -121,8 +124,10 @@ export class AuthService {
 
   async storeLocation(locationData: any) {
     try {
-      const { userCode, latitude, longitude, description, timestamp, type } = locationData;
-      
+      const { userCode, latitude, longitude, description, timestamp, type, companyId } = locationData;
+      if (!companyId) {
+        throw new Error('companyId is required');
+      }
       // Store location in database
       const location = await this.prisma.userLocation.create({
         data: {
@@ -132,6 +137,7 @@ export class AuthService {
           description,
           timestamp: new Date(timestamp),
           type,
+          companyId,
         },
       });
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -22,8 +22,8 @@ export class CustomersController {
     description: 'Customer list retrieved successfully',
     type: [CustomerDto],
   })
-  async getCustomerList(@Param('exeId') exeId: string): Promise<CustomerDto[]> {
-    return this.customersService.getCustomerList(exeId);
+  async getCustomerList(@Param('exeId') exeId: string, @Request() req): Promise<CustomerDto[]> {
+    return this.customersService.getCustomerList(exeId, req.user.companyId);
   }
 
   @Get('info/:customerId')
@@ -37,8 +37,8 @@ export class CustomersController {
     status: 404,
     description: 'Customer not found',
   })
-  async getCustomerDetails(@Param('customerId') customerId: string): Promise<CustomerDetailsResponseDto> {
-    return this.customersService.getCustomerDetails(customerId);
+  async getCustomerDetails(@Param('customerId') customerId: string, @Request() req): Promise<CustomerDetailsResponseDto> {
+    return this.customersService.getCustomerDetails(customerId, req.user.companyId);
   }
 
   @Get('due/list/:exeId')
@@ -48,7 +48,7 @@ export class CustomersController {
     description: 'Due list retrieved successfully',
     type: DueListResponseDto,
   })
-  async getDueList(@Param('exeId') exeId: string): Promise<DueListResponseDto> {
-    return this.customersService.getDueList(exeId);
+  async getDueList(@Param('exeId') exeId: string, @Request() req): Promise<DueListResponseDto> {
+    return this.customersService.getDueList(exeId, req.user.companyId);
   }
 } 

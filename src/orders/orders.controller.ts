@@ -1,8 +1,9 @@
-import { Controller, Post, Get, Body, Param, UseGuards, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UseGuards, Put, Delete, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CreateOrderDto, OrderResponseDto } from '../common/dto/order.dto';
+import { ProductDto } from '../common/dto/product.dto';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -26,8 +27,8 @@ export class OrdersController {
     status: 404,
     description: 'Customer or salesperson not found',
   })
-  async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
-    return this.ordersService.createOrder(createOrderDto);
+  async createOrder(@Body() createOrderDto: CreateOrderDto, @Request() req): Promise<OrderResponseDto> {
+    return this.ordersService.createOrder({ ...createOrderDto, companyId: req.user.companyId });
   }
 
   @Get('salesperson/:salespersonId')
@@ -36,8 +37,8 @@ export class OrdersController {
     status: 200,
     description: 'Orders retrieved successfully',
   })
-  async getOrdersBySalesperson(@Param('salespersonId') salespersonId: string) {
-    return this.ordersService.getOrdersBySalesperson(salespersonId);
+  async getOrdersBySalesperson(@Param('salespersonId') salespersonId: string, @Request() req) {
+    return this.ordersService.getOrdersBySalesperson(salespersonId, req.user.companyId);
   }
 
   @Get(':orderId')
@@ -50,8 +51,8 @@ export class OrdersController {
     status: 404,
     description: 'Order not found',
   })
-  async getOrderById(@Param('orderId') orderId: string) {
-    return this.ordersService.getOrderById(orderId);
+  async getOrderById(@Param('orderId') orderId: string, @Request() req) {
+    return this.ordersService.getOrderById(orderId, req.user.companyId);
   }
 
   @Put(':orderId/status')
@@ -68,8 +69,9 @@ export class OrdersController {
   async updateOrderStatus(
     @Param('orderId') orderId: string,
     @Body('status') status: string,
+    @Request() req
   ): Promise<OrderResponseDto> {
-    return this.ordersService.updateOrderStatus(orderId, status);
+    return this.ordersService.updateOrderStatus(orderId, status, req.user.companyId);
   }
 
   // Order Items Management
@@ -82,8 +84,9 @@ export class OrdersController {
   async storeTempOrderItems(
     @Body() items: any[],
     @Body('sessionId') sessionId: string,
+    @Request() req
   ) {
-    return this.ordersService.storeTempOrderItems(sessionId, items);
+    return this.ordersService.storeTempOrderItems(sessionId, items, req.user.companyId);
   }
 
   @Get('items/temp-store/:sessionId')
@@ -92,8 +95,8 @@ export class OrdersController {
     status: 200,
     description: 'Temporary order items retrieved',
   })
-  async getTempOrderItems(@Param('sessionId') sessionId: string) {
-    return this.ordersService.getTempOrderItems(sessionId);
+  async getTempOrderItems(@Param('sessionId') sessionId: string, @Request() req) {
+    return this.ordersService.getTempOrderItems(sessionId, req.user.companyId);
   }
 
   @Delete('items/temp-store/:sessionId')
@@ -131,8 +134,8 @@ export class OrdersController {
     status: 404,
     description: 'Customer or salesperson not found',
   })
-  async saveDraftOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
-    return this.ordersService.saveDraftOrder(createOrderDto);
+  async saveDraftOrder(@Body() createOrderDto: CreateOrderDto, @Request() req): Promise<OrderResponseDto> {
+    return this.ordersService.saveDraftOrder({ ...createOrderDto, companyId: req.user.companyId });
   }
 
   @Get('draft/salesperson/:salespersonId')
@@ -141,8 +144,15 @@ export class OrdersController {
     status: 200,
     description: 'Draft orders retrieved successfully',
   })
-  async getDraftOrdersBySalesperson(@Param('salespersonId') salespersonId: string) {
-    return this.ordersService.getDraftOrdersBySalesperson(salespersonId);
+  async getDraftOrdersBySalesperson(@Param('salespersonId') salespersonId: string, @Request() req) {
+    return this.ordersService.getDraftOrdersBySalesperson(salespersonId, req.user.companyId);
+  }
+
+  @Get('draft/customer/:customerId')
+  @ApiOperation({ summary: 'Get draft orders by customer' })
+  @ApiResponse({ status: 200, description: 'Draft orders retrieved successfully' })
+  async getDraftOrdersByCustomer(@Param('customerId') customerId: string, @Request() req) {
+    return this.ordersService.getDraftOrdersByCustomer(customerId, req.user.companyId);
   }
 
   @Put('draft/:orderId/convert')
@@ -158,5 +168,16 @@ export class OrdersController {
   })
   async convertDraftToOrder(@Param('orderId') orderId: string): Promise<OrderResponseDto> {
     return this.ordersService.convertDraftToOrder(orderId);
+  }
+
+  @Get('customer/:customerId/products')
+  @ApiOperation({ summary: 'Get all products ordered by a specific customer' })
+  @ApiResponse({
+    status: 200,
+    description: 'Products ordered by customer retrieved successfully',
+    type: [ProductDto],
+  })
+  async getProductsOrderedByCustomer(@Param('customerId') customerId: string, @Request() req) {
+    return this.ordersService.getProductsOrderedByCustomer(customerId, req.user.companyId);
   }
 } 

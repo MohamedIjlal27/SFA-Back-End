@@ -10,10 +10,26 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Company {
+  id                 String              @id @default(cuid())
+  name               String
+  users              User[]
+  customers          Customer[]
+  orders             Order[]
+  products           Product[]
+  orderItems         OrderItem[]
+  invoices           Invoice[]
+  payments           Payment[]
+  documentNumberings DocumentNumbering[]
+  userLocations      UserLocation[]
+  salesReports       SalesReport[]
+}
+
 model User {
   id                String             @id @default(cuid())
   exeId             String             @unique
-  companyId         String             @default("LGLMKT")
+  companyId         String
+  company           Company            @relation(fields: [companyId], references: [id])
   password          String
   leader            String?
   areaCode          String?
@@ -38,6 +54,8 @@ model Customer {
   id              String    @id @default(cuid())
   customerId      String    @unique
   exeId           String
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id])
   customerName    String
   addr1           String?
   addr2           String?
@@ -76,6 +94,8 @@ model Customer {
 
 model Product {
   id                 String      @id @default(cuid())
+  companyId          String
+  company            Company     @relation(fields: [companyId], references: [id])
   itemCode           String      @unique
   description        String
   category           String?
@@ -100,6 +120,8 @@ model Order {
   orderNumber   String      @unique
   customerId    String
   salespersonId String
+  companyId     String
+  company       Company     @relation(fields: [companyId], references: [id])
   status        String      @default("Draft")
   isDraft       Boolean     @default(true)
   errorMessage  String?
@@ -115,6 +137,8 @@ model Order {
 
 model OrderItem {
   id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
   orderId     String
   productId   String
   quantity    Int
@@ -130,6 +154,8 @@ model OrderItem {
 
 model Invoice {
   id         String   @id @default(cuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id])
   customerId String
   documentNo String   @unique
   docDate    DateTime
@@ -148,6 +174,8 @@ model Invoice {
 
 model Payment {
   id         String   @id @default(cuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id])
   customerId String
   transNo    String   @unique
   transDate  DateTime
@@ -162,6 +190,8 @@ model Payment {
 
 model DocumentNumbering {
   id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id])
   salespersonId String   @unique
   prefix        String
   currentNumber Int      @default(1)
@@ -173,6 +203,8 @@ model DocumentNumbering {
 
 model UserLocation {
   id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
   userCode    String
   latitude    Float
   longitude   Float
@@ -186,6 +218,8 @@ model UserLocation {
 
 model SalesReport {
   id           String   @id @default(cuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
   date         DateTime
   customerId   String
   customerName String

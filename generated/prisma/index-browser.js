@@ -122,6 +122,11 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   exeId: 'exeId',
@@ -145,6 +150,7 @@ exports.Prisma.CustomerScalarFieldEnum = {
   id: 'id',
   customerId: 'customerId',
   exeId: 'exeId',
+  companyId: 'companyId',
   customerName: 'customerName',
   addr1: 'addr1',
   addr2: 'addr2',
@@ -177,6 +183,7 @@ exports.Prisma.CustomerScalarFieldEnum = {
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   itemCode: 'itemCode',
   description: 'description',
   category: 'category',
@@ -198,6 +205,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   orderNumber: 'orderNumber',
   customerId: 'customerId',
   salespersonId: 'salespersonId',
+  companyId: 'companyId',
   status: 'status',
   isDraft: 'isDraft',
   errorMessage: 'errorMessage',
@@ -208,6 +216,7 @@ exports.Prisma.OrderScalarFieldEnum = {
 
 exports.Prisma.OrderItemScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   orderId: 'orderId',
   productId: 'productId',
   quantity: 'quantity',
@@ -219,6 +228,7 @@ exports.Prisma.OrderItemScalarFieldEnum = {
 
 exports.Prisma.InvoiceScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   customerId: 'customerId',
   documentNo: 'documentNo',
   docDate: 'docDate',
@@ -234,6 +244,7 @@ exports.Prisma.InvoiceScalarFieldEnum = {
 
 exports.Prisma.PaymentScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   customerId: 'customerId',
   transNo: 'transNo',
   transDate: 'transDate',
@@ -245,6 +256,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
 
 exports.Prisma.DocumentNumberingScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   salespersonId: 'salespersonId',
   prefix: 'prefix',
   currentNumber: 'currentNumber',
@@ -253,6 +265,7 @@ exports.Prisma.DocumentNumberingScalarFieldEnum = {
 
 exports.Prisma.UserLocationScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   userCode: 'userCode',
   latitude: 'latitude',
   longitude: 'longitude',
@@ -264,6 +277,7 @@ exports.Prisma.UserLocationScalarFieldEnum = {
 
 exports.Prisma.SalesReportScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   date: 'date',
   customerId: 'customerId',
   customerName: 'customerName',
@@ -298,6 +312,7 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
+  Company: 'Company',
   User: 'User',
   Customer: 'Customer',
   Product: 'Product',

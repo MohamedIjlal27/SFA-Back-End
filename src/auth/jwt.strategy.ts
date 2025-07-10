@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    // companyId is extracted from JWT and made available in req.user
     return {
       exeId: payload.exeId,
       companyId: payload.companyId,

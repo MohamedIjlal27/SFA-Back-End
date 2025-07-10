@@ -5,6 +5,9 @@ export class CustomerDto {
   customerId: string;
 
   @ApiProperty()
+  companyId: string;
+
+  @ApiProperty()
   exeId: string;
 
   @ApiProperty()
@@ -47,6 +50,9 @@ export class CustomerDto {
 export class CustomerDetailDto {
   @ApiProperty()
   customerId: string;
+
+  @ApiProperty()
+  companyId: string;
 
   @ApiProperty()
   executiveId: string;
@@ -187,6 +193,9 @@ export class DueListInvoiceDto {
 export class DueListCustomerDto {
   @ApiProperty()
   customerId: string;
+
+  @ApiProperty()
+  companyId: string;
 
   @ApiProperty()
   customerName: string;

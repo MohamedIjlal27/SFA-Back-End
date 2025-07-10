@@ -10,10 +10,11 @@ import {
 export class CustomersService {
   constructor(private prisma: PrismaService) {}
 
-  async getCustomerList(exeId: string): Promise<CustomerDto[]> {
+  async getCustomerList(exeId: string, companyId: string): Promise<CustomerDto[]> {
     const customers = await this.prisma.customer.findMany({
       where: {
         exeId,
+        companyId,
         isActive: true,
       },
       select: {
@@ -31,6 +32,7 @@ export class CustomersService {
         additional: true,
         isActive: true,
         grade: true,
+        companyId: true,
       },
     });
 
@@ -49,12 +51,13 @@ export class CustomersService {
       additional: customer.additional || '',
       isActive: customer.isActive ? 1 : 0,
       grade: customer.grade || '',
+      companyId: customer.companyId,
     }));
   }
 
-  async getCustomerDetails(customerId: string): Promise<CustomerDetailsResponseDto> {
-    const customer = await this.prisma.customer.findUnique({
-      where: { customerId },
+  async getCustomerDetails(customerId: string, companyId: string): Promise<CustomerDetailsResponseDto> {
+    const customer = await this.prisma.customer.findFirst({
+      where: { customerId, companyId },
       include: {
         invoices: {
           where: {
@@ -104,6 +107,7 @@ export class CustomersService {
     return {
       result: {
         customerId: customer.customerId,
+        companyId: customer.companyId,
         executiveId: customer.exeId,
         customerName: customer.customerName,
         telephone1: customer.phone1 || '',
@@ -142,10 +146,11 @@ export class CustomersService {
     };
   }
 
-  async getDueList(exeId: string): Promise<DueListResponseDto> {
+  async getDueList(exeId: string, companyId: string): Promise<DueListResponseDto> {
     const customers = await this.prisma.customer.findMany({
       where: {
         exeId,
+        companyId,
         isActive: true,
       },
       include: {
@@ -168,6 +173,7 @@ export class CustomersService {
 
         return {
           customerId: customer.customerId,
+          companyId: customer.companyId,
           customerName: customer.customerName,
           overdue,
           invoices: customer.invoices.map(invoice => ({

@@ -9,6 +9,9 @@ export class OrderItemDto {
   productId: string;
 
   @ApiProperty()
+  companyId: string;
+
+  @ApiProperty()
   @IsNotEmpty()
   quantity: number;
 
@@ -22,6 +25,11 @@ export class OrderItemDto {
 }
 
 export class CreateOrderDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  companyId: string;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -53,4 +61,7 @@ export class OrderResponseDto {
 
   @ApiProperty()
   status: string;
+
+  @ApiProperty()
+  companyId: string;
 } 

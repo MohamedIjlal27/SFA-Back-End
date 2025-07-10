@@ -5,6 +5,9 @@ export class ProductDto {
   itemCode: string;
 
   @ApiProperty()
+  companyId: string;
+
+  @ApiProperty()
   description: string;
 
   @ApiProperty()
@@ -65,6 +68,9 @@ export class PaginationDto {
 
   @ApiProperty({ description: 'Sort order', required: false, enum: ['asc', 'desc'], default: 'asc' })
   sortOrder?: 'asc' | 'desc' = 'asc';
+
+  @ApiProperty({ description: 'Company ID for multi-tenancy', required: false })
+  companyId?: string;
 }
 
 export class PaginatedProductsResponseDto {

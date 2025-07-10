@@ -26,6 +26,9 @@ export class LoginResponseDto {
   exeId: string;
 
   @ApiProperty()
+  companyId: string;
+
+  @ApiProperty()
   areaCode: string;
 
   @ApiProperty()

@@ -5,8 +5,8 @@ import { PrismaService } from '../database/prisma.service';
 export class ReportsService {
   constructor(private prisma: PrismaService) {}
 
-  async getSalesReport(startDate?: string, endDate?: string) {
-    const whereClause: any = {};
+  async getSalesReport(companyId: string, startDate?: string, endDate?: string) {
+    const whereClause: any = { companyId };
     
     if (startDate && endDate) {
       whereClause.date = {
@@ -39,7 +39,7 @@ export class ReportsService {
     }));
   }
 
-  async getTopCustomers(limit: number = 20) {
+  async getTopCustomers(companyId: string, limit: number = 20) {
     // Get current period data
     const currentPeriodStart = new Date();
     currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
@@ -62,6 +62,7 @@ export class ReportsService {
           gte: currentPeriodStart,
           lte: currentPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -87,6 +88,7 @@ export class ReportsService {
           gte: previousPeriodStart,
           lte: previousPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -110,6 +112,7 @@ export class ReportsService {
               gte: currentPeriodStart,
               lte: currentPeriodEnd,
             },
+            companyId,
           },
           select: {
             customerName: true,
@@ -155,7 +158,7 @@ export class ReportsService {
     });
   }
 
-  async getTopProducts(limit: number = 20) {
+  async getTopProducts(companyId: string, limit: number = 20) {
     // Get current period data
     const currentPeriodStart = new Date();
     currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
@@ -178,6 +181,7 @@ export class ReportsService {
           gte: currentPeriodStart,
           lte: currentPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -203,6 +207,7 @@ export class ReportsService {
           gte: previousPeriodStart,
           lte: previousPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -226,6 +231,7 @@ export class ReportsService {
               gte: currentPeriodStart,
               lte: currentPeriodEnd,
             },
+            companyId,
           },
           select: {
             productName: true,
@@ -270,7 +276,7 @@ export class ReportsService {
     });
   }
 
-  async getCategorySales() {
+  async getCategorySales(companyId: string) {
     // Get current period data
     const currentPeriodStart = new Date();
     currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
@@ -293,6 +299,7 @@ export class ReportsService {
           gte: currentPeriodStart,
           lte: currentPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -313,6 +320,7 @@ export class ReportsService {
           gte: previousPeriodStart,
           lte: previousPeriodEnd,
         },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -344,11 +352,12 @@ export class ReportsService {
     });
   }
 
-  async getCityWiseSales(limit: number = 10) {
+  async getCityWiseSales(companyId: string, limit: number = 10) {
     const cities = await this.prisma.salesReport.groupBy({
       by: ['city', 'province'],
       where: {
         netSales: { gt: 0 },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -371,12 +380,13 @@ export class ReportsService {
     }));
   }
 
-  async getCustomerSalesByProduct(productId: string, limit: number = 10) {
+  async getCustomerSalesByProduct(companyId: string, productId: string, limit: number = 10) {
     const customers = await this.prisma.salesReport.groupBy({
       by: ['customerId', 'customerName', 'city'],
       where: {
         productId,
         netSales: { gt: 0 },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -405,12 +415,13 @@ export class ReportsService {
     }));
   }
 
-  async getCustomerSalesByCategory(category: string, limit: number = 10) {
+  async getCustomerSalesByCategory(companyId: string, category: string, limit: number = 10) {
     const customers = await this.prisma.salesReport.groupBy({
       by: ['customerId', 'customerName', 'city'],
       where: {
         category,
         netSales: { gt: 0 },
+        companyId,
       },
       _sum: {
         netSales: true,
@@ -437,7 +448,7 @@ export class ReportsService {
     }));
   }
 
-  async getRangeCoverageInsights() {
+  async getRangeCoverageInsights(companyId: string) {
     // Get current period data
     const currentPeriodStart = new Date();
     currentPeriodStart.setMonth(currentPeriodStart.getMonth() - 1); // Last month
@@ -452,6 +463,7 @@ export class ReportsService {
           gte: currentPeriodStart,
           lte: currentPeriodEnd,
         },
+        companyId,
       },
       _count: {
         productId: true,
@@ -468,6 +480,7 @@ export class ReportsService {
           gte: currentPeriodStart,
           lte: currentPeriodEnd,
         },
+        companyId,
       },
       _count: {
         productId: true,
@@ -528,9 +541,12 @@ export class ReportsService {
     return insights.sort((a, b) => a.coverage - b.coverage);
   }
 
-  async getCustomerDetails() {
+  async getCustomerDetails(companyId: string) {
     const customers = await this.prisma.salesReport.groupBy({
       by: ['customerId', 'customerName', 'city', 'province'],
+      where: {
+        companyId,
+      },
       _sum: {
         netSales: true,
         quantity: true,
@@ -553,10 +569,13 @@ export class ReportsService {
     }));
   }
 
-  async getProductCoverage() {
+  async getProductCoverage(companyId: string) {
     // Get all products
     const allProducts = await this.prisma.salesReport.groupBy({
       by: ['productId', 'productName', 'category', 'subCategory'],
+      where: {
+        companyId,
+      },
       _sum: {
         quantity: true,
         netSales: true,
@@ -590,7 +609,7 @@ export class ReportsService {
     };
   }
 
-  async getDashboardSummary(executiveId?: string, month?: string, year?: string) {
+  async getDashboardSummary(companyId: string, executiveId?: string, month?: string, year?: string) {
     // Build date filter for current month/year
     const currentDate = new Date();
     const currentMonth = month || (currentDate.getMonth() + 1).toString().padStart(2, '0');
@@ -605,6 +624,7 @@ export class ReportsService {
         gte: startDate,
         lte: endDate,
       },
+      companyId,
     };
 
     // Fix: Filter by executive's customers
@@ -634,6 +654,7 @@ export class ReportsService {
         gte: prevStartDate,
         lte: prevEndDate,
       },
+      companyId,
     };
     if (executiveId) {
       // Use same customerIds for previous month

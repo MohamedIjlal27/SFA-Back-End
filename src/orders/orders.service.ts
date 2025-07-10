@@ -7,11 +7,11 @@ export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
-    const { customerId, salespersonId, items, jsonPayload } = createOrderDto;
+    const { customerId, salespersonId, items, jsonPayload, companyId } = createOrderDto;
 
     // Validate customer exists
-    const customer = await this.prisma.customer.findUnique({
-      where: { customerId },
+    const customer = await this.prisma.customer.findFirst({
+      where: { customerId, companyId },
     });
 
     if (!customer) {
@@ -19,8 +19,8 @@ export class OrdersService {
     }
 
     // Validate salesperson exists
-    const salesperson = await this.prisma.user.findUnique({
-      where: { exeId: salespersonId },
+    const salesperson = await this.prisma.user.findFirst({
+      where: { exeId: salespersonId, companyId },
     });
 
     if (!salesperson) {
@@ -28,8 +28,8 @@ export class OrdersService {
     }
 
     // Get or create document numbering
-    let documentNumbering = await this.prisma.documentNumbering.findUnique({
-      where: { salespersonId },
+    let documentNumbering = await this.prisma.documentNumbering.findFirst({
+      where: { salespersonId, companyId },
     });
 
     if (!documentNumbering) {
@@ -38,6 +38,7 @@ export class OrdersService {
           salespersonId,
           prefix: 'ORD',
           currentNumber: 1,
+          companyId,
         },
       });
     }
@@ -51,6 +52,7 @@ export class OrdersService {
         orderNumber,
         customerId,
         salespersonId,
+        companyId,
         status: 'Pending',
         jsonPayload: jsonPayload || JSON.stringify(createOrderDto),
         orderItems: {
@@ -60,6 +62,7 @@ export class OrdersService {
             unitPrice: item.unitPrice,
             discount: item.discount || 0,
             totalAmount: (item.unitPrice * item.quantity) - (item.discount || 0),
+            companyId,
           })),
         },
       },
@@ -70,7 +73,7 @@ export class OrdersService {
 
     // Increment document numbering
     await this.prisma.documentNumbering.update({
-      where: { salespersonId },
+      where: { id: documentNumbering.id },
       data: {
         currentNumber: documentNumbering.currentNumber + 1,
         lastUpdated: new Date(),
@@ -81,18 +84,20 @@ export class OrdersService {
       orderId: order.id,
       orderNumber: order.orderNumber,
       status: order.status,
+      companyId: order.companyId,
     };
   }
 
-  async getOrdersBySalesperson(salespersonId: string) {
+  async getOrdersBySalesperson(salespersonId: string, companyId: string) {
     const orders = await this.prisma.order.findMany({
-      where: { salespersonId },
+      where: { salespersonId, companyId },
       include: {
         customer: {
           select: {
             customerId: true,
             customerName: true,
             city: true,
+            companyId: true,
           },
         },
         orderItems: {
@@ -122,12 +127,13 @@ export class OrdersService {
         0,
       ),
       itemCount: order.orderItems.length,
+      companyId: order.companyId,
     }));
   }
 
-  async getOrderById(orderId: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { id: orderId },
+  async getOrderById(orderId: string, companyId: string) {
+    const order = await this.prisma.order.findFirst({
+      where: { id: orderId, companyId },
       include: {
         customer: {
           select: {
@@ -139,6 +145,7 @@ export class OrdersService {
             city: true,
             phone1: true,
             phone2: true,
+            companyId: true,
           },
         },
         orderItems: {
@@ -176,49 +183,44 @@ export class OrdersService {
         unitPrice: Number(item.unitPrice),
         discount: Number(item.discount),
         totalAmount: Number(item.totalAmount),
+        companyId: item.companyId,
       })),
       totalAmount: order.orderItems.reduce(
         (sum, item) => sum + Number(item.totalAmount),
         0,
       ),
+      companyId: order.companyId,
     };
   }
 
-  async updateOrderStatus(orderId: string, status: string) {
+  async updateOrderStatus(orderId: string, status: string, companyId: string): Promise<OrderResponseDto> {
     const order = await this.prisma.order.update({
-      where: { id: orderId },
+      where: { id: orderId, companyId },
       data: { status },
     });
-
     return {
       orderId: order.id,
       orderNumber: order.orderNumber,
       status: order.status,
+      companyId: order.companyId,
     };
   }
 
   // Temporary order items storage (in-memory for now, can be moved to Redis later)
   private tempOrderItems = new Map<string, any[]>();
 
-  async storeTempOrderItems(sessionId: string, items: any[]) {
-    this.tempOrderItems.set(sessionId, items);
+  async storeTempOrderItems(sessionId: string, items: any[], companyId: string) {
+    this.tempOrderItems.set(sessionId + ':' + companyId, items);
     return {
       sessionId,
       itemCount: items.length,
+      companyId,
       message: 'Order items stored temporarily',
     };
   }
 
-  async getTempOrderItems(sessionId: string) {
-    const items = this.tempOrderItems.get(sessionId);
-    if (!items) {
-      throw new NotFoundException('No temporary order items found for this session');
-    }
-    return {
-      sessionId,
-      items,
-      itemCount: items.length,
-    };
+  async getTempOrderItems(sessionId: string, companyId: string) {
+    return this.tempOrderItems.get(sessionId + ':' + companyId) || [];
   }
 
   async clearTempOrderItems(sessionId: string) {
@@ -293,60 +295,44 @@ export class OrdersService {
   // New method for saving draft orders
   async saveDraftOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
     try {
-      console.log('Starting saveDraftOrder with data:', JSON.stringify(createOrderDto, null, 2)); // Debug log
-      
-      const { customerId, salespersonId, items, jsonPayload } = createOrderDto;
-
+      const { customerId, salespersonId, items, jsonPayload, companyId } = createOrderDto;
       // Validate customer exists
-      console.log('Validating customer:', customerId); // Debug log
-      const customer = await this.prisma.customer.findUnique({
-        where: { customerId },
+      const customer = await this.prisma.customer.findFirst({
+        where: { customerId, companyId },
       });
-
       if (!customer) {
-        console.log('Customer not found:', customerId); // Debug log
         throw new NotFoundException(`Customer ${customerId} not found`);
       }
-
       // Validate salesperson exists
-      console.log('Validating salesperson:', salespersonId); // Debug log
-      const salesperson = await this.prisma.user.findUnique({
-        where: { exeId: salespersonId },
+      const salesperson = await this.prisma.user.findFirst({
+        where: { exeId: salespersonId, companyId },
       });
-
       if (!salesperson) {
-        console.log('Salesperson not found:', salespersonId); // Debug log
         throw new NotFoundException(`Salesperson ${salespersonId} not found`);
       }
-
       // Get or create document numbering
-      console.log('Getting document numbering for salesperson:', salespersonId); // Debug log
-      let documentNumbering = await this.prisma.documentNumbering.findUnique({
-        where: { salespersonId },
+      let documentNumbering = await this.prisma.documentNumbering.findFirst({
+        where: { salespersonId, companyId },
       });
-
       if (!documentNumbering) {
-        console.log('Creating new document numbering for salesperson:', salespersonId); // Debug log
         documentNumbering = await this.prisma.documentNumbering.create({
           data: {
             salespersonId,
             prefix: 'DRF',
             currentNumber: 1,
+            companyId,
           },
         });
       }
-
       // Generate draft order number
       const orderNumber = `${documentNumbering.prefix}${documentNumbering.currentNumber.toString().padStart(6, '0')}`;
-      console.log('Generated order number:', orderNumber); // Debug log
-
       // Create draft order with items
-      console.log('Creating draft order with items:', JSON.stringify(items, null, 2)); // Debug log
       const order = await this.prisma.order.create({
         data: {
           orderNumber,
           customerId,
           salespersonId,
+          companyId,
           status: 'Draft',
           isDraft: true,
           jsonPayload: jsonPayload || JSON.stringify(createOrderDto),
@@ -356,17 +342,16 @@ export class OrdersService {
               const product = await this.prisma.product.findUnique({
                 where: { itemCode: item.productId },
               });
-
               if (!product) {
                 throw new NotFoundException(`Product ${item.productId} not found`);
               }
-
               return {
                 productId: product.id, // Use the product's ID from the database
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,
                 discount: item.discount || 0,
                 totalAmount: (item.unitPrice * item.quantity) - (item.discount || 0),
+                companyId,
               };
             })),
           },
@@ -375,42 +360,36 @@ export class OrdersService {
           orderItems: true,
         },
       });
-
       // Increment document numbering
-      console.log('Incrementing document numbering'); // Debug log
       await this.prisma.documentNumbering.update({
-        where: { salespersonId },
+        where: { id: documentNumbering.id },
         data: {
           currentNumber: documentNumbering.currentNumber + 1,
           lastUpdated: new Date(),
         },
       });
-
-      console.log('Draft order created successfully:', order); // Debug log
       return {
         orderId: order.id,
         orderNumber: order.orderNumber,
         status: order.status,
+        companyId: order.companyId,
       };
     } catch (error) {
-      console.error('Error in saveDraftOrder:', error); // Debug error with full stack trace
       throw error;
     }
   }
 
   // New method for getting draft orders by salesperson
-  async getDraftOrdersBySalesperson(salespersonId: string) {
+  async getDraftOrdersBySalesperson(salespersonId: string, companyId: string) {
     const orders = await this.prisma.order.findMany({
-      where: { 
-        salespersonId,
-        isDraft: true,
-      },
+      where: { salespersonId, isDraft: true, companyId },
       include: {
         customer: {
           select: {
             customerId: true,
             customerName: true,
             city: true,
+            companyId: true,
           },
         },
         orderItems: {
@@ -426,7 +405,6 @@ export class OrdersService {
       },
       orderBy: { createdAt: 'desc' },
     });
-
     return orders.map(order => ({
       id: order.id,
       orderNumber: order.orderNumber,
@@ -440,6 +418,7 @@ export class OrdersService {
         0,
       ),
       itemCount: order.orderItems.length,
+      companyId: order.companyId,
     }));
   }
 
@@ -469,6 +448,7 @@ export class OrdersService {
       documentNumbering = await this.prisma.documentNumbering.create({
         data: {
           salespersonId: order.salespersonId,
+          companyId: order.companyId,
           prefix: 'ORD',
           currentNumber: 1,
         },
@@ -500,6 +480,96 @@ export class OrdersService {
       orderId: updatedOrder.id,
       orderNumber: updatedOrder.orderNumber,
       status: updatedOrder.status,
+      companyId: updatedOrder.companyId,
     };
+  }
+
+  async getProductsOrderedByCustomer(customerId: string, companyId: string) {
+    // Find all order items for orders by this customer and company
+    const orderItems = await this.prisma.orderItem.findMany({
+      where: {
+        companyId,
+        order: {
+          customerId,
+          companyId,
+        },
+      },
+      include: {
+        product: true,
+      },
+    });
+    // Use a map to ensure unique products
+    const uniqueProductsMap = new Map();
+    for (const item of orderItems) {
+      if (item.product && !uniqueProductsMap.has(item.product.id)) {
+        uniqueProductsMap.set(item.product.id, item.product);
+      }
+    }
+    const uniqueProducts = Array.from(uniqueProductsMap.values());
+    // Map to ProductDto
+    return uniqueProducts.map(product => ({
+      itemCode: product.itemCode,
+      description: product.description,
+      category: product.category || '',
+      subCategory: product.subCategory || '',
+      categoryCode: product.categoryCode || '',
+      uom: product.uom || '',
+      price: Number(product.price),
+      qty: product.qty,
+      imageUrl: product.imageUrl,
+      discountAmount: Number(product.discountAmount),
+      discountPercentage: Number(product.discountPercentage),
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
+      companyId: product.companyId,
+    }));
+  }
+
+  async getDraftOrdersByCustomer(customerId: string, companyId: string) {
+    const orders = await this.prisma.order.findMany({
+      where: {
+        customerId,
+        isDraft: true,
+        companyId,
+      },
+      include: {
+        customer: {
+          select: {
+            customerId: true,
+            customerName: true,
+            city: true,
+            companyId: true,
+          },
+        },
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                itemCode: true,
+                description: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return orders.map(order => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      customerId: order.customerId,
+      customerName: order.customer.customerName,
+      city: order.customer.city,
+      status: order.status,
+      createdAt: order.createdAt,
+      totalAmount: order.orderItems.reduce(
+        (sum, item) => sum + Number(item.totalAmount),
+        0,
+      ),
+      itemCount: order.orderItems.length,
+      items: order.orderItems, // include items for frontend use
+      companyId: order.companyId,
+    }));
   }
 } 

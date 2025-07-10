@@ -7,13 +7,14 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async getProductsPaginated(paginationDto: PaginationDto): Promise<PaginatedProductsResponseDto> {
-    const { page, limit, search, category, subcategory, sortBy, sortOrder } = paginationDto;
+    const { page, limit, search, category, subcategory, sortBy, sortOrder, companyId } = paginationDto;
     const skip = (page - 1) * limit;
 
     // Build where clause
     const whereClause: any = {
       isActive: true,
       qty: { gt: 0 },
+      companyId,
     };
 
     // Add search filter
@@ -89,6 +90,7 @@ export class ProductsService {
         isSaved: false,
         isSold: false,
         isNewShipment: false,
+        companyId: product.companyId,
       })),
       total,
       page,
@@ -99,11 +101,12 @@ export class ProductsService {
     };
   }
 
-  async getProducts(): Promise<ProductDto[]> {
+  async getProducts(companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
         isActive: true,
         qty: { gt: 0 },
+        companyId,
       },
       orderBy: [
         { category: 'asc' },
@@ -127,12 +130,13 @@ export class ProductsService {
       isSaved: false,
       isSold: false,
       isNewShipment: false,
+      companyId: product.companyId,
     }));
   }
 
-  async getProductByCode(itemCode: string): Promise<ProductDto | null> {
-    const product = await this.prisma.product.findUnique({
-      where: { itemCode },
+  async getProductByCode(itemCode: string, companyId: string): Promise<ProductDto | null> {
+    const product = await this.prisma.product.findFirst({
+      where: { itemCode, companyId },
     });
 
     if (!product) {
@@ -154,14 +158,16 @@ export class ProductsService {
       isSaved: false,
       isSold: false,
       isNewShipment: false,
+      companyId: product.companyId,
     };
   }
 
-  async searchProducts(query: string): Promise<ProductDto[]> {
+  async searchProducts(query: string, companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
         isActive: true,
         qty: { gt: 0 },
+        companyId,
         OR: [
           {
             itemCode: {
@@ -199,14 +205,16 @@ export class ProductsService {
       isSaved: false,
       isSold: false,
       isNewShipment: false,
+      companyId: product.companyId,
     }));
   }
 
-  async getProductsByCategory(category: string): Promise<ProductDto[]> {
+  async getProductsByCategory(category: string, companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
         isActive: true,
         qty: { gt: 0 },
+        companyId,
         category: {
           contains: category,
           mode: 'insensitive',
@@ -233,14 +241,16 @@ export class ProductsService {
       isSaved: false,
       isSold: false,
       isNewShipment: false,
+      companyId: product.companyId,
     }));
   }
 
-  async getCategories(): Promise<string[]> {
+  async getCategories(companyId: string): Promise<string[]> {
     const categories = await this.prisma.product.findMany({
       where: {
         isActive: true,
         qty: { gt: 0 },
+        companyId,
       },
       select: {
         category: true,
@@ -253,10 +263,11 @@ export class ProductsService {
       .filter(cat => cat !== null) as string[];
   }
 
-  async getSubCategories(category?: string): Promise<string[]> {
+  async getSubCategories(category: string | undefined, companyId: string): Promise<string[]> {
     const whereClause: any = {
       isActive: true,
       qty: { gt: 0 },
+      companyId,
     };
 
     if (category) {
@@ -279,11 +290,12 @@ export class ProductsService {
       .filter(subCat => subCat !== null) as string[];
   }
 
-  async getTotalCount(): Promise<number> {
+  async getTotalCount(companyId: string): Promise<number> {
     return this.prisma.product.count({
       where: {
         isActive: true,
         qty: { gt: 0 },
+        companyId,
       },
     });
   }

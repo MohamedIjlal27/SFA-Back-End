@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Param, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -18,8 +18,8 @@ export class ProductsController {
     description: 'Products retrieved successfully',
     type: [ProductDto],
   })
-  async getProducts(): Promise<ProductDto[]> {
-    return this.productsService.getProducts();
+  async getProducts(@Request() req): Promise<ProductDto[]> {
+    return this.productsService.getProducts(req.user.companyId);
   }
 
   @Get('items/paginated')
@@ -37,13 +37,14 @@ export class ProductsController {
   @ApiQuery({ name: 'sortBy', required: false, type: String, description: 'Sort field' })
   @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'], description: 'Sort order' })
   async getProductsPaginated(
+    @Request() req,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 20,
     @Query('search') search?: string,
     @Query('category') category?: string,
     @Query('subcategory') subcategory?: string,
     @Query('sortBy') sortBy: string = 'itemCode',
-    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'asc',
+    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'asc'
   ): Promise<PaginatedProductsResponseDto> {
     const paginationDto: PaginationDto = {
       page: Math.max(1, page),
@@ -53,6 +54,7 @@ export class ProductsController {
       subcategory,
       sortBy,
       sortOrder,
+      companyId: req.user.companyId,
     };
 
     return this.productsService.getProductsPaginated(paginationDto);
@@ -65,8 +67,8 @@ export class ProductsController {
     description: 'Products search completed',
     type: [ProductDto],
   })
-  async searchProducts(@Query('q') query: string): Promise<ProductDto[]> {
-    return this.productsService.searchProducts(query);
+  async searchProducts(@Query('q') query: string, @Request() req): Promise<ProductDto[]> {
+    return this.productsService.searchProducts(query, req.user.companyId);
   }
 
   @Get('items/category/:category')
@@ -76,8 +78,8 @@ export class ProductsController {
     description: 'Products by category retrieved successfully',
     type: [ProductDto],
   })
-  async getProductsByCategory(@Param('category') category: string): Promise<ProductDto[]> {
-    return this.productsService.getProductsByCategory(category);
+  async getProductsByCategory(@Param('category') category: string, @Request() req): Promise<ProductDto[]> {
+    return this.productsService.getProductsByCategory(category, req.user.companyId);
   }
 
   @Get('items/:itemCode')
@@ -91,8 +93,8 @@ export class ProductsController {
     status: 404,
     description: 'Product not found',
   })
-  async getProductByCode(@Param('itemCode') itemCode: string): Promise<ProductDto | null> {
-    return this.productsService.getProductByCode(itemCode);
+  async getProductByCode(@Param('itemCode') itemCode: string, @Request() req): Promise<ProductDto | null> {
+    return this.productsService.getProductByCode(itemCode, req.user.companyId);
   }
 
   @Get('categories')
@@ -102,8 +104,8 @@ export class ProductsController {
     description: 'Categories retrieved successfully',
     type: [String],
   })
-  async getCategories(): Promise<string[]> {
-    return this.productsService.getCategories();
+  async getCategories(@Request() req): Promise<string[]> {
+    return this.productsService.getCategories(req.user.companyId);
   }
 
   @Get('subcategories')
@@ -113,8 +115,11 @@ export class ProductsController {
     description: 'Subcategories retrieved successfully',
     type: [String],
   })
-  async getSubCategories(@Query('category') category?: string): Promise<string[]> {
-    return this.productsService.getSubCategories(category);
+  async getSubCategories(
+    @Request() req,
+    @Query('category') category?: string
+  ): Promise<string[]> {
+    return this.productsService.getSubCategories(category, req.user.companyId);
   }
 
   @Get('items/count')
@@ -124,7 +129,7 @@ export class ProductsController {
     description: 'Total count retrieved successfully',
     type: Number,
   })
-  async getTotalCount(): Promise<number> {
-    return this.productsService.getTotalCount();
+  async getTotalCount(@Request() req): Promise<number> {
+    return this.productsService.getTotalCount(req.user.companyId);
   }
 } 

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Delete, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, LoginResponseDto } from '../common/dto/login.dto';
@@ -32,6 +32,10 @@ export class AuthController {
     description: 'Location data stored successfully',
   })
   async storeLocation(@Body() locationData: any) {
+    // Require companyId in the body
+    if (!locationData.companyId) {
+      throw new Error('companyId is required');
+    }
     return this.authService.storeLocation(locationData);
   }
 }
@@ -49,8 +53,8 @@ export class UserSyncController {
     status: 201,
     description: 'User data synced successfully',
   })
-  async syncUserData(@Body() userData: any) {
-    return this.authService.syncUserData(userData);
+  async syncUserData(@Body() userData: any, @Request() req) {
+    return this.authService.syncUserData({ ...userData, companyId: req.user.companyId });
   }
 
   @Post('avatar/sync')
@@ -59,8 +63,8 @@ export class UserSyncController {
     status: 201,
     description: 'User avatar synced successfully',
   })
-  async syncUserAvatar(@Body() avatarData: any) {
-    return this.authService.syncUserAvatar(avatarData);
+  async syncUserAvatar(@Body() avatarData: any, @Request() req) {
+    return this.authService.syncUserAvatar({ ...avatarData, companyId: req.user.companyId });
   }
 
   @Delete('sync')
@@ -69,7 +73,7 @@ export class UserSyncController {
     status: 200,
     description: 'User data cleared successfully',
   })
-  async clearUserData() {
+  async clearUserData(@Request() req) {
     return this.authService.clearUserData();
   }
 } 

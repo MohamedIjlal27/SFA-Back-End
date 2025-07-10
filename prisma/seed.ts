@@ -6,6 +6,16 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seeding...');
 
+  // Ensure the company exists before referencing it
+  await prisma.company.upsert({
+    where: { id: 'LGLMKT' },
+    update: {},
+    create: {
+      id: 'LGLMKT',
+      name: 'Legal Market',
+    },
+  });
+
   // Create sample users/executives
   const users = await Promise.all([
     prisma.user.upsert({
@@ -58,6 +68,7 @@ async function main() {
       create: {
         customerId: 'CUST001',
         exeId: 'EXE001',
+        companyId: 'LGLMKT',
         customerName: 'Colombo Hardware Store',
         addr1: '123 Main Street',
         addr2: 'Colombo 01',
@@ -92,6 +103,7 @@ async function main() {
       create: {
         customerId: 'CUST002',
         exeId: 'EXE001',
+        companyId: 'LGLMKT',
         customerName: 'Kalutara Construction Co',
         addr1: '456 Industrial Road',
         addr2: 'Kalutara',
@@ -124,6 +136,12 @@ async function main() {
 
   console.log('✅ Customers created:', customers.length);
 
+  // After creating customers, build a map from customerId to companyId
+  const customerCompanyMap: Record<string, string> = {};
+  for (const customer of customers) {
+    customerCompanyMap[customer.customerId] = customer.companyId;
+  }
+
   // Create sample products
   const productUpserts = [
     prisma.product.upsert({
@@ -142,6 +160,7 @@ async function main() {
         discountAmount: 50.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -160,6 +179,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -178,6 +198,7 @@ async function main() {
         discountAmount: 25.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -196,6 +217,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     // Additional products for more variety
@@ -215,6 +237,7 @@ async function main() {
         discountAmount: 85.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -233,6 +256,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -251,6 +275,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -269,6 +294,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -287,6 +313,7 @@ async function main() {
         discountAmount: 18.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -305,6 +332,7 @@ async function main() {
         discountAmount: 350.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -323,6 +351,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -341,6 +370,7 @@ async function main() {
         discountAmount: 28.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -359,6 +389,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -377,6 +408,7 @@ async function main() {
         discountAmount: 85.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -395,6 +427,7 @@ async function main() {
         discountAmount: 450.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -413,6 +446,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -431,6 +465,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -449,6 +484,7 @@ async function main() {
         discountAmount: 28.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -467,6 +503,7 @@ async function main() {
         discountAmount: 95.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -485,6 +522,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -503,6 +541,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -521,6 +560,7 @@ async function main() {
         discountAmount: 60.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -539,6 +579,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -557,6 +598,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -575,6 +617,7 @@ async function main() {
         discountAmount: 650.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -593,6 +636,7 @@ async function main() {
         discountAmount: 420.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -611,6 +655,7 @@ async function main() {
         discountAmount: 780.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -629,6 +674,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -647,6 +693,7 @@ async function main() {
         discountAmount: 60.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -665,6 +712,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -683,6 +731,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -701,6 +750,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -719,6 +769,7 @@ async function main() {
         discountAmount: 90.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -737,6 +788,7 @@ async function main() {
         discountAmount: 120.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -755,6 +807,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -773,6 +826,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -791,6 +845,7 @@ async function main() {
         discountAmount: 320.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -809,6 +864,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -827,6 +883,7 @@ async function main() {
         discountAmount: 380.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -845,6 +902,7 @@ async function main() {
         discountAmount: 180.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -863,6 +921,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -881,6 +940,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -899,6 +959,7 @@ async function main() {
         discountAmount: 320.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -917,6 +978,7 @@ async function main() {
         discountAmount: 220.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -935,6 +997,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -953,6 +1016,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -971,6 +1035,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -989,6 +1054,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1007,6 +1073,7 @@ async function main() {
         discountAmount: 95.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1025,6 +1092,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1043,6 +1111,7 @@ async function main() {
         discountAmount: 320.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1061,6 +1130,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1079,6 +1149,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1097,6 +1168,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1115,6 +1187,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1133,6 +1206,7 @@ async function main() {
         discountAmount: 320.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1151,6 +1225,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1169,6 +1244,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1187,6 +1263,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1205,6 +1282,7 @@ async function main() {
         discountAmount: 180.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1223,6 +1301,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1241,6 +1320,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1259,6 +1339,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1277,6 +1358,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1295,6 +1377,7 @@ async function main() {
         discountAmount: 70.00,
         discountPercentage: 10.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1313,6 +1396,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1331,6 +1415,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.product.upsert({
@@ -1349,6 +1434,7 @@ async function main() {
         discountAmount: 0.00,
         discountPercentage: 0.00,
         isActive: true,
+        companyId: 'LGLMKT',
       },
     }),
   ];
@@ -1358,10 +1444,16 @@ async function main() {
   }
   console.log('✅ Products created:', products.length);
 
-  // Build a map from itemCode to id
+  // Build a map from itemCode to product.id for order item mapping
   const productMap: Record<string, string> = {};
   for (const product of products) {
     productMap[product.itemCode] = product.id;
+  }
+
+  // After creating products, build a map from productId to companyId
+  const productCompanyMap: Record<string, string> = {};
+  for (const product of products) {
+    productCompanyMap[product.id] = product.companyId;
   }
 
   // Create sample orders (50 total records)
@@ -1879,13 +1971,18 @@ async function main() {
   ];
 
   // Map productId in order items from itemCode to UUID
-  const fixedOrderData = orderData.map(order => ({
-    ...order,
-    items: order.items.map(item => ({
-      ...item,
-      productId: productMap[item.productId],
-    })),
-  }));
+  const fixedOrderData = orderData.map(order => {
+    const companyId = customerCompanyMap[order.customerId];
+    return {
+      ...order,
+      companyId,
+      items: order.items.map(item => ({
+        ...item,
+        productId: productMap[item.productId],
+        companyId, // Inject companyId into each order item
+      })),
+    };
+  });
 
   // Create orders sequentially to avoid connection pool timeout
   const orders: any[] = [];
@@ -1895,10 +1992,10 @@ async function main() {
       update: {
         customerId: orderData.customerId,
         salespersonId: orderData.salespersonId,
+        companyId: orderData.companyId,
         status: orderData.status,
         createdAt: orderData.createdAt,
         jsonPayload: JSON.stringify(orderData),
-        // Update order items by deleting existing ones and creating new ones
         orderItems: {
           deleteMany: {},
           create: orderData.items,
@@ -1908,6 +2005,7 @@ async function main() {
         orderNumber: orderData.orderNumber,
         customerId: orderData.customerId,
         salespersonId: orderData.salespersonId,
+        companyId: orderData.companyId,
         status: orderData.status,
         createdAt: orderData.createdAt,
         jsonPayload: JSON.stringify(orderData),
@@ -1935,6 +2033,7 @@ async function main() {
         dueAmount: 50000.00,
         exeId: 'EXE001',
         refNo: 'REF001',
+        companyId: 'LGLMKT',
       },
     }),
     // Additional due invoices for CUST001
@@ -1951,6 +2050,7 @@ async function main() {
         dueAmount: 20000.00,
         exeId: 'EXE001',
         refNo: 'REF003',
+        companyId: 'LGLMKT',
       },
     }),
     prisma.invoice.upsert({
@@ -1966,6 +2066,7 @@ async function main() {
         dueAmount: 45000.00,
         exeId: 'EXE001',
         refNo: 'REF004',
+        companyId: 'LGLMKT',
       },
     }),
     prisma.invoice.upsert({
@@ -1981,6 +2082,7 @@ async function main() {
         dueAmount: 30000.00,
         exeId: 'EXE001',
         refNo: 'REF005',
+        companyId: 'LGLMKT',
       },
     }),
     prisma.invoice.upsert({
@@ -1996,6 +2098,7 @@ async function main() {
         dueAmount: 150000.00,
         exeId: 'EXE001',
         refNo: 'REF002',
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2021,6 +2124,7 @@ async function main() {
         totalSales: 50000.00,
         discount: 5000.00,
         netSales: 45000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2039,6 +2143,7 @@ async function main() {
         totalSales: 240000.00,
         discount: 0.00,
         netSales: 240000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2057,6 +2162,7 @@ async function main() {
         totalSales: 125000.00,
         discount: 12500.00,
         netSales: 112500.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2075,6 +2181,7 @@ async function main() {
         totalSales: 150000.00,
         discount: 0.00,
         netSales: 150000.00,
+        companyId: 'LGLMKT',
       },
     }),
     // Additional sales for better metrics
@@ -2094,6 +2201,7 @@ async function main() {
         totalSales: 25000.00,
         discount: 2500.00,
         netSales: 22500.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2112,6 +2220,7 @@ async function main() {
         totalSales: 180000.00,
         discount: 0.00,
         netSales: 180000.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2129,6 +2238,7 @@ async function main() {
         transDate: new Date('2025-06-10'),
         amtBc: 45000.00,
         remUnappl: 5000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2140,6 +2250,7 @@ async function main() {
         transDate: new Date('2025-06-18'),
         amtBc: 120000.00,
         remUnappl: 30000.00,
+        companyId: 'LGLMKT',
       },
     }),
     // Additional collections for current month
@@ -2152,6 +2263,7 @@ async function main() {
         transDate: new Date('2025-06-22'),
         amtBc: 67500.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2163,6 +2275,7 @@ async function main() {
         transDate: new Date('2025-06-25'),
         amtBc: 180000.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2174,6 +2287,7 @@ async function main() {
         transDate: new Date('2025-06-28'),
         amtBc: 112500.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2185,6 +2299,7 @@ async function main() {
         transDate: new Date('2025-06-30'),
         amtBc: 150000.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2209,6 +2324,7 @@ async function main() {
         totalSales: -5000.00,
         discount: -500.00,
         netSales: -4500.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2227,6 +2343,7 @@ async function main() {
         totalSales: -5000.00,
         discount: -500.00,
         netSales: -4500.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2245,6 +2362,7 @@ async function main() {
         totalSales: -7500.00,
         discount: 0.00,
         netSales: -7500.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2269,6 +2387,7 @@ async function main() {
         totalSales: 6000.00,
         discount: 0.00,
         netSales: 6000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2287,6 +2406,7 @@ async function main() {
         totalSales: 3750.00,
         discount: 375.00,
         netSales: 3375.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2305,6 +2425,7 @@ async function main() {
         totalSales: 4000.00,
         discount: 400.00,
         netSales: 3600.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2329,6 +2450,7 @@ async function main() {
         totalSales: 40000.00,
         discount: 4000.00,
         netSales: 36000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2347,6 +2469,7 @@ async function main() {
         totalSales: 180000.00,
         discount: 0.00,
         netSales: 180000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2365,6 +2488,7 @@ async function main() {
         totalSales: 75000.00,
         discount: 7500.00,
         netSales: 67500.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2383,6 +2507,7 @@ async function main() {
         totalSales: 90000.00,
         discount: 0.00,
         netSales: 90000.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2399,6 +2524,7 @@ async function main() {
         transDate: new Date('2025-05-10'),
         amtBc: 36000.00,
         remUnappl: 4000.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2410,6 +2536,7 @@ async function main() {
         transDate: new Date('2025-05-18'),
         amtBc: 180000.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.payment.upsert({
@@ -2421,6 +2548,7 @@ async function main() {
         transDate: new Date('2025-05-25'),
         amtBc: 67500.00,
         remUnappl: 0.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2444,6 +2572,7 @@ async function main() {
         totalSales: -2500.00,
         discount: -250.00,
         netSales: -2250.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2462,6 +2591,7 @@ async function main() {
         totalSales: -2500.00,
         discount: -250.00,
         netSales: -2250.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
@@ -2485,6 +2615,7 @@ async function main() {
         totalSales: 2400.00,
         discount: 0.00,
         netSales: 2400.00,
+        companyId: 'LGLMKT',
       },
     }),
     prisma.salesReport.create({
@@ -2503,6 +2634,7 @@ async function main() {
         totalSales: 1250.00,
         discount: 125.00,
         netSales: 1125.00,
+        companyId: 'LGLMKT',
       },
     }),
   ]);
