@@ -289,7 +289,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/mohamedijlal/Public/mobile/SmatrixNodeAPI/generated/prisma",
+      "value": "/Users/mohamedijlal/Public/SFA/SFA-Back-End/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -307,7 +307,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/mohamedijlal/Public/mobile/SmatrixNodeAPI/prisma/schema.prisma",
+    "sourceFilePath": "/Users/mohamedijlal/Public/SFA/SFA-Back-End/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
