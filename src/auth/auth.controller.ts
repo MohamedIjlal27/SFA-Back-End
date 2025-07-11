@@ -29,6 +29,19 @@ export class AuthController {
     return res.status(HttpStatus.OK).json(result);
   }
 
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'User logout' })
+  @ApiResponse({
+    status: 200,
+    description: 'Logout successful',
+  })
+  async logout(@Res() res: Response): Promise<any> {
+    // Clear the isAuthenticated cookie
+    res.cookie('isAuthenticated', '', { path: '/', expires: new Date(0) });
+    return res.status(HttpStatus.OK).json({ message: 'Logout successful' });
+  }
+
   @Post('location/store')
   @ApiOperation({ summary: 'Store user location data' })
   @ApiResponse({
