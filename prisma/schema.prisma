@@ -47,6 +47,7 @@ model User {
   documentNumbering DocumentNumbering?
   orders            Order[]
 
+  @@unique([companyId, exeId])
   @@map("users")
 }
 

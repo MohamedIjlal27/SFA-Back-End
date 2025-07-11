@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { PrismaClient } from '../generated/prisma';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -8,13 +9,79 @@ async function main() {
 
   // Ensure the company exists before referencing it
   await prisma.company.upsert({
-    where: { id: 'LGLMKT' },
+    where: { id: 'SYNQOP' },
     update: {},
     create: {
-      id: 'LGLMKT',
-      name: 'Legal Market',
+      id: 'SYNQOP',
+      name: 'Synqop Demo Company',
     },
   });
+
+  // Create admin and executive users for the company
+  const adminPassword = await bcrypt.hash('admin123', 10);
+  const exec1Password = await bcrypt.hash('exec123', 10);
+  const exec2Password = await bcrypt.hash('exec456', 10);
+
+  await Promise.all([
+    prisma.user.upsert({
+      where: { exeId: 'ADMIN001' },
+      update: {},
+      create: {
+        exeId: 'ADMIN001',
+        companyId: 'SYNQOP',
+        password: adminPassword,
+        leader: 'ADMIN001',
+        areaCode: 'HQ',
+        exeName: 'Alice Admin',
+        exeNameOrig: 'HQ:Alice Admin-001',
+        role: 'Admin',
+        areaName: 'Headquarters',
+        region: 'Central',
+        subdivisionCode: 'SUBHQ',
+        imageLocation: '/images/users/admin001.jpg',
+        isActive: true,
+      },
+    }),
+    prisma.user.upsert({
+      where: { exeId: 'EXEC001' },
+      update: {},
+      create: {
+        exeId: 'EXEC001',
+        companyId: 'SYNQOP',
+        password: exec1Password,
+        leader: 'ADMIN001',
+        areaCode: 'CMB',
+        exeName: 'Bob Executive',
+        exeNameOrig: 'CMB:Bob Executive-002',
+        role: 'Executive',
+        areaName: 'Colombo',
+        region: 'Western',
+        subdivisionCode: 'SUBCMB',
+        imageLocation: '/images/users/exec001.jpg',
+        isActive: true,
+      },
+    }),
+    prisma.user.upsert({
+      where: { exeId: 'EXEC002' },
+      update: {},
+      create: {
+        exeId: 'EXEC002',
+        companyId: 'SYNQOP',
+        password: exec2Password,
+        leader: 'ADMIN001',
+        areaCode: 'KAL',
+        exeName: 'Charlie Executive',
+        exeNameOrig: 'KAL:Charlie Executive-003',
+        role: 'Executive',
+        areaName: 'Kalutara',
+        region: 'Western',
+        subdivisionCode: 'SUBKAL',
+        imageLocation: '/images/users/exec002.jpg',
+        isActive: true,
+      },
+    }),
+  ]);
+  console.log('✅ Demo company and users created');
 
   // Create sample users/executives
   const users = await Promise.all([

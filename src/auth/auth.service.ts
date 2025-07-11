@@ -16,18 +16,22 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const { companyId, exeId, password } = loginDto;
 
-    // Validate company ID and password (hardcoded for now as per .NET API)
-    if (companyId !== 'LGLMKT' || password !== 'LGLMKT') {
-      throw new UnauthorizedException('Invalid company ID or password');
-    }
-
-    // Find user in database
-    const user = await this.prisma.user.findUnique({
-      where: { exeId },
+    // Find user by companyId and exeId (multi-tenant safe)
+    const user = await this.prisma.user.findFirst({
+      where: {
+        companyId,
+        exeId,
+      },
     });
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Check password (assuming hashed passwords)
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // Generate JWT token

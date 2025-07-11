@@ -14510,6 +14510,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     exeId?: string
+    companyId_exeId?: UserCompanyIdExeIdCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -14531,7 +14532,7 @@ export namespace Prisma {
     customers?: CustomerListRelationFilter
     documentNumbering?: XOR<DocumentNumberingNullableRelationFilter, DocumentNumberingWhereInput> | null
     orders?: OrderListRelationFilter
-  }, "id" | "exeId">
+  }, "id" | "exeId" | "companyId_exeId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -16969,6 +16970,11 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type UserCompanyIdExeIdCompoundUniqueInput = {
+    companyId: string
+    exeId: string
   }
 
   export type UserCountOrderByAggregateInput = {
