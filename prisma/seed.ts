@@ -17,10 +17,23 @@ async function main() {
     },
   });
 
+  // Ensure the LGLMKT company exists before referencing it
+  await prisma.company.upsert({
+    where: { id: 'LGLMKT' },
+    update: {},
+    create: {
+      id: 'LGLMKT',
+      name: 'Legal Market',
+    },
+  });
+
   // Create admin and executive users for the company
   const adminPassword = await bcrypt.hash('admin123', 10);
-  const exec1Password = await bcrypt.hash('exec123', 10);
-  const exec2Password = await bcrypt.hash('exec456', 10);
+  const exe1Password = await bcrypt.hash('exe1234', 10);
+  const exe2Password = await bcrypt.hash('exe5678', 10);
+  const sal1Password = await bcrypt.hash('sal1234', 10);
+  const sal2Password = await bcrypt.hash('sal5678', 10);
+
 
   await Promise.all([
     prisma.user.upsert({
@@ -48,15 +61,15 @@ async function main() {
       create: {
         exeId: 'EXEC001',
         companyId: 'SYNQOP',
-        password: exec1Password,
+        password: exe1Password,
         leader: 'ADMIN001',
         areaCode: 'CMB',
-        exeName: 'Bob Executive',
-        exeNameOrig: 'CMB:Bob Executive-002',
+        exeName: 'John Doe',
+        exeNameOrig: 'CMB:John Doe-001',
         role: 'Executive',
-        areaName: 'Colombo',
+        areaName: 'COLOMBO',
         region: 'Western',
-        subdivisionCode: 'SUBCMB',
+        subdivisionCode: 'SUB001',
         imageLocation: '/images/users/exec001.jpg',
         isActive: true,
       },
@@ -67,15 +80,15 @@ async function main() {
       create: {
         exeId: 'EXEC002',
         companyId: 'SYNQOP',
-        password: exec2Password,
+        password: exe2Password,
         leader: 'ADMIN001',
         areaCode: 'KAL',
-        exeName: 'Charlie Executive',
-        exeNameOrig: 'KAL:Charlie Executive-003',
+        exeName: 'Jane Smith',
+        exeNameOrig: 'KAL:Jane Smith-002',
         role: 'Executive',
-        areaName: 'Kalutara',
+        areaName: 'KALUTARA',
         region: 'Western',
-        subdivisionCode: 'SUBKAL',
+        subdivisionCode: 'SUB002',
         imageLocation: '/images/users/exec002.jpg',
         isActive: true,
       },
@@ -91,7 +104,7 @@ async function main() {
       create: {
         exeId: 'EXE001',
         companyId: 'LGLMKT',
-        password: 'LGLMKT', // In production, this should be hashed
+        password: sal1Password,
         leader: 'LEADER001',
         areaCode: 'CMB',
         exeName: 'John Doe',
@@ -110,7 +123,7 @@ async function main() {
       create: {
         exeId: 'EXE002',
         companyId: 'LGLMKT',
-        password: 'LGLMKT',
+        password: sal2Password,
         leader: 'LEADER001',
         areaCode: 'KAL',
         exeName: 'Jane Smith',

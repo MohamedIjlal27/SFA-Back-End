@@ -1,4 +1,5 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Delete, UseGuards, Request, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, LoginResponseDto } from '../common/dto/login.dto';
@@ -21,8 +22,11 @@ export class AuthController {
     status: 400,
     description: 'Invalid credentials',
   })
-  async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<any> {
+    const result = await this.authService.login(loginDto);
+    // Set the isAuthenticated cookie (not httpOnly for demo, set httpOnly: true for production)
+    res.cookie('isAuthenticated', 'true', { path: '/', httpOnly: false });
+    return res.status(HttpStatus.OK).json(result);
   }
 
   @Post('location/store')
