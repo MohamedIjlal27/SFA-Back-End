@@ -38,6 +38,18 @@ async function bootstrap() {
     }),
   );
 
+  // Enable CORS for web and mobile clients
+  app.enableCors({
+    origin: [
+      'http://localhost:3000', // Local web frontend
+      'https://sfa-web.vercel.app', // Deployed web frontend (change to your actual domain)
+      '*', // Allow all origins for mobile apps (native apps ignore CORS, but this is safe for API)
+    ],
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
+  });
+
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Smartrix Mobile API')
