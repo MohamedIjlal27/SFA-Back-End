@@ -3,7 +3,6 @@ import { PrismaService } from '../database/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../common/dto/user.dto';
 import { UserIdGenerator } from './user-id-generator.util';
 import { PasswordGenerator } from './password-generator.util';
-import { SmsService } from '../sms/sms.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -12,7 +11,6 @@ export class UsersService {
     private prisma: PrismaService,
     private userIdGenerator: UserIdGenerator,
     private passwordGenerator: PasswordGenerator,
-    private smsService: SmsService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -97,16 +95,7 @@ export class UsersService {
       response.generatedPassword = generatedPassword;
     }
 
-    // Send SMS with credentials if phone is provided
-    if (user.phone && generatedPassword) {
-      const smsBody = `Welcome to Smartix!\nUser ID: ${user.exeId}\nPassword: ${generatedPassword}\nCompany ID: ${user.companyId}`;
-      try {
-        await this.smsService.sendSms(user.phone, smsBody);
-      } catch (err) {
-        // Log but do not block user creation
-        console.error('Failed to send SMS:', err);
-      }
-    }
+    // SMS sending logic removed
 
     return response;
   }
