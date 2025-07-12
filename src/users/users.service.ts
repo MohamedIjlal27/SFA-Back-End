@@ -284,6 +284,31 @@ export class UsersService {
     return this.mapToResponseDto(user);
   }
 
+  async resetPassword(id: string): Promise<UserResponseDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Generate new password based on user type
+    const newPassword = this.passwordGenerator.generatePasswordByUserType(user.userType || 'mobile');
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+
+    // Return user with generated password
+    const response = this.mapToResponseDto(updatedUser);
+    response.generatedPassword = newPassword;
+
+    return response;
+  }
+
   private mapToResponseDto(user: any): UserResponseDto {
     return {
       id: user.id,

@@ -94,6 +94,11 @@ export class UsersController {
     return this.usersService.activate(id);
   }
 
+  @Patch(':id/reset-password')
+  async resetPassword(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.usersService.resetPassword(id);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
