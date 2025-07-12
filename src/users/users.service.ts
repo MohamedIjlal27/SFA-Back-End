@@ -1,17 +1,36 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../common/dto/user.dto';
+import { UserIdGenerator } from './user-id-generator.util';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userIdGenerator: UserIdGenerator,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    // Generate exeId if not provided and role is supported
+    let exeId = createUserDto.exeId;
+    
+    if (!exeId && createUserDto.role) {
+      if (!this.userIdGenerator.isSupportedRole(createUserDto.role)) {
+        throw new BadRequestException(`Role "${createUserDto.role}" is not supported for automatic ID generation. Supported roles: ${this.userIdGenerator.getSupportedRoles().join(', ')}`);
+      }
+      
+      try {
+        exeId = await this.userIdGenerator.generateUserId(createUserDto.role, createUserDto.companyId);
+      } catch (error) {
+        throw new BadRequestException(`Failed to generate user ID: ${error.message}`);
+      }
+    }
+
     // Check if user with same exeId exists in the company
     const existingUser = await this.prisma.user.findFirst({
       where: {
-        exeId: createUserDto.exeId,
+        exeId: exeId,
         companyId: createUserDto.companyId,
       },
     });
@@ -51,6 +70,7 @@ export class UsersService {
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
+        exeId: exeId,
         password: hashedPassword,
         userType: createUserDto.userType || 'mobile',
       },

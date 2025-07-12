@@ -8,7 +8,8 @@ export enum UserType {
 
 export class CreateUserDto {
   @IsString()
-  exeId: string;
+  @IsOptional()
+  exeId?: string;
 
   @IsString()
   companyId: string;
