@@ -30,7 +30,20 @@ model User {
   exeId             String             @unique
   companyId         String
   company           Company            @relation(fields: [companyId], references: [id])
-  password          String
+  
+  // Basic Information
+  firstName         String?
+  lastName          String?
+  email             String?             @unique
+  phone             String?
+  username          String?             @unique
+  
+  // Authentication
+  password          String?
+  userType          String              @default("mobile") // mobile, web, both
+  androidId         String?
+  
+  // Legacy fields (keeping for backward compatibility)
   leader            String?
   areaCode          String?
   exeName           String?
@@ -40,9 +53,14 @@ model User {
   region            String?
   subdivisionCode   String?
   imageLocation     String?
+  
+  // Status and timestamps
   isActive          Boolean            @default(true)
+  lastLoginAt       DateTime?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  
+  // Relations
   customers         Customer[]
   documentNumbering DocumentNumbering?
   orders            Order[]

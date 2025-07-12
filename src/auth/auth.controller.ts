@@ -12,7 +12,10 @@ export class AuthController {
 
   @Post('basic')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'User login' })
+  @ApiOperation({ 
+    summary: 'User login',
+    description: 'Login with companyId, exeId, and password. For mobile login, Android ID is required.'
+  })
   @ApiResponse({
     status: 200,
     description: 'Login successful',
@@ -20,12 +23,83 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid credentials',
+    description: 'Invalid credentials or missing Android ID for mobile login',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - invalid credentials or device not authorized',
   })
   async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<any> {
     const result = await this.authService.login(loginDto);
+    
     // Set the isAuthenticated cookie (not httpOnly for demo, set httpOnly: true for production)
     res.cookie('isAuthenticated', 'true', { path: '/', httpOnly: false });
+    
+    return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Post('mobile')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'Mobile app login',
+    description: 'Login specifically for mobile app with Android ID validation'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Mobile login successful',
+    type: LoginResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Missing Android ID',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - invalid credentials or device not authorized',
+  })
+  async mobileLogin(@Body() loginDto: LoginDto, @Res() res: Response): Promise<any> {
+    // Ensure platform is set to mobile
+    loginDto.platform = 'mobile';
+    
+    if (!loginDto.androidId) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Android ID is required for mobile login',
+        error: 'MISSING_ANDROID_ID'
+      });
+    }
+
+    const result = await this.authService.login(loginDto);
+    
+    // Set the isAuthenticated cookie
+    res.cookie('isAuthenticated', 'true', { path: '/', httpOnly: false });
+    
+    return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Post('web')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'Web app login',
+    description: 'Login specifically for web application'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Web login successful',
+    type: LoginResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - invalid credentials',
+  })
+  async webLogin(@Body() loginDto: LoginDto, @Res() res: Response): Promise<any> {
+    // Ensure platform is set to web
+    loginDto.platform = 'web';
+    
+    const result = await this.authService.login(loginDto);
+    
+    // Set the isAuthenticated cookie
+    res.cookie('isAuthenticated', 'true', { path: '/', httpOnly: false });
+    
     return res.status(HttpStatus.OK).json(result);
   }
 

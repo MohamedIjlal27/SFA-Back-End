@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../database/prisma.service';
@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
-    const { companyId, exeId, password } = loginDto;
+    const { companyId, exeId, password, androidId, platform } = loginDto;
 
     // Find user by companyId and exeId (multi-tenant safe)
     const user = await this.prisma.user.findFirst({
@@ -28,10 +28,51 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // Check if user is active
+    if (!user.isActive) {
+      throw new UnauthorizedException('User account is deactivated');
+    }
+
     // Check password (assuming hashed passwords)
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Handle Android ID for mobile platform
+    let isFirstTimeLogin = false;
+    if (platform === 'mobile') {
+      if (!androidId) {
+        throw new BadRequestException('Android ID is required for mobile login');
+      }
+
+      // Check if this is first-time login (no Android ID stored yet)
+      if (!user.androidId) {
+        // Store Android ID for first-time mobile login
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { 
+            androidId,
+            lastLoginAt: new Date()
+          },
+        });
+        isFirstTimeLogin = true;
+      } else if (user.androidId !== androidId) {
+        // Android ID mismatch - device binding violation
+        throw new UnauthorizedException('Device not authorized. Please contact administrator.');
+      } else {
+        // Update last login time for existing mobile user
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { lastLoginAt: new Date() },
+        });
+      }
+    } else {
+      // For web login, just update last login time
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
+      });
     }
 
     // Generate JWT token
@@ -39,11 +80,12 @@ export class AuthService {
       exeId: user.exeId,
       companyId: user.companyId,
       role: user.role,
+      userId: user.id,
     };
 
     const token = this.jwtService.sign(payload);
 
-    // Return user data (similar to .NET API response)
+    // Return user data with new fields
     return {
       leader: user.leader || '',
       exeId: user.exeId,
@@ -56,7 +98,17 @@ export class AuthService {
       subdivisionCode: user.subdivisionCode || '',
       imageLocation: user.imageLocation || '',
       token: token,
-      companyId: companyId
+      companyId: companyId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      username: user.username,
+      userType: user.userType,
+      androidId: user.androidId,
+      isActive: user.isActive,
+      lastLoginAt: user.lastLoginAt,
+      isFirstTimeLogin,
     };
   }
 

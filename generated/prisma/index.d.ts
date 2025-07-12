@@ -3107,7 +3107,14 @@ export namespace Prisma {
     id: string | null
     exeId: string | null
     companyId: string | null
+    firstName: string | null
+    lastName: string | null
+    email: string | null
+    phone: string | null
+    username: string | null
     password: string | null
+    userType: string | null
+    androidId: string | null
     leader: string | null
     areaCode: string | null
     exeName: string | null
@@ -3118,6 +3125,7 @@ export namespace Prisma {
     subdivisionCode: string | null
     imageLocation: string | null
     isActive: boolean | null
+    lastLoginAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3126,7 +3134,14 @@ export namespace Prisma {
     id: string | null
     exeId: string | null
     companyId: string | null
+    firstName: string | null
+    lastName: string | null
+    email: string | null
+    phone: string | null
+    username: string | null
     password: string | null
+    userType: string | null
+    androidId: string | null
     leader: string | null
     areaCode: string | null
     exeName: string | null
@@ -3137,6 +3152,7 @@ export namespace Prisma {
     subdivisionCode: string | null
     imageLocation: string | null
     isActive: boolean | null
+    lastLoginAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3145,7 +3161,14 @@ export namespace Prisma {
     id: number
     exeId: number
     companyId: number
+    firstName: number
+    lastName: number
+    email: number
+    phone: number
+    username: number
     password: number
+    userType: number
+    androidId: number
     leader: number
     areaCode: number
     exeName: number
@@ -3156,6 +3179,7 @@ export namespace Prisma {
     subdivisionCode: number
     imageLocation: number
     isActive: number
+    lastLoginAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3166,7 +3190,14 @@ export namespace Prisma {
     id?: true
     exeId?: true
     companyId?: true
+    firstName?: true
+    lastName?: true
+    email?: true
+    phone?: true
+    username?: true
     password?: true
+    userType?: true
+    androidId?: true
     leader?: true
     areaCode?: true
     exeName?: true
@@ -3177,6 +3208,7 @@ export namespace Prisma {
     subdivisionCode?: true
     imageLocation?: true
     isActive?: true
+    lastLoginAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3185,7 +3217,14 @@ export namespace Prisma {
     id?: true
     exeId?: true
     companyId?: true
+    firstName?: true
+    lastName?: true
+    email?: true
+    phone?: true
+    username?: true
     password?: true
+    userType?: true
+    androidId?: true
     leader?: true
     areaCode?: true
     exeName?: true
@@ -3196,6 +3235,7 @@ export namespace Prisma {
     subdivisionCode?: true
     imageLocation?: true
     isActive?: true
+    lastLoginAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3204,7 +3244,14 @@ export namespace Prisma {
     id?: true
     exeId?: true
     companyId?: true
+    firstName?: true
+    lastName?: true
+    email?: true
+    phone?: true
+    username?: true
     password?: true
+    userType?: true
+    androidId?: true
     leader?: true
     areaCode?: true
     exeName?: true
@@ -3215,6 +3262,7 @@ export namespace Prisma {
     subdivisionCode?: true
     imageLocation?: true
     isActive?: true
+    lastLoginAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3296,7 +3344,14 @@ export namespace Prisma {
     id: string
     exeId: string
     companyId: string
-    password: string
+    firstName: string | null
+    lastName: string | null
+    email: string | null
+    phone: string | null
+    username: string | null
+    password: string | null
+    userType: string
+    androidId: string | null
     leader: string | null
     areaCode: string | null
     exeName: string | null
@@ -3307,6 +3362,7 @@ export namespace Prisma {
     subdivisionCode: string | null
     imageLocation: string | null
     isActive: boolean
+    lastLoginAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -3332,7 +3388,14 @@ export namespace Prisma {
     id?: boolean
     exeId?: boolean
     companyId?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    email?: boolean
+    phone?: boolean
+    username?: boolean
     password?: boolean
+    userType?: boolean
+    androidId?: boolean
     leader?: boolean
     areaCode?: boolean
     exeName?: boolean
@@ -3343,6 +3406,7 @@ export namespace Prisma {
     subdivisionCode?: boolean
     imageLocation?: boolean
     isActive?: boolean
+    lastLoginAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -3356,7 +3420,14 @@ export namespace Prisma {
     id?: boolean
     exeId?: boolean
     companyId?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    email?: boolean
+    phone?: boolean
+    username?: boolean
     password?: boolean
+    userType?: boolean
+    androidId?: boolean
     leader?: boolean
     areaCode?: boolean
     exeName?: boolean
@@ -3367,6 +3438,7 @@ export namespace Prisma {
     subdivisionCode?: boolean
     imageLocation?: boolean
     isActive?: boolean
+    lastLoginAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -3376,7 +3448,14 @@ export namespace Prisma {
     id?: boolean
     exeId?: boolean
     companyId?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    email?: boolean
+    phone?: boolean
+    username?: boolean
     password?: boolean
+    userType?: boolean
+    androidId?: boolean
     leader?: boolean
     areaCode?: boolean
     exeName?: boolean
@@ -3387,6 +3466,7 @@ export namespace Prisma {
     subdivisionCode?: boolean
     imageLocation?: boolean
     isActive?: boolean
+    lastLoginAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -3414,7 +3494,14 @@ export namespace Prisma {
       id: string
       exeId: string
       companyId: string
-      password: string
+      firstName: string | null
+      lastName: string | null
+      email: string | null
+      phone: string | null
+      username: string | null
+      password: string | null
+      userType: string
+      androidId: string | null
       leader: string | null
       areaCode: string | null
       exeName: string | null
@@ -3425,6 +3512,7 @@ export namespace Prisma {
       subdivisionCode: string | null
       imageLocation: string | null
       isActive: boolean
+      lastLoginAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -3827,7 +3915,14 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly exeId: FieldRef<"User", 'String'>
     readonly companyId: FieldRef<"User", 'String'>
+    readonly firstName: FieldRef<"User", 'String'>
+    readonly lastName: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
+    readonly phone: FieldRef<"User", 'String'>
+    readonly username: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly userType: FieldRef<"User", 'String'>
+    readonly androidId: FieldRef<"User", 'String'>
     readonly leader: FieldRef<"User", 'String'>
     readonly areaCode: FieldRef<"User", 'String'>
     readonly exeName: FieldRef<"User", 'String'>
@@ -3838,6 +3933,7 @@ export namespace Prisma {
     readonly subdivisionCode: FieldRef<"User", 'String'>
     readonly imageLocation: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
+    readonly lastLoginAt: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -14088,7 +14184,14 @@ export namespace Prisma {
     id: 'id',
     exeId: 'exeId',
     companyId: 'companyId',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    email: 'email',
+    phone: 'phone',
+    username: 'username',
     password: 'password',
+    userType: 'userType',
+    androidId: 'androidId',
     leader: 'leader',
     areaCode: 'areaCode',
     exeName: 'exeName',
@@ -14099,6 +14202,7 @@ export namespace Prisma {
     subdivisionCode: 'subdivisionCode',
     imageLocation: 'imageLocation',
     isActive: 'isActive',
+    lastLoginAt: 'lastLoginAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14465,7 +14569,14 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     exeId?: StringFilter<"User"> | string
     companyId?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
+    firstName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringNullableFilter<"User"> | string | null
+    email?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    username?: StringNullableFilter<"User"> | string | null
+    password?: StringNullableFilter<"User"> | string | null
+    userType?: StringFilter<"User"> | string
+    androidId?: StringNullableFilter<"User"> | string | null
     leader?: StringNullableFilter<"User"> | string | null
     areaCode?: StringNullableFilter<"User"> | string | null
     exeName?: StringNullableFilter<"User"> | string | null
@@ -14476,6 +14587,7 @@ export namespace Prisma {
     subdivisionCode?: StringNullableFilter<"User"> | string | null
     imageLocation?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
+    lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyRelationFilter, CompanyWhereInput>
@@ -14488,7 +14600,14 @@ export namespace Prisma {
     id?: SortOrder
     exeId?: SortOrder
     companyId?: SortOrder
-    password?: SortOrder
+    firstName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    username?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
+    userType?: SortOrder
+    androidId?: SortOrderInput | SortOrder
     leader?: SortOrderInput | SortOrder
     areaCode?: SortOrderInput | SortOrder
     exeName?: SortOrderInput | SortOrder
@@ -14499,6 +14618,7 @@ export namespace Prisma {
     subdivisionCode?: SortOrderInput | SortOrder
     imageLocation?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    lastLoginAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     company?: CompanyOrderByWithRelationInput
@@ -14510,12 +14630,19 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     exeId?: string
+    email?: string
+    username?: string
     companyId_exeId?: UserCompanyIdExeIdCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     companyId?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
+    firstName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    password?: StringNullableFilter<"User"> | string | null
+    userType?: StringFilter<"User"> | string
+    androidId?: StringNullableFilter<"User"> | string | null
     leader?: StringNullableFilter<"User"> | string | null
     areaCode?: StringNullableFilter<"User"> | string | null
     exeName?: StringNullableFilter<"User"> | string | null
@@ -14526,19 +14653,27 @@ export namespace Prisma {
     subdivisionCode?: StringNullableFilter<"User"> | string | null
     imageLocation?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
+    lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyRelationFilter, CompanyWhereInput>
     customers?: CustomerListRelationFilter
     documentNumbering?: XOR<DocumentNumberingNullableRelationFilter, DocumentNumberingWhereInput> | null
     orders?: OrderListRelationFilter
-  }, "id" | "exeId" | "companyId_exeId">
+  }, "id" | "exeId" | "email" | "username" | "companyId_exeId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     exeId?: SortOrder
     companyId?: SortOrder
-    password?: SortOrder
+    firstName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    username?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
+    userType?: SortOrder
+    androidId?: SortOrderInput | SortOrder
     leader?: SortOrderInput | SortOrder
     areaCode?: SortOrderInput | SortOrder
     exeName?: SortOrderInput | SortOrder
@@ -14549,6 +14684,7 @@ export namespace Prisma {
     subdivisionCode?: SortOrderInput | SortOrder
     imageLocation?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    lastLoginAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -14563,7 +14699,14 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     exeId?: StringWithAggregatesFilter<"User"> | string
     companyId?: StringWithAggregatesFilter<"User"> | string
-    password?: StringWithAggregatesFilter<"User"> | string
+    firstName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    lastName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    email?: StringNullableWithAggregatesFilter<"User"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    username?: StringNullableWithAggregatesFilter<"User"> | string | null
+    password?: StringNullableWithAggregatesFilter<"User"> | string | null
+    userType?: StringWithAggregatesFilter<"User"> | string
+    androidId?: StringNullableWithAggregatesFilter<"User"> | string | null
     leader?: StringNullableWithAggregatesFilter<"User"> | string | null
     areaCode?: StringNullableWithAggregatesFilter<"User"> | string | null
     exeName?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -14574,6 +14717,7 @@ export namespace Prisma {
     subdivisionCode?: StringNullableWithAggregatesFilter<"User"> | string | null
     imageLocation?: StringNullableWithAggregatesFilter<"User"> | string | null
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
+    lastLoginAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -15591,7 +15735,14 @@ export namespace Prisma {
   export type UserCreateInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -15602,6 +15753,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutUsersInput
@@ -15614,7 +15766,14 @@ export namespace Prisma {
     id?: string
     exeId: string
     companyId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -15625,6 +15784,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
@@ -15635,7 +15795,14 @@ export namespace Prisma {
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15646,6 +15813,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
@@ -15658,7 +15826,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15669,6 +15844,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
@@ -15680,7 +15856,14 @@ export namespace Prisma {
     id?: string
     exeId: string
     companyId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -15691,6 +15874,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15698,7 +15882,14 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15709,6 +15900,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15717,7 +15909,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15728,6 +15927,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16946,6 +17146,17 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -16981,7 +17192,14 @@ export namespace Prisma {
     id?: SortOrder
     exeId?: SortOrder
     companyId?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    username?: SortOrder
     password?: SortOrder
+    userType?: SortOrder
+    androidId?: SortOrder
     leader?: SortOrder
     areaCode?: SortOrder
     exeName?: SortOrder
@@ -16992,6 +17210,7 @@ export namespace Prisma {
     subdivisionCode?: SortOrder
     imageLocation?: SortOrder
     isActive?: SortOrder
+    lastLoginAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17000,7 +17219,14 @@ export namespace Prisma {
     id?: SortOrder
     exeId?: SortOrder
     companyId?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    username?: SortOrder
     password?: SortOrder
+    userType?: SortOrder
+    androidId?: SortOrder
     leader?: SortOrder
     areaCode?: SortOrder
     exeName?: SortOrder
@@ -17011,6 +17237,7 @@ export namespace Prisma {
     subdivisionCode?: SortOrder
     imageLocation?: SortOrder
     isActive?: SortOrder
+    lastLoginAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17019,7 +17246,14 @@ export namespace Prisma {
     id?: SortOrder
     exeId?: SortOrder
     companyId?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    username?: SortOrder
     password?: SortOrder
+    userType?: SortOrder
+    androidId?: SortOrder
     leader?: SortOrder
     areaCode?: SortOrder
     exeName?: SortOrder
@@ -17030,6 +17264,7 @@ export namespace Prisma {
     subdivisionCode?: SortOrder
     imageLocation?: SortOrder
     isActive?: SortOrder
+    lastLoginAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17060,6 +17295,20 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -17072,17 +17321,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type DecimalNullableFilter<$PrismaModel = never> = {
@@ -17229,20 +17467,6 @@ export namespace Prisma {
     creditPeriod?: SortOrder
     lastInvoiceAmt?: SortOrder
     lastPaymentAmt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -18277,6 +18501,10 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -18417,10 +18645,6 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutCustomerInput | PaymentCreateOrConnectWithoutCustomerInput[]
     createMany?: PaymentCreateManyCustomerInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -18918,6 +19142,17 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -18965,6 +19200,20 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -18979,17 +19228,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -18999,20 +19237,6 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -19131,7 +19355,14 @@ export namespace Prisma {
   export type UserCreateWithoutCompanyInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -19142,6 +19373,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customers?: CustomerCreateNestedManyWithoutUserInput
@@ -19152,7 +19384,14 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutCompanyInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -19163,6 +19402,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
@@ -19583,7 +19823,14 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     exeId?: StringFilter<"User"> | string
     companyId?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
+    firstName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringNullableFilter<"User"> | string | null
+    email?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    username?: StringNullableFilter<"User"> | string | null
+    password?: StringNullableFilter<"User"> | string | null
+    userType?: StringFilter<"User"> | string
+    androidId?: StringNullableFilter<"User"> | string | null
     leader?: StringNullableFilter<"User"> | string | null
     areaCode?: StringNullableFilter<"User"> | string | null
     exeName?: StringNullableFilter<"User"> | string | null
@@ -19594,6 +19841,7 @@ export namespace Prisma {
     subdivisionCode?: StringNullableFilter<"User"> | string | null
     imageLocation?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
+    lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
@@ -20228,7 +20476,14 @@ export namespace Prisma {
   export type UserCreateWithoutCustomersInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -20239,6 +20494,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutUsersInput
@@ -20250,7 +20506,14 @@ export namespace Prisma {
     id?: string
     exeId: string
     companyId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -20261,6 +20524,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
@@ -20435,7 +20699,14 @@ export namespace Prisma {
   export type UserUpdateWithoutCustomersInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20446,6 +20717,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
@@ -20457,7 +20729,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20468,6 +20747,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
@@ -20789,7 +21069,14 @@ export namespace Prisma {
   export type UserCreateWithoutOrdersInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -20800,6 +21087,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutUsersInput
@@ -20811,7 +21099,14 @@ export namespace Prisma {
     id?: string
     exeId: string
     companyId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -20822,6 +21117,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
@@ -20987,7 +21283,14 @@ export namespace Prisma {
   export type UserUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20998,6 +21301,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
@@ -21009,7 +21313,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21020,6 +21331,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
@@ -21770,7 +22082,14 @@ export namespace Prisma {
   export type UserCreateWithoutDocumentNumberingInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -21781,6 +22100,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutUsersInput
@@ -21792,7 +22112,14 @@ export namespace Prisma {
     id?: string
     exeId: string
     companyId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -21803,6 +22130,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
@@ -21867,7 +22195,14 @@ export namespace Prisma {
   export type UserUpdateWithoutDocumentNumberingInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21878,6 +22213,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
@@ -21889,7 +22225,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21900,6 +22243,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
@@ -22053,7 +22397,14 @@ export namespace Prisma {
   export type UserCreateManyCompanyInput = {
     id?: string
     exeId: string
-    password: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
     leader?: string | null
     areaCode?: string | null
     exeName?: string | null
@@ -22064,6 +22415,7 @@ export namespace Prisma {
     subdivisionCode?: string | null
     imageLocation?: string | null
     isActive?: boolean
+    lastLoginAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22211,7 +22563,14 @@ export namespace Prisma {
   export type UserUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22222,6 +22581,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUpdateManyWithoutUserNestedInput
@@ -22232,7 +22592,14 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22243,6 +22610,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
@@ -22253,7 +22621,14 @@ export namespace Prisma {
   export type UserUncheckedUpdateManyWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
     leader?: NullableStringFieldUpdateOperationsInput | string | null
     areaCode?: NullableStringFieldUpdateOperationsInput | string | null
     exeName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22264,6 +22639,7 @@ export namespace Prisma {
     subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
     imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

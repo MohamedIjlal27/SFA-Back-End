@@ -131,7 +131,14 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   exeId: 'exeId',
   companyId: 'companyId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  username: 'username',
   password: 'password',
+  userType: 'userType',
+  androidId: 'androidId',
   leader: 'leader',
   areaCode: 'areaCode',
   exeName: 'exeName',
@@ -142,6 +149,7 @@ exports.Prisma.UserScalarFieldEnum = {
   subdivisionCode: 'subdivisionCode',
   imageLocation: 'imageLocation',
   isActive: 'isActive',
+  lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

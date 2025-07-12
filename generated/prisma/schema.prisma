@@ -26,23 +26,41 @@ model Company {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  exeId             String             @unique
-  companyId         String
-  company           Company            @relation(fields: [companyId], references: [id])
-  password          String
-  leader            String?
-  areaCode          String?
-  exeName           String?
-  exeNameOrig       String?
-  role              String?
-  areaName          String?
-  region            String?
-  subdivisionCode   String?
-  imageLocation     String?
-  isActive          Boolean            @default(true)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id        String  @id @default(cuid())
+  exeId     String  @unique
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  // Basic Information
+  firstName String?
+  lastName  String?
+  email     String? @unique
+  phone     String?
+  username  String? @unique
+
+  // Authentication
+  password  String?
+  userType  String  @default("mobile") // mobile, web, both
+  androidId String?
+
+  // Legacy fields (keeping for backward compatibility)
+  leader          String?
+  areaCode        String?
+  exeName         String?
+  exeNameOrig     String?
+  role            String?
+  areaName        String?
+  region          String?
+  subdivisionCode String?
+  imageLocation   String?
+
+  // Status and timestamps
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
   customers         Customer[]
   documentNumbering DocumentNumbering?
   orders            Order[]

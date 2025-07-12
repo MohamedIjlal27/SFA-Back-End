@@ -8,6 +8,7 @@ import { ReportsModule } from './reports/reports.module';
 import { DatabaseModule } from './database/database.module';
 import { HealthController } from './health/health.controller';
 import { MirrorModule } from './mirror/mirror.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MirrorModule } from './mirror/mirror.module';
     OrdersModule,
     ReportsModule,
     MirrorModule,
+    UsersModule,
   ],
   controllers: [HealthController],
 })
