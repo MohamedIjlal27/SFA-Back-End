@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ConflictException, BadRequestException }
 import { PrismaService } from '../database/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../common/dto/user.dto';
 import { UserIdGenerator } from './user-id-generator.util';
+import { PasswordGenerator } from './password-generator.util';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -9,6 +10,7 @@ export class UsersService {
   constructor(
     private prisma: PrismaService,
     private userIdGenerator: UserIdGenerator,
+    private passwordGenerator: PasswordGenerator,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -25,6 +27,17 @@ export class UsersService {
       } catch (error) {
         throw new BadRequestException(`Failed to generate user ID: ${error.message}`);
       }
+    }
+
+    // Generate password if not provided
+    let generatedPassword: string | undefined;
+    let passwordToHash: string | undefined;
+    
+    if (!createUserDto.password) {
+      generatedPassword = this.passwordGenerator.generatePasswordByUserType(createUserDto.userType || 'mobile');
+      passwordToHash = generatedPassword;
+    } else {
+      passwordToHash = createUserDto.password;
     }
 
     // Check if user with same exeId exists in the company
@@ -61,10 +74,10 @@ export class UsersService {
       }
     }
 
-    // Hash password if provided
+    // Hash password
     let hashedPassword: string | undefined;
-    if (createUserDto.password) {
-      hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    if (passwordToHash) {
+      hashedPassword = await bcrypt.hash(passwordToHash, 10);
     }
 
     const user = await this.prisma.user.create({
@@ -76,7 +89,13 @@ export class UsersService {
       },
     });
 
-    return this.mapToResponseDto(user);
+    // Return user with generated password if one was created
+    const response = this.mapToResponseDto(user);
+    if (generatedPassword) {
+      response.generatedPassword = generatedPassword;
+    }
+
+    return response;
   }
 
   async findAll(companyId?: string, page: number = 1, limit: number = 10, search?: string): Promise<{ users: UserResponseDto[]; total: number; page: number; limit: number }> {

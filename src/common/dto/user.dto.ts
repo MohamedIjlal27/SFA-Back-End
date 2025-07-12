@@ -181,4 +181,5 @@ export class UserResponseDto {
   lastLoginAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+  generatedPassword?: string; // Only included when creating new users
 } 
