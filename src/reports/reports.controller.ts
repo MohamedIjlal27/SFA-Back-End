@@ -136,4 +136,9 @@ export class ReportsController {
   ) {
     return this.reportsService.getDashboardSummary(req.user.companyId, executiveId, month, year);
   }
+
+  @Get('top-users')
+  async getTopUsers(@Request() req, @Query('startDate') startDate?: string, @Query('endDate') endDate?: string) {
+    return this.reportsService.getTopUsers(req.user.companyId, startDate, endDate);
+  }
 } 

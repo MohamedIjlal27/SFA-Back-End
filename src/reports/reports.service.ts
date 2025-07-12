@@ -618,6 +618,13 @@ export class ReportsService {
     const startDate = new Date(`${currentYear}-${currentMonth}-01`);
     const endDate = new Date(parseInt(currentYear), parseInt(currentMonth), 0); // Last day of month
 
+    // Fetch all admin exeIds for this company
+    const adminUsers = await this.prisma.user.findMany({
+      where: { companyId, role: 'Admin' },
+      select: { exeId: true },
+    });
+    const adminExeIds = adminUsers.map(u => u.exeId);
+
     // Build where clause
     const whereClause: any = {
       date: {
@@ -638,9 +645,20 @@ export class ReportsService {
     }
 
     // Get current month data
-    const currentMonthData = await this.prisma.salesReport.findMany({
+    let currentMonthData = await this.prisma.salesReport.findMany({
       where: whereClause,
     });
+
+    // Exclude sales linked to admin users
+    if (adminExeIds.length > 0) {
+      // Get all customerIds linked to admin exeIds
+      const adminCustomers = await this.prisma.customer.findMany({
+        where: { exeId: { in: adminExeIds }, companyId },
+        select: { customerId: true },
+      });
+      const adminCustomerIds = new Set(adminCustomers.map(c => c.customerId));
+      currentMonthData = currentMonthData.filter(sale => !adminCustomerIds.has(sale.customerId));
+    }
 
     // Get previous month data for comparison
     const prevMonth = parseInt(currentMonth) === 1 ? 12 : parseInt(currentMonth) - 1;
@@ -666,9 +684,18 @@ export class ReportsService {
       prevWhereClause.customerId = { in: customerIds };
     }
 
-    const prevMonthData = await this.prisma.salesReport.findMany({
+    let prevMonthData = await this.prisma.salesReport.findMany({
       where: prevWhereClause,
     });
+    // Exclude sales linked to admin users for previous month
+    if (adminExeIds.length > 0) {
+      const adminCustomers = await this.prisma.customer.findMany({
+        where: { exeId: { in: adminExeIds }, companyId },
+        select: { customerId: true },
+      });
+      const adminCustomerIds = new Set(adminCustomers.map(c => c.customerId));
+      prevMonthData = prevMonthData.filter(sale => !adminCustomerIds.has(sale.customerId));
+    }
 
     // Calculate metrics
     const currentTotalSales = currentMonthData.reduce((sum, sale) => sum + Number(sale.netSales), 0);
@@ -737,6 +764,80 @@ export class ReportsService {
         totalCustomers: new Set(currentMonthData.map(sale => sale.customerId)).size,
         totalProducts: new Set(currentMonthData.map(sale => sale.productId)).size,
       },
+    };
+  }
+
+  async getTopUsers(companyId: string, startDate?: string, endDate?: string) {
+    const whereClause: any = { companyId };
+    if (startDate && endDate) {
+      whereClause.date = {
+        gte: new Date(startDate),
+        lte: new Date(endDate),
+      };
+    }
+
+    // Fetch all sales data for the period
+    const salesData = await this.prisma.salesReport.findMany({
+      where: whereClause,
+    });
+
+    // Get all unique customerIds
+    const customerIds = Array.from(new Set(salesData.map(s => s.customerId)));
+    // Fetch all customers for those IDs
+    const customers = await this.prisma.customer.findMany({
+      where: {
+        customerId: { in: customerIds },
+        companyId,
+      },
+      select: {
+        customerId: true,
+        exeId: true,
+        customerName: true,
+      },
+    });
+    // Build a lookup: customerId -> { exeId, customerName }
+    const customerLookup: Record<string, { exeId: string; customerName: string }> = {};
+    for (const c of customers) {
+      customerLookup[c.customerId] = { exeId: c.exeId, customerName: c.customerName };
+    }
+
+    // Aggregate by exeId (user/executive)
+    const userStats: Record<string, {
+      exeId: string;
+      userName: string;
+      totalSales: number;
+      totalReturns: number;
+      totalOrders: number;
+    }> = {};
+
+    for (const sale of salesData) {
+      const customer = customerLookup[sale.customerId];
+      const exeId = customer?.exeId || 'Unknown';
+      const userName = customer?.customerName || 'Unknown';
+      if (!userStats[exeId]) {
+        userStats[exeId] = {
+          exeId,
+          userName,
+          totalSales: 0,
+          totalReturns: 0,
+          totalOrders: 0,
+        };
+      }
+      userStats[exeId].totalSales += Number(sale.netSales) || 0;
+      userStats[exeId].totalReturns += Number(sale.discount) || 0;
+      userStats[exeId].totalOrders += 1;
+    }
+
+    // Find top users
+    const usersArr = Object.values(userStats);
+    const topSalesUser = usersArr.reduce((max, u) => u.totalSales > (max?.totalSales || 0) ? u : max, null as any);
+    const topReturnsUser = usersArr.reduce((max, u) => u.totalReturns > (max?.totalReturns || 0) ? u : max, null as any);
+    const topOrdersUser = usersArr.reduce((max, u) => u.totalOrders > (max?.totalOrders || 0) ? u : max, null as any);
+
+    return {
+      topSalesUser,
+      topReturnsUser,
+      topOrdersUser,
     };
   }
 } 

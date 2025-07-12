@@ -372,7 +372,7 @@ export class UsersService {
   }
 
   async getAnalytics(companyId?: string) {
-    const where: any = {};
+    const where: any = { role: { not: 'Admin' } };
     if (companyId) where.companyId = companyId;
 
     const [total, active, inactive, recent] = await Promise.all([

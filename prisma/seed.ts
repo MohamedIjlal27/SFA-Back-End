@@ -24,8 +24,8 @@ async function main() {
 
   await prisma.user.upsert({
     where: { exeId: 'ADMIN001' },
-    update: {},
-    create: {
+      update: {},
+      create: {
       exeId: 'ADMIN001',
       companyId: 'COMP001',
       firstName: 'Admin',
@@ -36,7 +36,7 @@ async function main() {
       password: adminPassword,
       userType: 'both', // Can access both mobile and web
       role: 'Admin',
-      isActive: true,
+        isActive: true,
     },
   });
 
