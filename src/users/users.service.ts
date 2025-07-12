@@ -371,6 +371,38 @@ export class UsersService {
     return response;
   }
 
+  async getAnalytics(companyId?: string) {
+    const where: any = {};
+    if (companyId) where.companyId = companyId;
+
+    const [total, active, inactive, recent] = await Promise.all([
+      this.prisma.user.count({ where }),
+      this.prisma.user.count({ where: { ...where, isActive: true } }),
+      this.prisma.user.count({ where: { ...where, isActive: false } }),
+      this.prisma.user.findMany({
+        where,
+        orderBy: { lastLoginAt: 'desc' },
+        take: 5,
+        select: {
+          id: true,
+          exeId: true,
+          firstName: true,
+          lastName: true,
+          isActive: true,
+          lastLoginAt: true,
+          role: true,
+        },
+      }),
+    ]);
+
+    return {
+      total,
+      active,
+      inactive,
+      recent,
+    };
+  }
+
   private mapToResponseDto(user: any): UserResponseDto {
     return {
       id: user.id,

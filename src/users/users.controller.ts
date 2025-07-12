@@ -39,9 +39,9 @@ export class UsersController {
     return this.usersService.findAll(companyId, pageNum, limitNum, search);
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<UserResponseDto> {
-    return this.usersService.findOne(id);
+  @Get('analytics')
+  async getAnalytics(@Query('companyId') companyId?: string) {
+    return this.usersService.getAnalytics(companyId);
   }
 
   @Get('exe/:exeId')
@@ -60,6 +60,11 @@ export class UsersController {
   @Get('username/:username')
   async findByUsername(@Param('username') username: string): Promise<UserResponseDto> {
     return this.usersService.findByUsername(username);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
