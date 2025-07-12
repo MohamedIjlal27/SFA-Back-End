@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as Twilio from 'twilio';
+import Twilio from 'twilio';
 
 @Injectable()
 export class SmsService {
@@ -8,8 +8,8 @@ export class SmsService {
 
   constructor() {
     this.client = Twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN,
+      process.env.TWILIO_ACCOUNT_SID!,
+      process.env.TWILIO_AUTH_TOKEN!,
     );
   }
 
