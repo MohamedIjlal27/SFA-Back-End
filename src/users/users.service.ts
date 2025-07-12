@@ -3,6 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../common/dto/user.dto';
 import { UserIdGenerator } from './user-id-generator.util';
 import { PasswordGenerator } from './password-generator.util';
+import { EmailService } from '../email/email.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class UsersService {
     private prisma: PrismaService,
     private userIdGenerator: UserIdGenerator,
     private passwordGenerator: PasswordGenerator,
+    private emailService: EmailService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -93,6 +95,35 @@ export class UsersService {
     const response = this.mapToResponseDto(user);
     if (generatedPassword) {
       response.generatedPassword = generatedPassword;
+    }
+
+    // Send welcome email if email is provided
+    if (user.email && generatedPassword) {
+      const subject = 'Welcome to Smartix! Your Account Has Been Created';
+      const html = `
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #f9f9fb; padding: 32px; color: #222;">
+          <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px;">
+            <h2 style="color: #2a4d9b; margin-top: 0;">Welcome to Smartix!</h2>
+            <p>Hi${user.firstName ? ' ' + user.firstName : ''},</p>
+            <p>Your account has been created. Here are your login credentials:</p>
+            <div style="background: #f3f6fa; border-radius: 8px; padding: 16px 20px; margin: 24px 0;">
+              <p style="margin: 0 0 8px 0;"><b>User ID:</b> <span style="color: #2a4d9b;">${user.exeId}</span></p>
+              <p style="margin: 0 0 8px 0;"><b>Company ID:</b> <span style="color: #2a4d9b;">${user.companyId}</span></p>
+              <p style="margin: 0;"><b>Password:</b> <span style="color: #2a4d9b; letter-spacing: 1px;">${generatedPassword}</span></p>
+            </div>
+            <p style="margin-bottom: 24px;">For your security, please change this password after logging in and do not share it with anyone.</p>
+            <p style="font-size: 0.95em; color: #666;">If you have any questions or need help, please contact your administrator or support team.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px 0;" />
+            <p style="font-size: 0.95em; color: #888;">Thank you,<br/>The Smartix Team</p>
+          </div>
+        </div>
+      `;
+      try {
+        await this.emailService.sendEmail(user.email, subject, html);
+      } catch (err) {
+        // Log but do not block user creation
+        console.error('Failed to send welcome email:', err);
+      }
     }
 
     // SMS sending logic removed
@@ -307,6 +338,35 @@ export class UsersService {
     // Return user with generated password
     const response = this.mapToResponseDto(updatedUser);
     response.generatedPassword = newPassword;
+
+    // Send password reset email if email is provided
+    if (user.email) {
+      const subject = 'Your Smartix Account Password Has Been Reset';
+      const html = `
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #f9f9fb; padding: 32px; color: #222;">
+          <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px;">
+            <h2 style="color: #2a4d9b; margin-top: 0;">Password Reset Successful</h2>
+            <p>Hi${user.firstName ? ' ' + user.firstName : ''},</p>
+            <p>Your password for your <b>Smartix</b> account has been reset. Please find your new login credentials below:</p>
+            <div style="background: #f3f6fa; border-radius: 8px; padding: 16px 20px; margin: 24px 0;">
+              <p style="margin: 0 0 8px 0;"><b>User ID:</b> <span style="color: #2a4d9b;">${user.exeId}</span></p>
+              <p style="margin: 0 0 8px 0;"><b>Company ID:</b> <span style="color: #2a4d9b;">${user.companyId}</span></p>
+              <p style="margin: 0;"><b>New Password:</b> <span style="color: #2a4d9b; letter-spacing: 1px;">${newPassword}</span></p>
+            </div>
+            <p style="margin-bottom: 24px;">For your security, please change this password after logging in and do not share it with anyone.</p>
+            <p style="font-size: 0.95em; color: #666;">If you did not request this password reset, please contact your administrator or support team immediately.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px 0;" />
+            <p style="font-size: 0.95em; color: #888;">Thank you,<br/>The Smartix Team</p>
+          </div>
+        </div>
+      `;
+      try {
+        await this.emailService.sendEmail(user.email, subject, html);
+      } catch (err) {
+        // Log but do not block password reset
+        console.error('Failed to send password reset email:', err);
+      }
+    }
 
     return response;
   }

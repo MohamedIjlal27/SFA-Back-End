@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthController } from './health/health.controller';
 import { MirrorModule } from './mirror/mirror.module';
 import { UsersModule } from './users/users.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UsersModule } from './users/users.module';
     ReportsModule,
     MirrorModule,
     UsersModule,
+    EmailModule,
   ],
   controllers: [HealthController],
 })
