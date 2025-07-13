@@ -232,7 +232,7 @@ export class OrdersService {
     };
   }
 
-  async validateOrderItems(items: any[]) {
+  async validateOrderItems(items: any[], companyId: string) {
     const validationResults = [];
 
     for (const item of items) {
@@ -261,7 +261,7 @@ export class OrdersService {
       // Check if product exists
       if (item.itemCode) {
         const product = await this.prisma.product.findUnique({
-          where: { itemCode: item.itemCode },
+          where: { itemCode_companyId: { itemCode: item.itemCode, companyId: item.companyId || companyId } },
         });
 
         if (!product) {
@@ -340,7 +340,7 @@ export class OrdersService {
             create: await Promise.all(items.map(async item => {
               // Get product by itemCode
               const product = await this.prisma.product.findUnique({
-                where: { itemCode: item.productId },
+                where: { itemCode_companyId: { itemCode: item.productId, companyId } },
               });
               if (!product) {
                 throw new NotFoundException(`Product ${item.productId} not found`);

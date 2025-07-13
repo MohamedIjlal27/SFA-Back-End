@@ -115,7 +115,7 @@ model Product {
   id                 String      @id @default(cuid())
   companyId          String
   company            Company     @relation(fields: [companyId], references: [id])
-  itemCode           String      @unique
+  itemCode           String
   description        String
   category           String?
   subCategory        String?
@@ -131,6 +131,7 @@ model Product {
   updatedAt          DateTime    @updatedAt
   orderItems         OrderItem[]
 
+  @@unique([itemCode, companyId])
   @@map("products")
 }
 

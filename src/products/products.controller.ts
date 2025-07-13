@@ -1,8 +1,14 @@
-import { Controller, Get, Query, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Query, Param, UseGuards, Request, Post, Body, UploadedFile, UseInterceptors, HttpException, HttpStatus, Put, Delete } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import axios from 'axios';
+import * as FormData from 'form-data';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { ProductDto, PaginationDto, PaginatedProductsResponseDto } from '../common/dto/product.dto';
+
+const UPLOADTHING_TOKEN = process.env.UPLOADTHING_TOKEN;
+const UPLOADTHING_URL = 'https://uploadthing.com/api/uploadFiles';
 
 @ApiTags('Products')
 @Controller('ic')
@@ -131,5 +137,63 @@ export class ProductsController {
   })
   async getTotalCount(@Request() req): Promise<number> {
     return this.productsService.getTotalCount(req.user.companyId);
+  }
+
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Upload product image using UploadThing' })
+  @ApiResponse({ status: 201, description: 'Image uploaded successfully', type: String })
+  async uploadImage(@UploadedFile() file: any): Promise<{ url: string }> {
+    if (!file) {
+      throw new HttpException('No file uploaded', HttpStatus.BAD_REQUEST);
+    }
+    if (!UPLOADTHING_TOKEN) {
+      throw new HttpException('UploadThing token not configured', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    // Upload to UploadThing
+    const formData = new FormData();
+    formData.append('file', file.buffer, file.originalname);
+    const response = await axios.post(UPLOADTHING_URL, formData, {
+      headers: {
+        'Authorization': `Bearer ${UPLOADTHING_TOKEN}`,
+        ...formData.getHeaders(),
+      },
+    });
+    if (!response.data || !response.data.url) {
+      throw new HttpException('Failed to upload image', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return { url: response.data.url };
+  }
+
+  @Post('items')
+  @ApiOperation({ summary: 'Create a new product' })
+  @ApiResponse({ status: 201, description: 'Product created successfully', type: ProductDto })
+  async createProduct(@Body() productData: any, @Request() req): Promise<ProductDto> {
+    // Attach companyId from JWT
+    const data = { ...productData, companyId: req.user.companyId };
+    return this.productsService.createProduct(data);
+  }
+
+  @Put('items/:itemCode')
+  @ApiOperation({ summary: 'Update a product' })
+  @ApiResponse({ status: 200, description: 'Product updated successfully', type: ProductDto })
+  async updateProduct(
+    @Param('itemCode') itemCode: string,
+    @Body() productData: any,
+    @Request() req
+  ): Promise<ProductDto> {
+    const data = { ...productData, companyId: req.user.companyId };
+    return this.productsService.updateProduct(itemCode, data);
+  }
+
+  @Delete('items/:itemCode')
+  @ApiOperation({ summary: 'Delete a product' })
+  @ApiResponse({ status: 200, description: 'Product deleted successfully' })
+  async deleteProduct(
+    @Param('itemCode') itemCode: string,
+    @Request() req
+  ): Promise<{ success: boolean }> {
+    await this.productsService.deleteProduct(itemCode, req.user.companyId);
+    return { success: true };
   }
 } 

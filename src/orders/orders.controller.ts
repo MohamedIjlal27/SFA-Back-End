@@ -115,8 +115,8 @@ export class OrdersController {
     status: 200,
     description: 'Order items validated',
   })
-  async validateOrderItems(@Body() items: any[]) {
-    return this.ordersService.validateOrderItems(items);
+  async validateOrderItems(@Body() items: any[], @Request() req) {
+    return this.ordersService.validateOrderItems(items, req.user.companyId);
   }
 
   @Post('draft')

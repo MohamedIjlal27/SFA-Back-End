@@ -299,4 +299,83 @@ export class ProductsService {
       },
     });
   }
+
+  async createProduct(data: any): Promise<ProductDto> {
+    const product = await this.prisma.product.create({
+      data: {
+        itemCode: data.itemCode,
+        description: data.description,
+        category: data.category,
+        subCategory: data.subCategory,
+        categoryCode: data.categoryCode,
+        uom: data.uom,
+        price: data.price,
+        qty: data.qty,
+        imageUrl: data.imageUrl,
+        discountAmount: data.discountAmount ?? 0,
+        discountPercentage: data.discountPercentage ?? 0,
+        isActive: data.isActive ?? true,
+        companyId: data.companyId,
+      },
+    });
+    return {
+      itemCode: product.itemCode,
+      description: product.description,
+      category: product.category || '',
+      subCategory: product.subCategory || '',
+      categoryCode: product.categoryCode || '',
+      uom: product.uom || '',
+      price: Number(product.price),
+      qty: product.qty,
+      imageUrl: product.imageUrl,
+      discountAmount: Number(product.discountAmount),
+      discountPercentage: Number(product.discountPercentage),
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
+      companyId: product.companyId,
+    };
+  }
+
+  async updateProduct(itemCode: string, data: any): Promise<ProductDto> {
+    const product = await this.prisma.product.update({
+      where: { itemCode_companyId: { itemCode, companyId: data.companyId } },
+      data: {
+        description: data.description,
+        category: data.category,
+        subCategory: data.subCategory,
+        categoryCode: data.categoryCode,
+        uom: data.uom,
+        price: data.price,
+        qty: data.qty,
+        imageUrl: data.imageUrl,
+        discountAmount: data.discountAmount ?? 0,
+        discountPercentage: data.discountPercentage ?? 0,
+        isActive: data.isActive ?? true,
+      },
+    });
+    return {
+      itemCode: product.itemCode,
+      description: product.description,
+      category: product.category || '',
+      subCategory: product.subCategory || '',
+      categoryCode: product.categoryCode || '',
+      uom: product.uom || '',
+      price: Number(product.price),
+      qty: product.qty,
+      imageUrl: product.imageUrl,
+      discountAmount: Number(product.discountAmount),
+      discountPercentage: Number(product.discountPercentage),
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
+      companyId: product.companyId,
+    };
+  }
+
+  async deleteProduct(itemCode: string, companyId: string): Promise<void> {
+    await this.prisma.product.delete({
+      where: { itemCode_companyId: { itemCode, companyId } },
+    });
+  }
 } 

@@ -14973,11 +14973,12 @@ export namespace Prisma {
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    itemCode?: string
+    itemCode_companyId?: ProductItemCodeCompanyIdCompoundUniqueInput
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
     companyId?: StringFilter<"Product"> | string
+    itemCode?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     category?: StringNullableFilter<"Product"> | string | null
     subCategory?: StringNullableFilter<"Product"> | string | null
@@ -14993,7 +14994,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     company?: XOR<CompanyRelationFilter, CompanyWhereInput>
     orderItems?: OrderItemListRelationFilter
-  }, "id" | "itemCode">
+  }, "id" | "itemCode_companyId">
 
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
@@ -17521,6 +17522,11 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type ProductItemCodeCompanyIdCompoundUniqueInput = {
+    itemCode: string
+    companyId: string
   }
 
   export type ProductCountOrderByAggregateInput = {
