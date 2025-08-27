@@ -312,7 +312,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/mohamedijlal/Public/SFA/SFA-Back-End/generated/prisma",
+      "value": "/Users/ijlalssck1940gmail.com/Projects/SFA/SFA-Back-End/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -330,7 +330,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/mohamedijlal/Public/SFA/SFA-Back-End/prisma/schema.prisma",
+    "sourceFilePath": "/Users/ijlalssck1940gmail.com/Projects/SFA/SFA-Back-End/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -344,6 +344,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
