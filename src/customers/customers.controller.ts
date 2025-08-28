@@ -1,5 +1,5 @@
-import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UseInterceptors, Delete, Res } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UploadedFiles, UseInterceptors, Delete, Res } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -71,7 +71,7 @@ export class CustomersController {
 
   @Post('documents/upload')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FilesInterceptor('file', 10, {
       storage: process.env.VERCEL === '1' ? undefined : diskStorage({
         destination: './uploads/documents',
         filename: (req, file, cb) => {
@@ -83,7 +83,8 @@ export class CustomersController {
         },
       }),
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB limit
+        fileSize: 10 * 1024 * 1024, // 10MB limit per file
+        files: 10, // Maximum 10 files
       },
       fileFilter: (req, file, cb) => {
         // Allow common document and image types
@@ -108,19 +109,19 @@ export class CustomersController {
       },
     })
   )
-  @ApiOperation({ summary: 'Upload customer document' })
+  @ApiOperation({ summary: 'Upload customer documents' })
   @ApiConsumes('multipart/form-data')
   @ApiResponse({
     status: 201,
-    description: 'Document uploaded successfully',
-    type: DocumentDto,
+    description: 'Documents uploaded successfully',
+    type: [DocumentDto],
   })
   async uploadDocument(
-    @UploadedFile() file: any,
+    @UploadedFiles() files: any[],
     @Body() uploadDocumentDto: UploadDocumentDto,
     @Request() req
-  ): Promise<DocumentDto> {
-    return this.customersService.uploadDocument(file, uploadDocumentDto, req.user);
+  ): Promise<DocumentDto[]> {
+    return this.customersService.uploadDocuments(files, uploadDocumentDto, req.user);
   }
 
   @Delete('documents/:documentId')

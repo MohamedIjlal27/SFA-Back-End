@@ -297,6 +297,80 @@ export class CustomersService {
     }
   }
 
+  async uploadDocuments(files: any[], uploadDocumentDto: UploadDocumentDto, user: any): Promise<DocumentDto[]> {
+    if (!files || files.length === 0) {
+      throw new HttpException('No files uploaded', HttpStatus.BAD_REQUEST);
+    }
+
+    const { customerId, description } = uploadDocumentDto;
+
+    // Verify customer exists
+    const customer = await this.prisma.customer.findFirst({
+      where: { customerId, companyId: user.companyId },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    try {
+      const uploadedDocuments: DocumentDto[] = [];
+
+      for (const file of files) {
+        let fileUrl: string;
+        let fileName: string;
+
+        if (process.env.VERCEL === '1') {
+          // For production (Vercel), we'll use a placeholder URL since we can't store files locally
+          // In a real production environment, you'd want to use a cloud storage service like AWS S3, Cloudinary, etc.
+          fileName = `${Date.now()}_${file.originalname}`;
+          fileUrl = `https://placeholder.com/documents/${fileName}`; // Placeholder URL
+        } else {
+          // For development, use local storage
+          const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+          fileName = file.filename;
+          fileUrl = `${baseUrl}/uploads/documents/${fileName}`;
+        }
+
+        // Save document record to database
+        const document = await this.prisma.document.create({
+          data: {
+            companyId: user.companyId,
+            customerId,
+            uploadedBy: user.exeId,
+            fileName: fileName,
+            originalName: file.originalname,
+            fileType: file.mimetype,
+            fileSize: file.size,
+            fileUrl: fileUrl,
+            description,
+          },
+        });
+
+        uploadedDocuments.push({
+          id: document.id,
+          customerId: document.customerId,
+          uploadedBy: document.uploadedBy,
+          fileName: document.fileName,
+          originalName: document.originalName,
+          fileType: document.fileType,
+          fileSize: document.fileSize,
+          fileUrl: document.fileUrl,
+          description: document.description,
+          createdAt: document.createdAt.toISOString(),
+          updatedAt: document.updatedAt.toISOString(),
+        });
+      }
+
+      return uploadedDocuments;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException('Failed to upload documents', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async deleteDocument(documentId: string, companyId: string): Promise<{ message: string }> {
     const document = await this.prisma.document.findFirst({
       where: { id: documentId, companyId },
