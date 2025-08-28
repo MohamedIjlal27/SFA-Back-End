@@ -24,10 +24,12 @@ async function bootstrap() {
   
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Serve static files
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
-  });
+  // Serve static files only in development
+  if (process.env.NODE_ENV !== 'production') {
+    app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+      prefix: '/uploads/',
+    });
+  }
 
   // Global prefix
   const apiPrefix = process.env.API_PREFIX || 'api';

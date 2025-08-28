@@ -246,9 +246,20 @@ export class CustomersService {
     }
 
     try {
-      // Generate file URL for local storage
-      const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-      const fileUrl = `${baseUrl}/uploads/documents/${file.filename}`;
+      let fileUrl: string;
+      let fileName: string;
+
+      if (process.env.NODE_ENV === 'production') {
+        // For production (Vercel), we'll use a placeholder URL since we can't store files locally
+        // In a real production environment, you'd want to use a cloud storage service like AWS S3, Cloudinary, etc.
+        fileName = `${Date.now()}_${file.originalname}`;
+        fileUrl = `https://placeholder.com/documents/${fileName}`; // Placeholder URL
+      } else {
+        // For development, use local storage
+        const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+        fileName = file.filename;
+        fileUrl = `${baseUrl}/uploads/documents/${fileName}`;
+      }
 
       // Save document record to database
       const document = await this.prisma.document.create({
@@ -256,7 +267,7 @@ export class CustomersService {
           companyId: user.companyId,
           customerId,
           uploadedBy: user.exeId,
-          fileName: file.filename,
+          fileName: fileName,
           originalName: file.originalname,
           fileType: file.mimetype,
           fileSize: file.size,
@@ -295,13 +306,15 @@ export class CustomersService {
       throw new NotFoundException('Document not found');
     }
 
-    // Delete the physical file
-    const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
-    try {
-      await unlink(filePath);
-    } catch (error) {
-      // File might not exist, continue with database deletion
-      console.warn(`File not found for deletion: ${filePath}`);
+    if (process.env.NODE_ENV !== 'production') {
+      // Delete the physical file only in development
+      const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
+      try {
+        await unlink(filePath);
+      } catch (error) {
+        // File might not exist, continue with database deletion
+        console.warn(`File not found for deletion: ${filePath}`);
+      }
     }
 
     // Delete from database
@@ -321,12 +334,18 @@ export class CustomersService {
       throw new NotFoundException('Document not found');
     }
 
-    const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
-    
-    res.download(filePath, document.originalName, (err) => {
-      if (err) {
-        throw new HttpException('File not found', HttpStatus.NOT_FOUND);
-      }
-    });
+    if (process.env.NODE_ENV === 'production') {
+      // For production, redirect to the stored URL
+      res.redirect(document.fileUrl);
+    } else {
+      // For development, serve local file
+      const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
+      
+      res.download(filePath, document.originalName, (err) => {
+        if (err) {
+          throw new HttpException('File not found', HttpStatus.NOT_FOUND);
+        }
+      });
+    }
   }
 } 
