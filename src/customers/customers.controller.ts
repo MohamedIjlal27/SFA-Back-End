@@ -1,6 +1,6 @@
 import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UploadedFiles, UseInterceptors, Delete, Res } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import {
@@ -109,12 +109,54 @@ export class CustomersController {
       },
     })
   )
-  @ApiOperation({ summary: 'Upload customer documents' })
+  @ApiOperation({ 
+    summary: 'Upload customer documents',
+    description: 'Upload multiple documents (up to 10 files, 10MB each). Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, GIF, WEBP, TXT'
+  })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'File upload with customer information',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+          description: 'Files to upload (max 10 files)',
+        },
+        customerId: {
+          type: 'string',
+          description: 'Customer ID',
+          example: 'CUST001',
+        },
+        description: {
+          type: 'string',
+          description: 'Optional description for the documents',
+          example: 'Customer contract documents',
+        },
+      },
+      required: ['file', 'customerId'],
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'Documents uploaded successfully',
     type: [DocumentDto],
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid file format or missing required fields',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Authentication required',
+  })
+  @ApiResponse({
+    status: 413,
+    description: 'File too large - Maximum file size is 10MB',
   })
   async uploadDocument(
     @UploadedFiles() files: any[],

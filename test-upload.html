@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Test - SFA Backend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        input[type="file"] {
+            padding: 8px;
+        }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4A90E2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .file-list {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .remove-file {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📤 File Upload Test</h1>
+        
+        <div class="form-group">
+            <label for="apiUrl">API URL:</label>
+            <input type="text" id="apiUrl" value="https://sfa-back-end.vercel.app/api/ar/documents/upload" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="token">JWT Token:</label>
+            <input type="text" id="token" placeholder="Enter your JWT token here">
+        </div>
+
+        <div class="form-group">
+            <label for="customerId">Customer ID:</label>
+            <input type="text" id="customerId" placeholder="Enter customer ID (e.g., CUST001)">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Optional):</label>
+            <textarea id="description" placeholder="Enter description for the documents"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="files">Select Files (Max 10, 10MB each):</label>
+            <input type="file" id="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif,.webp,.txt">
+            <div class="file-list" id="fileList" style="display: none;">
+                <strong>Selected Files:</strong>
+                <div id="fileItems"></div>
+            </div>
+        </div>
+
+        <button onclick="uploadFiles()" id="uploadBtn">Upload Files</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let selectedFiles = [];
+
+        // Handle file selection
+        document.getElementById('files').addEventListener('change', function(e) {
+            selectedFiles = Array.from(e.target.files);
+            displaySelectedFiles();
+        });
+
+        function displaySelectedFiles() {
+            const fileList = document.getElementById('fileList');
+            const fileItems = document.getElementById('fileItems');
+            
+            if (selectedFiles.length === 0) {
+                fileList.style.display = 'none';
+                return;
+            }
+
+            fileList.style.display = 'block';
+            fileItems.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name} (${formatFileSize(file.size)})</span>
+                    <button class="remove-file" onclick="removeFile(${index})">Remove</button>
+                `;
+                fileItems.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displaySelectedFiles();
+            
+            // Update the file input
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            document.getElementById('files').files = dt.files;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function uploadFiles() {
+            const token = document.getElementById('token').value.trim();
+            const customerId = document.getElementById('customerId').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const apiUrl = document.getElementById('apiUrl').value;
+            const resultDiv = document.getElementById('result');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            // Validation
+            if (!token) {
+                showResult('Please enter a JWT token', 'error');
+                return;
+            }
+
+            if (!customerId) {
+                showResult('Please enter a customer ID', 'error');
+                return;
+            }
+
+            if (selectedFiles.length === 0) {
+                showResult('Please select at least one file', 'error');
+                return;
+            }
+
+            if (selectedFiles.length > 10) {
+                showResult('Maximum 10 files allowed', 'error');
+                return;
+            }
+
+            // Check file sizes
+            for (let file of selectedFiles) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showResult(`File "${file.name}" is too large. Maximum size is 10MB`, 'error');
+                    return;
+                }
+            }
+
+            // Disable button and show loading
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading...';
+            showResult('Uploading files...', 'info');
+
+            try {
+                const formData = new FormData();
+                
+                // Add files
+                selectedFiles.forEach(file => {
+                    formData.append('file', file);
+                });
+                
+                // Add other fields
+                formData.append('customerId', customerId);
+                if (description) {
+                    formData.append('description', description);
+                }
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const responseData = await response.json();
+
+                if (response.ok) {
+                    showResult(`✅ Upload successful!\n\nResponse:\n${JSON.stringify(responseData, null, 2)}`, 'success');
+                } else {
+                    showResult(`❌ Upload failed (${response.status})\n\nError:\n${JSON.stringify(responseData, null, 2)}`, 'error');
+                }
+
+            } catch (error) {
+                showResult(`❌ Upload failed: ${error.message}`, 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload Files';
+            }
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${type}`;
+            resultDiv.textContent = message;
+        }
+
+        // Instructions
+        showResult(`📋 Instructions:
+1. Enter your JWT token (get it from your app login)
+2. Enter a valid customer ID
+3. Select files to upload (max 10 files, 10MB each)
+4. Click "Upload Files" to test the API
+
+Supported file types: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, GIF, WEBP, TXT`, 'info');
+    </script>
+</body>
+</html>
