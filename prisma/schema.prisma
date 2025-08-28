@@ -23,6 +23,7 @@ model Company {
   documentNumberings DocumentNumbering[]
   userLocations UserLocation[]
   salesReports SalesReport[]
+  documents Document[]
 }
 
 model User {
@@ -64,6 +65,7 @@ model User {
   customers         Customer[]
   documentNumbering DocumentNumbering?
   orders            Order[]
+  documents         Document[]
 
   @@unique([companyId, exeId])
   @@map("users")
@@ -89,6 +91,7 @@ model Customer {
   grade           String?
   contactName     String?
   contactPhone    String?
+  nicNumber       String?
   startDate       DateTime?
   creditLimit     Decimal?  @db.Decimal(15, 2)
   creditPeriod    Int?
@@ -107,6 +110,7 @@ model Customer {
   invoices        Invoice[]
   orders          Order[]
   payments        Payment[]
+  documents       Document[]
 
   @@map("customers")
 }
@@ -257,4 +261,24 @@ model SalesReport {
   createdAt    DateTime @default(now())
 
   @@map("sales_reports")
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [customerId])
+  uploadedBy  String
+  user        User     @relation(fields: [uploadedBy], references: [exeId])
+  fileName    String
+  originalName String
+  fileType    String
+  fileSize    Int
+  fileUrl     String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("documents")
 }

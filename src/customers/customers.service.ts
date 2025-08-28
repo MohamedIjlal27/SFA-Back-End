@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import {
   CustomerDto,
   CustomerDetailsResponseDto,
   DueListResponseDto,
+  DocumentDto,
+  DocumentResponseDto,
+  UploadDocumentDto,
 } from '../common/dto/customer.dto';
+import * as FormData from 'form-data';
+import axios from 'axios';
 
 @Injectable()
 export class CustomersService {
@@ -190,5 +195,128 @@ export class CustomersService {
       .filter(customer => customer.overdue > 0);
 
     return { duelist };
+  }
+
+  async getCustomerDocuments(customerId: string, companyId: string): Promise<DocumentResponseDto> {
+    // Verify customer exists
+    const customer = await this.prisma.customer.findFirst({
+      where: { customerId, companyId },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    const documents = await this.prisma.document.findMany({
+      where: { customerId, companyId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return {
+      documents: documents.map(doc => ({
+        id: doc.id,
+        customerId: doc.customerId,
+        uploadedBy: doc.uploadedBy,
+        fileName: doc.fileName,
+        originalName: doc.originalName,
+        fileType: doc.fileType,
+        fileSize: doc.fileSize,
+        fileUrl: doc.fileUrl,
+        description: doc.description,
+        createdAt: doc.createdAt.toISOString(),
+        updatedAt: doc.updatedAt.toISOString(),
+      })),
+    };
+  }
+
+  async uploadDocument(file: any, uploadDocumentDto: UploadDocumentDto, user: any): Promise<DocumentDto> {
+    if (!file) {
+      throw new HttpException('No file uploaded', HttpStatus.BAD_REQUEST);
+    }
+
+    const { customerId, description } = uploadDocumentDto;
+
+    // Verify customer exists
+    const customer = await this.prisma.customer.findFirst({
+      where: { customerId, companyId: user.companyId },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    // Upload to UploadThing (similar to products upload)
+    const UPLOADTHING_TOKEN = process.env.UPLOADTHING_TOKEN;
+    const UPLOADTHING_URL = 'https://uploadthing.com/api/uploadFiles';
+
+    if (!UPLOADTHING_TOKEN) {
+      throw new HttpException('UploadThing token not configured', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file.buffer, file.originalname);
+      
+      const response = await axios.post(UPLOADTHING_URL, formData, {
+        headers: {
+          'Authorization': `Bearer ${UPLOADTHING_TOKEN}`,
+          ...formData.getHeaders(),
+        },
+      });
+
+      if (!response.data || !response.data.url) {
+        throw new HttpException('Failed to upload file', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      // Save document record to database
+      const document = await this.prisma.document.create({
+        data: {
+          companyId: user.companyId,
+          customerId,
+          uploadedBy: user.exeId,
+          fileName: file.originalname,
+          originalName: file.originalname,
+          fileType: file.mimetype,
+          fileSize: file.size,
+          fileUrl: response.data.url,
+          description,
+        },
+      });
+
+      return {
+        id: document.id,
+        customerId: document.customerId,
+        uploadedBy: document.uploadedBy,
+        fileName: document.fileName,
+        originalName: document.originalName,
+        fileType: document.fileType,
+        fileSize: document.fileSize,
+        fileUrl: document.fileUrl,
+        description: document.description,
+        createdAt: document.createdAt.toISOString(),
+        updatedAt: document.updatedAt.toISOString(),
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException('Failed to upload document', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteDocument(documentId: string, companyId: string): Promise<{ message: string }> {
+    const document = await this.prisma.document.findFirst({
+      where: { id: documentId, companyId },
+    });
+
+    if (!document) {
+      throw new NotFoundException('Document not found');
+    }
+
+    await this.prisma.document.delete({
+      where: { id: documentId },
+    });
+
+    return { message: 'Document deleted successfully' };
   }
 } 

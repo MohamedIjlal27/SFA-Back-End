@@ -210,4 +210,52 @@ export class DueListCustomerDto {
 export class DueListResponseDto {
   @ApiProperty({ type: [DueListCustomerDto] })
   duelist: DueListCustomerDto[];
+}
+
+export class DocumentDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  customerId: string;
+
+  @ApiProperty()
+  uploadedBy: string;
+
+  @ApiProperty()
+  fileName: string;
+
+  @ApiProperty()
+  originalName: string;
+
+  @ApiProperty()
+  fileType: string;
+
+  @ApiProperty()
+  fileSize: number;
+
+  @ApiProperty()
+  fileUrl: string;
+
+  @ApiProperty()
+  description?: string;
+
+  @ApiProperty()
+  createdAt: string;
+
+  @ApiProperty()
+  updatedAt: string;
+}
+
+export class UploadDocumentDto {
+  @ApiProperty()
+  customerId: string;
+
+  @ApiProperty()
+  description?: string;
+}
+
+export class DocumentResponseDto {
+  @ApiProperty({ type: [DocumentDto] })
+  documents: DocumentDto[];
 } 
