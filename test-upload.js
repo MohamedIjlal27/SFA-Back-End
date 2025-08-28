@@ -18,25 +18,26 @@ async function testFileUpload() {
     
     console.log(`📄 Created test file: ${testFileName}`);
     
-    // Create form data
-    const formData = new FormData();
-    formData.append('file', fs.createReadStream(testFileName), {
-      filename: testFileName,
-      contentType: 'text/plain',
-    });
-    formData.append('customerId', TEST_CUSTOMER_ID);
-    formData.append('description', 'Test document upload from script');
-    
-    console.log('📤 Uploading file...');
-    
-    // Make the request
-    const response = await axios.post(`${API_BASE_URL}/ar/documents/upload`, formData, {
-      headers: {
-        ...formData.getHeaders(),
-        'Authorization': `Bearer ${TEST_TOKEN}`,
-      },
-      timeout: 30000,
-    });
+          // Create form data
+      const formData = new FormData();
+      formData.append('file', fs.createReadStream(testFileName), {
+        filename: testFileName,
+        contentType: 'text/plain',
+      });
+      formData.append('customerId', TEST_CUSTOMER_ID);
+      formData.append('description', 'Test document upload from script');
+      
+      console.log('📤 Uploading file...');
+      console.log('Form data fields:', ['file', 'customerId', 'description']);
+      
+      // Make the request
+      const response = await axios.post(`${API_BASE_URL}/ar/documents/upload`, formData, {
+        headers: {
+          ...formData.getHeaders(),
+          'Authorization': `Bearer ${TEST_TOKEN}`,
+        },
+        timeout: 30000,
+      });
     
     console.log('✅ Upload successful!');
     console.log('Response:', JSON.stringify(response.data, null, 2));

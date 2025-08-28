@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UploadedFiles, UseInterceptors, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UploadedFiles, UseInterceptors, Delete, Res, HttpException, HttpStatus } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
@@ -160,9 +160,25 @@ export class CustomersController {
   })
   async uploadDocument(
     @UploadedFiles() files: any[],
-    @Body() uploadDocumentDto: UploadDocumentDto,
+    @Body() body: any,
     @Request() req
   ): Promise<DocumentDto[]> {
+    // Manually validate the body for file uploads
+    const { customerId, description } = body;
+    
+    if (!customerId) {
+      throw new HttpException('customerId is required', HttpStatus.BAD_REQUEST);
+    }
+    
+    if (!files || files.length === 0) {
+      throw new HttpException('At least one file is required', HttpStatus.BAD_REQUEST);
+    }
+    
+    const uploadDocumentDto: UploadDocumentDto = {
+      customerId,
+      description: description || undefined,
+    };
+    
     return this.customersService.uploadDocuments(files, uploadDocumentDto, req.user);
   }
 
