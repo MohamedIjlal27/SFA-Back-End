@@ -23,6 +23,7 @@ model Company {
   documentNumberings DocumentNumbering[]
   userLocations      UserLocation[]
   salesReports       SalesReport[]
+  documents          Document[]
 }
 
 model User {
@@ -64,17 +65,18 @@ model User {
   customers         Customer[]
   documentNumbering DocumentNumbering?
   orders            Order[]
+  documents         Document[]
 
   @@unique([companyId, exeId])
   @@map("users")
 }
 
 model Customer {
-  id              String    @id @default(cuid())
-  customerId      String    @unique
+  id              String     @id @default(cuid())
+  customerId      String     @unique
   exeId           String
   companyId       String
-  company         Company   @relation(fields: [companyId], references: [id])
+  company         Company    @relation(fields: [companyId], references: [id])
   customerName    String
   addr1           String?
   addr2           String?
@@ -85,28 +87,30 @@ model Customer {
   phone2          String?
   phone3          String?
   additional      String?
-  isActive        Boolean   @default(true)
+  isActive        Boolean    @default(true)
   grade           String?
   contactName     String?
   contactPhone    String?
+  nicNumber       String?
   startDate       DateTime?
-  creditLimit     Decimal?  @db.Decimal(15, 2)
+  creditLimit     Decimal?   @db.Decimal(15, 2)
   creditPeriod    Int?
   comments        String?
   lastInvoiceDate DateTime?
-  lastInvoiceAmt  Decimal?  @db.Decimal(15, 2)
+  lastInvoiceAmt  Decimal?   @db.Decimal(15, 2)
   lastPaymentDate DateTime?
-  lastPaymentAmt  Decimal?  @db.Decimal(15, 2)
-  isInactive      Boolean   @default(false)
-  isHold          Boolean   @default(false)
+  lastPaymentAmt  Decimal?   @db.Decimal(15, 2)
+  isInactive      Boolean    @default(false)
+  isHold          Boolean    @default(false)
   followupStatus  String?
   location        String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  user            User      @relation(fields: [exeId], references: [exeId])
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  user            User       @relation(fields: [exeId], references: [exeId])
   invoices        Invoice[]
   orders          Order[]
   payments        Payment[]
+  documents       Document[]
 
   @@map("customers")
 }
@@ -257,4 +261,24 @@ model SalesReport {
   createdAt    DateTime @default(now())
 
   @@map("sales_reports")
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [customerId])
+  uploadedBy   String
+  user         User     @relation(fields: [uploadedBy], references: [exeId])
+  fileName     String
+  originalName String
+  fileType     String
+  fileSize     Int
+  fileUrl      String
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("documents")
 }

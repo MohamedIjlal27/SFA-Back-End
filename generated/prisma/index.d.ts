@@ -68,6 +68,11 @@ export type UserLocation = $Result.DefaultSelection<Prisma.$UserLocationPayload>
  * 
  */
 export type SalesReport = $Result.DefaultSelection<Prisma.$SalesReportPayload>
+/**
+ * Model Document
+ * 
+ */
+export type Document = $Result.DefaultSelection<Prisma.$DocumentPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -301,6 +306,16 @@ export class PrismaClient<
     * ```
     */
   get salesReport(): Prisma.SalesReportDelegate<ExtArgs>;
+
+  /**
+   * `prisma.document`: Exposes CRUD operations for the **Document** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Documents
+    * const documents = await prisma.document.findMany()
+    * ```
+    */
+  get document(): Prisma.DocumentDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -752,7 +767,8 @@ export namespace Prisma {
     Payment: 'Payment',
     DocumentNumbering: 'DocumentNumbering',
     UserLocation: 'UserLocation',
-    SalesReport: 'SalesReport'
+    SalesReport: 'SalesReport',
+    Document: 'Document'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -768,7 +784,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "company" | "user" | "customer" | "product" | "order" | "orderItem" | "invoice" | "payment" | "documentNumbering" | "userLocation" | "salesReport"
+      modelProps: "company" | "user" | "customer" | "product" | "order" | "orderItem" | "invoice" | "payment" | "documentNumbering" | "userLocation" | "salesReport" | "document"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1542,6 +1558,76 @@ export namespace Prisma {
           }
         }
       }
+      Document: {
+        payload: Prisma.$DocumentPayload<ExtArgs>
+        fields: Prisma.DocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.DocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          findMany: {
+            args: Prisma.DocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>[]
+          }
+          create: {
+            args: Prisma.DocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          createMany: {
+            args: Prisma.DocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.DocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          update: {
+            args: Prisma.DocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.DocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.DocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDocument>
+          }
+          groupBy: {
+            args: Prisma.DocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<DocumentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1713,6 +1799,7 @@ export namespace Prisma {
     documentNumberings: number
     userLocations: number
     salesReports: number
+    documents: number
   }
 
   export type CompanyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1726,6 +1813,7 @@ export namespace Prisma {
     documentNumberings?: boolean | CompanyCountOutputTypeCountDocumentNumberingsArgs
     userLocations?: boolean | CompanyCountOutputTypeCountUserLocationsArgs
     salesReports?: boolean | CompanyCountOutputTypeCountSalesReportsArgs
+    documents?: boolean | CompanyCountOutputTypeCountDocumentsArgs
   }
 
   // Custom InputTypes
@@ -1809,6 +1897,13 @@ export namespace Prisma {
     where?: SalesReportWhereInput
   }
 
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
+  }
+
 
   /**
    * Count Type UserCountOutputType
@@ -1817,11 +1912,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     customers: number
     orders: number
+    documents: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customers?: boolean | UserCountOutputTypeCountCustomersArgs
     orders?: boolean | UserCountOutputTypeCountOrdersArgs
+    documents?: boolean | UserCountOutputTypeCountDocumentsArgs
   }
 
   // Custom InputTypes
@@ -1849,6 +1946,13 @@ export namespace Prisma {
     where?: OrderWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
+  }
+
 
   /**
    * Count Type CustomerCountOutputType
@@ -1858,12 +1962,14 @@ export namespace Prisma {
     invoices: number
     orders: number
     payments: number
+    documents: number
   }
 
   export type CustomerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoices?: boolean | CustomerCountOutputTypeCountInvoicesArgs
     orders?: boolean | CustomerCountOutputTypeCountOrdersArgs
     payments?: boolean | CustomerCountOutputTypeCountPaymentsArgs
+    documents?: boolean | CustomerCountOutputTypeCountDocumentsArgs
   }
 
   // Custom InputTypes
@@ -1896,6 +2002,13 @@ export namespace Prisma {
    */
   export type CustomerCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentWhereInput
+  }
+
+  /**
+   * CustomerCountOutputType without action
+   */
+  export type CustomerCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
   }
 
 
@@ -2115,6 +2228,7 @@ export namespace Prisma {
     documentNumberings?: boolean | Company$documentNumberingsArgs<ExtArgs>
     userLocations?: boolean | Company$userLocationsArgs<ExtArgs>
     salesReports?: boolean | Company$salesReportsArgs<ExtArgs>
+    documents?: boolean | Company$documentsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["company"]>
 
@@ -2139,6 +2253,7 @@ export namespace Prisma {
     documentNumberings?: boolean | Company$documentNumberingsArgs<ExtArgs>
     userLocations?: boolean | Company$userLocationsArgs<ExtArgs>
     salesReports?: boolean | Company$salesReportsArgs<ExtArgs>
+    documents?: boolean | Company$documentsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CompanyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2156,6 +2271,7 @@ export namespace Prisma {
       documentNumberings: Prisma.$DocumentNumberingPayload<ExtArgs>[]
       userLocations: Prisma.$UserLocationPayload<ExtArgs>[]
       salesReports: Prisma.$SalesReportPayload<ExtArgs>[]
+      documents: Prisma.$DocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2534,6 +2650,7 @@ export namespace Prisma {
     documentNumberings<T extends Company$documentNumberingsArgs<ExtArgs> = {}>(args?: Subset<T, Company$documentNumberingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentNumberingPayload<ExtArgs>, T, "findMany"> | Null>
     userLocations<T extends Company$userLocationsArgs<ExtArgs> = {}>(args?: Subset<T, Company$userLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLocationPayload<ExtArgs>, T, "findMany"> | Null>
     salesReports<T extends Company$salesReportsArgs<ExtArgs> = {}>(args?: Subset<T, Company$salesReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalesReportPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends Company$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Company$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3079,6 +3196,26 @@ export namespace Prisma {
   }
 
   /**
+   * Company.documents
+   */
+  export type Company$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
    * Company without action
    */
   export type CompanyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3413,6 +3550,7 @@ export namespace Prisma {
     customers?: boolean | User$customersArgs<ExtArgs>
     documentNumbering?: boolean | User$documentNumberingArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    documents?: boolean | User$documentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3476,6 +3614,7 @@ export namespace Prisma {
     customers?: boolean | User$customersArgs<ExtArgs>
     documentNumbering?: boolean | User$documentNumberingArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    documents?: boolean | User$documentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3489,6 +3628,7 @@ export namespace Prisma {
       customers: Prisma.$CustomerPayload<ExtArgs>[]
       documentNumbering: Prisma.$DocumentNumberingPayload<ExtArgs> | null
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      documents: Prisma.$DocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3883,6 +4023,7 @@ export namespace Prisma {
     customers<T extends User$customersArgs<ExtArgs> = {}>(args?: Subset<T, User$customersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findMany"> | Null>
     documentNumbering<T extends User$documentNumberingArgs<ExtArgs> = {}>(args?: Subset<T, User$documentNumberingArgs<ExtArgs>>): Prisma__DocumentNumberingClient<$Result.GetResult<Prisma.$DocumentNumberingPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends User$documentsArgs<ExtArgs> = {}>(args?: Subset<T, User$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4309,6 +4450,26 @@ export namespace Prisma {
   }
 
   /**
+   * User.documents
+   */
+  export type User$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4368,6 +4529,7 @@ export namespace Prisma {
     grade: string | null
     contactName: string | null
     contactPhone: string | null
+    nicNumber: string | null
     startDate: Date | null
     creditLimit: Decimal | null
     creditPeriod: number | null
@@ -4403,6 +4565,7 @@ export namespace Prisma {
     grade: string | null
     contactName: string | null
     contactPhone: string | null
+    nicNumber: string | null
     startDate: Date | null
     creditLimit: Decimal | null
     creditPeriod: number | null
@@ -4438,6 +4601,7 @@ export namespace Prisma {
     grade: number
     contactName: number
     contactPhone: number
+    nicNumber: number
     startDate: number
     creditLimit: number
     creditPeriod: number
@@ -4489,6 +4653,7 @@ export namespace Prisma {
     grade?: true
     contactName?: true
     contactPhone?: true
+    nicNumber?: true
     startDate?: true
     creditLimit?: true
     creditPeriod?: true
@@ -4524,6 +4689,7 @@ export namespace Prisma {
     grade?: true
     contactName?: true
     contactPhone?: true
+    nicNumber?: true
     startDate?: true
     creditLimit?: true
     creditPeriod?: true
@@ -4559,6 +4725,7 @@ export namespace Prisma {
     grade?: true
     contactName?: true
     contactPhone?: true
+    nicNumber?: true
     startDate?: true
     creditLimit?: true
     creditPeriod?: true
@@ -4681,6 +4848,7 @@ export namespace Prisma {
     grade: string | null
     contactName: string | null
     contactPhone: string | null
+    nicNumber: string | null
     startDate: Date | null
     creditLimit: Decimal | null
     creditPeriod: number | null
@@ -4735,6 +4903,7 @@ export namespace Prisma {
     grade?: boolean
     contactName?: boolean
     contactPhone?: boolean
+    nicNumber?: boolean
     startDate?: boolean
     creditLimit?: boolean
     creditPeriod?: boolean
@@ -4754,6 +4923,7 @@ export namespace Prisma {
     invoices?: boolean | Customer$invoicesArgs<ExtArgs>
     orders?: boolean | Customer$ordersArgs<ExtArgs>
     payments?: boolean | Customer$paymentsArgs<ExtArgs>
+    documents?: boolean | Customer$documentsArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["customer"]>
 
@@ -4776,6 +4946,7 @@ export namespace Prisma {
     grade?: boolean
     contactName?: boolean
     contactPhone?: boolean
+    nicNumber?: boolean
     startDate?: boolean
     creditLimit?: boolean
     creditPeriod?: boolean
@@ -4813,6 +4984,7 @@ export namespace Prisma {
     grade?: boolean
     contactName?: boolean
     contactPhone?: boolean
+    nicNumber?: boolean
     startDate?: boolean
     creditLimit?: boolean
     creditPeriod?: boolean
@@ -4835,6 +5007,7 @@ export namespace Prisma {
     invoices?: boolean | Customer$invoicesArgs<ExtArgs>
     orders?: boolean | Customer$ordersArgs<ExtArgs>
     payments?: boolean | Customer$paymentsArgs<ExtArgs>
+    documents?: boolean | Customer$documentsArgs<ExtArgs>
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CustomerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4850,6 +5023,7 @@ export namespace Prisma {
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
       orders: Prisma.$OrderPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
+      documents: Prisma.$DocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4870,6 +5044,7 @@ export namespace Prisma {
       grade: string | null
       contactName: string | null
       contactPhone: string | null
+      nicNumber: string | null
       startDate: Date | null
       creditLimit: Prisma.Decimal | null
       creditPeriod: number | null
@@ -5253,6 +5428,7 @@ export namespace Prisma {
     invoices<T extends Customer$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Customer$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany"> | Null>
     orders<T extends Customer$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Customer$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
     payments<T extends Customer$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Customer$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends Customer$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Customer$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5300,6 +5476,7 @@ export namespace Prisma {
     readonly grade: FieldRef<"Customer", 'String'>
     readonly contactName: FieldRef<"Customer", 'String'>
     readonly contactPhone: FieldRef<"Customer", 'String'>
+    readonly nicNumber: FieldRef<"Customer", 'String'>
     readonly startDate: FieldRef<"Customer", 'DateTime'>
     readonly creditLimit: FieldRef<"Customer", 'Decimal'>
     readonly creditPeriod: FieldRef<"Customer", 'Int'>
@@ -5689,6 +5866,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Customer.documents
+   */
+  export type Customer$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
   }
 
   /**
@@ -14159,6 +14356,1069 @@ export namespace Prisma {
 
 
   /**
+   * Model Document
+   */
+
+  export type AggregateDocument = {
+    _count: DocumentCountAggregateOutputType | null
+    _avg: DocumentAvgAggregateOutputType | null
+    _sum: DocumentSumAggregateOutputType | null
+    _min: DocumentMinAggregateOutputType | null
+    _max: DocumentMaxAggregateOutputType | null
+  }
+
+  export type DocumentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type DocumentSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type DocumentMinAggregateOutputType = {
+    id: string | null
+    companyId: string | null
+    customerId: string | null
+    uploadedBy: string | null
+    fileName: string | null
+    originalName: string | null
+    fileType: string | null
+    fileSize: number | null
+    fileUrl: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DocumentMaxAggregateOutputType = {
+    id: string | null
+    companyId: string | null
+    customerId: string | null
+    uploadedBy: string | null
+    fileName: string | null
+    originalName: string | null
+    fileType: string | null
+    fileSize: number | null
+    fileUrl: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DocumentCountAggregateOutputType = {
+    id: number
+    companyId: number
+    customerId: number
+    uploadedBy: number
+    fileName: number
+    originalName: number
+    fileType: number
+    fileSize: number
+    fileUrl: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DocumentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type DocumentSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type DocumentMinAggregateInputType = {
+    id?: true
+    companyId?: true
+    customerId?: true
+    uploadedBy?: true
+    fileName?: true
+    originalName?: true
+    fileType?: true
+    fileSize?: true
+    fileUrl?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DocumentMaxAggregateInputType = {
+    id?: true
+    companyId?: true
+    customerId?: true
+    uploadedBy?: true
+    fileName?: true
+    originalName?: true
+    fileType?: true
+    fileSize?: true
+    fileUrl?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DocumentCountAggregateInputType = {
+    id?: true
+    companyId?: true
+    customerId?: true
+    uploadedBy?: true
+    fileName?: true
+    originalName?: true
+    fileType?: true
+    fileSize?: true
+    fileUrl?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Document to aggregate.
+     */
+    where?: DocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Documents to fetch.
+     */
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Documents
+    **/
+    _count?: true | DocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DocumentMaxAggregateInputType
+  }
+
+  export type GetDocumentAggregateType<T extends DocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDocument[P]>
+      : GetScalarType<T[P], AggregateDocument[P]>
+  }
+
+
+
+
+  export type DocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithAggregationInput | DocumentOrderByWithAggregationInput[]
+    by: DocumentScalarFieldEnum[] | DocumentScalarFieldEnum
+    having?: DocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DocumentCountAggregateInputType | true
+    _avg?: DocumentAvgAggregateInputType
+    _sum?: DocumentSumAggregateInputType
+    _min?: DocumentMinAggregateInputType
+    _max?: DocumentMaxAggregateInputType
+  }
+
+  export type DocumentGroupByOutputType = {
+    id: string
+    companyId: string
+    customerId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DocumentCountAggregateOutputType | null
+    _avg: DocumentAvgAggregateOutputType | null
+    _sum: DocumentSumAggregateOutputType | null
+    _min: DocumentMinAggregateOutputType | null
+    _max: DocumentMaxAggregateOutputType | null
+  }
+
+  type GetDocumentGroupByPayload<T extends DocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], DocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyId?: boolean
+    customerId?: boolean
+    uploadedBy?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    fileUrl?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["document"]>
+
+  export type DocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyId?: boolean
+    customerId?: boolean
+    uploadedBy?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    fileUrl?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["document"]>
+
+  export type DocumentSelectScalar = {
+    id?: boolean
+    companyId?: boolean
+    customerId?: boolean
+    uploadedBy?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    fileUrl?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Document"
+    objects: {
+      company: Prisma.$CompanyPayload<ExtArgs>
+      customer: Prisma.$CustomerPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      companyId: string
+      customerId: string
+      uploadedBy: string
+      fileName: string
+      originalName: string
+      fileType: string
+      fileSize: number
+      fileUrl: string
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["document"]>
+    composites: {}
+  }
+
+  type DocumentGetPayload<S extends boolean | null | undefined | DocumentDefaultArgs> = $Result.GetResult<Prisma.$DocumentPayload, S>
+
+  type DocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DocumentCountAggregateInputType | true
+    }
+
+  export interface DocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Document'], meta: { name: 'Document' } }
+    /**
+     * Find zero or one Document that matches the filter.
+     * @param {DocumentFindUniqueArgs} args - Arguments to find a Document
+     * @example
+     * // Get one Document
+     * const document = await prisma.document.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DocumentFindUniqueArgs>(args: SelectSubset<T, DocumentFindUniqueArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Document that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DocumentFindUniqueOrThrowArgs} args - Arguments to find a Document
+     * @example
+     * // Get one Document
+     * const document = await prisma.document.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, DocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Document that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentFindFirstArgs} args - Arguments to find a Document
+     * @example
+     * // Get one Document
+     * const document = await prisma.document.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DocumentFindFirstArgs>(args?: SelectSubset<T, DocumentFindFirstArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Document that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentFindFirstOrThrowArgs} args - Arguments to find a Document
+     * @example
+     * // Get one Document
+     * const document = await prisma.document.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, DocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Documents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Documents
+     * const documents = await prisma.document.findMany()
+     * 
+     * // Get first 10 Documents
+     * const documents = await prisma.document.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const documentWithIdOnly = await prisma.document.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DocumentFindManyArgs>(args?: SelectSubset<T, DocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Document.
+     * @param {DocumentCreateArgs} args - Arguments to create a Document.
+     * @example
+     * // Create one Document
+     * const Document = await prisma.document.create({
+     *   data: {
+     *     // ... data to create a Document
+     *   }
+     * })
+     * 
+     */
+    create<T extends DocumentCreateArgs>(args: SelectSubset<T, DocumentCreateArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Documents.
+     * @param {DocumentCreateManyArgs} args - Arguments to create many Documents.
+     * @example
+     * // Create many Documents
+     * const document = await prisma.document.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DocumentCreateManyArgs>(args?: SelectSubset<T, DocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Documents and returns the data saved in the database.
+     * @param {DocumentCreateManyAndReturnArgs} args - Arguments to create many Documents.
+     * @example
+     * // Create many Documents
+     * const document = await prisma.document.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Documents and only return the `id`
+     * const documentWithIdOnly = await prisma.document.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, DocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Document.
+     * @param {DocumentDeleteArgs} args - Arguments to delete one Document.
+     * @example
+     * // Delete one Document
+     * const Document = await prisma.document.delete({
+     *   where: {
+     *     // ... filter to delete one Document
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DocumentDeleteArgs>(args: SelectSubset<T, DocumentDeleteArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Document.
+     * @param {DocumentUpdateArgs} args - Arguments to update one Document.
+     * @example
+     * // Update one Document
+     * const document = await prisma.document.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DocumentUpdateArgs>(args: SelectSubset<T, DocumentUpdateArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Documents.
+     * @param {DocumentDeleteManyArgs} args - Arguments to filter Documents to delete.
+     * @example
+     * // Delete a few Documents
+     * const { count } = await prisma.document.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DocumentDeleteManyArgs>(args?: SelectSubset<T, DocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Documents
+     * const document = await prisma.document.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DocumentUpdateManyArgs>(args: SelectSubset<T, DocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Document.
+     * @param {DocumentUpsertArgs} args - Arguments to update or create a Document.
+     * @example
+     * // Update or create a Document
+     * const document = await prisma.document.upsert({
+     *   create: {
+     *     // ... data to create a Document
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Document we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DocumentUpsertArgs>(args: SelectSubset<T, DocumentUpsertArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentCountArgs} args - Arguments to filter Documents to count.
+     * @example
+     * // Count the number of Documents
+     * const count = await prisma.document.count({
+     *   where: {
+     *     // ... the filter for the Documents we want to count
+     *   }
+     * })
+    **/
+    count<T extends DocumentCountArgs>(
+      args?: Subset<T, DocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Document.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DocumentAggregateArgs>(args: Subset<T, DocumentAggregateArgs>): Prisma.PrismaPromise<GetDocumentAggregateType<T>>
+
+    /**
+     * Group by Document.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DocumentGroupByArgs['orderBy'] }
+        : { orderBy?: DocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Document model
+   */
+  readonly fields: DocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Document.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    customer<T extends CustomerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerDefaultArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Document model
+   */ 
+  interface DocumentFieldRefs {
+    readonly id: FieldRef<"Document", 'String'>
+    readonly companyId: FieldRef<"Document", 'String'>
+    readonly customerId: FieldRef<"Document", 'String'>
+    readonly uploadedBy: FieldRef<"Document", 'String'>
+    readonly fileName: FieldRef<"Document", 'String'>
+    readonly originalName: FieldRef<"Document", 'String'>
+    readonly fileType: FieldRef<"Document", 'String'>
+    readonly fileSize: FieldRef<"Document", 'Int'>
+    readonly fileUrl: FieldRef<"Document", 'String'>
+    readonly description: FieldRef<"Document", 'String'>
+    readonly createdAt: FieldRef<"Document", 'DateTime'>
+    readonly updatedAt: FieldRef<"Document", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Document findUnique
+   */
+  export type DocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which Document to fetch.
+     */
+    where: DocumentWhereUniqueInput
+  }
+
+  /**
+   * Document findUniqueOrThrow
+   */
+  export type DocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which Document to fetch.
+     */
+    where: DocumentWhereUniqueInput
+  }
+
+  /**
+   * Document findFirst
+   */
+  export type DocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which Document to fetch.
+     */
+    where?: DocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Documents to fetch.
+     */
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Documents.
+     */
+    cursor?: DocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Documents.
+     */
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * Document findFirstOrThrow
+   */
+  export type DocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which Document to fetch.
+     */
+    where?: DocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Documents to fetch.
+     */
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Documents.
+     */
+    cursor?: DocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Documents.
+     */
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * Document findMany
+   */
+  export type DocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which Documents to fetch.
+     */
+    where?: DocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Documents to fetch.
+     */
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Documents.
+     */
+    cursor?: DocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Documents.
+     */
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * Document create
+   */
+  export type DocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Document.
+     */
+    data: XOR<DocumentCreateInput, DocumentUncheckedCreateInput>
+  }
+
+  /**
+   * Document createMany
+   */
+  export type DocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Documents.
+     */
+    data: DocumentCreateManyInput | DocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Document createManyAndReturn
+   */
+  export type DocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Documents.
+     */
+    data: DocumentCreateManyInput | DocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Document update
+   */
+  export type DocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Document.
+     */
+    data: XOR<DocumentUpdateInput, DocumentUncheckedUpdateInput>
+    /**
+     * Choose, which Document to update.
+     */
+    where: DocumentWhereUniqueInput
+  }
+
+  /**
+   * Document updateMany
+   */
+  export type DocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Documents.
+     */
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which Documents to update
+     */
+    where?: DocumentWhereInput
+  }
+
+  /**
+   * Document upsert
+   */
+  export type DocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Document to update in case it exists.
+     */
+    where: DocumentWhereUniqueInput
+    /**
+     * In case the Document found by the `where` argument doesn't exist, create a new Document with this data.
+     */
+    create: XOR<DocumentCreateInput, DocumentUncheckedCreateInput>
+    /**
+     * In case the Document was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DocumentUpdateInput, DocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * Document delete
+   */
+  export type DocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    /**
+     * Filter which Document to delete.
+     */
+    where: DocumentWhereUniqueInput
+  }
+
+  /**
+   * Document deleteMany
+   */
+  export type DocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Documents to delete
+     */
+    where?: DocumentWhereInput
+  }
+
+  /**
+   * Document without action
+   */
+  export type DocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -14229,6 +15489,7 @@ export namespace Prisma {
     grade: 'grade',
     contactName: 'contactName',
     contactPhone: 'contactPhone',
+    nicNumber: 'nicNumber',
     startDate: 'startDate',
     creditLimit: 'creditLimit',
     creditPeriod: 'creditPeriod',
@@ -14386,6 +15647,24 @@ export namespace Prisma {
   export type SalesReportScalarFieldEnum = (typeof SalesReportScalarFieldEnum)[keyof typeof SalesReportScalarFieldEnum]
 
 
+  export const DocumentScalarFieldEnum: {
+    id: 'id',
+    companyId: 'companyId',
+    customerId: 'customerId',
+    uploadedBy: 'uploadedBy',
+    fileName: 'fileName',
+    originalName: 'originalName',
+    fileType: 'fileType',
+    fileSize: 'fileSize',
+    fileUrl: 'fileUrl',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -14511,6 +15790,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingListRelationFilter
     userLocations?: UserLocationListRelationFilter
     salesReports?: SalesReportListRelationFilter
+    documents?: DocumentListRelationFilter
   }
 
   export type CompanyOrderByWithRelationInput = {
@@ -14526,6 +15806,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingOrderByRelationAggregateInput
     userLocations?: UserLocationOrderByRelationAggregateInput
     salesReports?: SalesReportOrderByRelationAggregateInput
+    documents?: DocumentOrderByRelationAggregateInput
   }
 
   export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -14544,6 +15825,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingListRelationFilter
     userLocations?: UserLocationListRelationFilter
     salesReports?: SalesReportListRelationFilter
+    documents?: DocumentListRelationFilter
   }, "id">
 
   export type CompanyOrderByWithAggregationInput = {
@@ -14594,6 +15876,7 @@ export namespace Prisma {
     customers?: CustomerListRelationFilter
     documentNumbering?: XOR<DocumentNumberingNullableRelationFilter, DocumentNumberingWhereInput> | null
     orders?: OrderListRelationFilter
+    documents?: DocumentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14625,6 +15908,7 @@ export namespace Prisma {
     customers?: CustomerOrderByRelationAggregateInput
     documentNumbering?: DocumentNumberingOrderByWithRelationInput
     orders?: OrderOrderByRelationAggregateInput
+    documents?: DocumentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14660,6 +15944,7 @@ export namespace Prisma {
     customers?: CustomerListRelationFilter
     documentNumbering?: XOR<DocumentNumberingNullableRelationFilter, DocumentNumberingWhereInput> | null
     orders?: OrderListRelationFilter
+    documents?: DocumentListRelationFilter
   }, "id" | "exeId" | "email" | "username" | "companyId_exeId">
 
   export type UserOrderByWithAggregationInput = {
@@ -14744,6 +16029,7 @@ export namespace Prisma {
     grade?: StringNullableFilter<"Customer"> | string | null
     contactName?: StringNullableFilter<"Customer"> | string | null
     contactPhone?: StringNullableFilter<"Customer"> | string | null
+    nicNumber?: StringNullableFilter<"Customer"> | string | null
     startDate?: DateTimeNullableFilter<"Customer"> | Date | string | null
     creditLimit?: DecimalNullableFilter<"Customer"> | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: IntNullableFilter<"Customer"> | number | null
@@ -14763,6 +16049,7 @@ export namespace Prisma {
     invoices?: InvoiceListRelationFilter
     orders?: OrderListRelationFilter
     payments?: PaymentListRelationFilter
+    documents?: DocumentListRelationFilter
   }
 
   export type CustomerOrderByWithRelationInput = {
@@ -14784,6 +16071,7 @@ export namespace Prisma {
     grade?: SortOrderInput | SortOrder
     contactName?: SortOrderInput | SortOrder
     contactPhone?: SortOrderInput | SortOrder
+    nicNumber?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     creditLimit?: SortOrderInput | SortOrder
     creditPeriod?: SortOrderInput | SortOrder
@@ -14803,6 +16091,7 @@ export namespace Prisma {
     invoices?: InvoiceOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
+    documents?: DocumentOrderByRelationAggregateInput
   }
 
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -14827,6 +16116,7 @@ export namespace Prisma {
     grade?: StringNullableFilter<"Customer"> | string | null
     contactName?: StringNullableFilter<"Customer"> | string | null
     contactPhone?: StringNullableFilter<"Customer"> | string | null
+    nicNumber?: StringNullableFilter<"Customer"> | string | null
     startDate?: DateTimeNullableFilter<"Customer"> | Date | string | null
     creditLimit?: DecimalNullableFilter<"Customer"> | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: IntNullableFilter<"Customer"> | number | null
@@ -14846,6 +16136,7 @@ export namespace Prisma {
     invoices?: InvoiceListRelationFilter
     orders?: OrderListRelationFilter
     payments?: PaymentListRelationFilter
+    documents?: DocumentListRelationFilter
   }, "id" | "customerId">
 
   export type CustomerOrderByWithAggregationInput = {
@@ -14867,6 +16158,7 @@ export namespace Prisma {
     grade?: SortOrderInput | SortOrder
     contactName?: SortOrderInput | SortOrder
     contactPhone?: SortOrderInput | SortOrder
+    nicNumber?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     creditLimit?: SortOrderInput | SortOrder
     creditPeriod?: SortOrderInput | SortOrder
@@ -14910,6 +16202,7 @@ export namespace Prisma {
     grade?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     contactName?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     contactPhone?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    nicNumber?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     startDate?: DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
     creditLimit?: DecimalNullableWithAggregatesFilter<"Customer"> | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: IntNullableWithAggregatesFilter<"Customer"> | number | null
@@ -15658,6 +16951,104 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SalesReport"> | Date | string
   }
 
+  export type DocumentWhereInput = {
+    AND?: DocumentWhereInput | DocumentWhereInput[]
+    OR?: DocumentWhereInput[]
+    NOT?: DocumentWhereInput | DocumentWhereInput[]
+    id?: StringFilter<"Document"> | string
+    companyId?: StringFilter<"Document"> | string
+    customerId?: StringFilter<"Document"> | string
+    uploadedBy?: StringFilter<"Document"> | string
+    fileName?: StringFilter<"Document"> | string
+    originalName?: StringFilter<"Document"> | string
+    fileType?: StringFilter<"Document"> | string
+    fileSize?: IntFilter<"Document"> | number
+    fileUrl?: StringFilter<"Document"> | string
+    description?: StringNullableFilter<"Document"> | string | null
+    createdAt?: DateTimeFilter<"Document"> | Date | string
+    updatedAt?: DateTimeFilter<"Document"> | Date | string
+    company?: XOR<CompanyRelationFilter, CompanyWhereInput>
+    customer?: XOR<CustomerRelationFilter, CustomerWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type DocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    customerId?: SortOrder
+    uploadedBy?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    fileUrl?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    company?: CompanyOrderByWithRelationInput
+    customer?: CustomerOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type DocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DocumentWhereInput | DocumentWhereInput[]
+    OR?: DocumentWhereInput[]
+    NOT?: DocumentWhereInput | DocumentWhereInput[]
+    companyId?: StringFilter<"Document"> | string
+    customerId?: StringFilter<"Document"> | string
+    uploadedBy?: StringFilter<"Document"> | string
+    fileName?: StringFilter<"Document"> | string
+    originalName?: StringFilter<"Document"> | string
+    fileType?: StringFilter<"Document"> | string
+    fileSize?: IntFilter<"Document"> | number
+    fileUrl?: StringFilter<"Document"> | string
+    description?: StringNullableFilter<"Document"> | string | null
+    createdAt?: DateTimeFilter<"Document"> | Date | string
+    updatedAt?: DateTimeFilter<"Document"> | Date | string
+    company?: XOR<CompanyRelationFilter, CompanyWhereInput>
+    customer?: XOR<CustomerRelationFilter, CustomerWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type DocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    customerId?: SortOrder
+    uploadedBy?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    fileUrl?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DocumentCountOrderByAggregateInput
+    _avg?: DocumentAvgOrderByAggregateInput
+    _max?: DocumentMaxOrderByAggregateInput
+    _min?: DocumentMinOrderByAggregateInput
+    _sum?: DocumentSumOrderByAggregateInput
+  }
+
+  export type DocumentScalarWhereWithAggregatesInput = {
+    AND?: DocumentScalarWhereWithAggregatesInput | DocumentScalarWhereWithAggregatesInput[]
+    OR?: DocumentScalarWhereWithAggregatesInput[]
+    NOT?: DocumentScalarWhereWithAggregatesInput | DocumentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Document"> | string
+    companyId?: StringWithAggregatesFilter<"Document"> | string
+    customerId?: StringWithAggregatesFilter<"Document"> | string
+    uploadedBy?: StringWithAggregatesFilter<"Document"> | string
+    fileName?: StringWithAggregatesFilter<"Document"> | string
+    originalName?: StringWithAggregatesFilter<"Document"> | string
+    fileType?: StringWithAggregatesFilter<"Document"> | string
+    fileSize?: IntWithAggregatesFilter<"Document"> | number
+    fileUrl?: StringWithAggregatesFilter<"Document"> | string
+    description?: StringNullableWithAggregatesFilter<"Document"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
+  }
+
   export type CompanyCreateInput = {
     id?: string
     name: string
@@ -15671,6 +17062,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateInput = {
@@ -15686,6 +17078,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUpdateInput = {
@@ -15701,6 +17094,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateInput = {
@@ -15716,6 +17110,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateManyInput = {
@@ -15761,6 +17156,7 @@ export namespace Prisma {
     customers?: CustomerCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    documents?: DocumentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15791,6 +17187,7 @@ export namespace Prisma {
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15821,6 +17218,7 @@ export namespace Prisma {
     customers?: CustomerUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    documents?: DocumentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15851,6 +17249,7 @@ export namespace Prisma {
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15950,6 +17349,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -15969,6 +17369,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     orders?: OrderCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -15990,6 +17391,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -16007,6 +17409,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUpdateInput = {
@@ -16026,6 +17429,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16045,6 +17449,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     orders?: OrderUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -16066,6 +17471,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16083,6 +17489,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
     orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerCreateManyInput = {
@@ -16104,6 +17511,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -16137,6 +17545,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16172,6 +17581,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16979,6 +18389,108 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DocumentCreateInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutDocumentsInput
+    customer: CustomerCreateNestedOneWithoutDocumentsInput
+    user: UserCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentUncheckedCreateInput = {
+    id?: string
+    companyId: string
+    customerId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutDocumentsNestedInput
+    customer?: CustomerUpdateOneRequiredWithoutDocumentsNestedInput
+    user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentCreateManyInput = {
+    id?: string
+    companyId: string
+    customerId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -17054,6 +18566,12 @@ export namespace Prisma {
     none?: SalesReportWhereInput
   }
 
+  export type DocumentListRelationFilter = {
+    every?: DocumentWhereInput
+    some?: DocumentWhereInput
+    none?: DocumentWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -17091,6 +18609,10 @@ export namespace Prisma {
   }
 
   export type SalesReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DocumentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17370,6 +18892,7 @@ export namespace Prisma {
     grade?: SortOrder
     contactName?: SortOrder
     contactPhone?: SortOrder
+    nicNumber?: SortOrder
     startDate?: SortOrder
     creditLimit?: SortOrder
     creditPeriod?: SortOrder
@@ -17412,6 +18935,7 @@ export namespace Prisma {
     grade?: SortOrder
     contactName?: SortOrder
     contactPhone?: SortOrder
+    nicNumber?: SortOrder
     startDate?: SortOrder
     creditLimit?: SortOrder
     creditPeriod?: SortOrder
@@ -17447,6 +18971,7 @@ export namespace Prisma {
     grade?: SortOrder
     contactName?: SortOrder
     contactPhone?: SortOrder
+    nicNumber?: SortOrder
     startDate?: SortOrder
     creditLimit?: SortOrder
     creditPeriod?: SortOrder
@@ -18029,6 +19554,59 @@ export namespace Prisma {
     netSales?: SortOrder
   }
 
+  export type DocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    customerId?: SortOrder
+    uploadedBy?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    fileUrl?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type DocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    customerId?: SortOrder
+    uploadedBy?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    fileUrl?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    customerId?: SortOrder
+    uploadedBy?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    fileUrl?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DocumentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -18099,6 +19677,13 @@ export namespace Prisma {
     connect?: SalesReportWhereUniqueInput | SalesReportWhereUniqueInput[]
   }
 
+  export type DocumentCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput> | DocumentCreateWithoutCompanyInput[] | DocumentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCompanyInput | DocumentCreateOrConnectWithoutCompanyInput[]
+    createMany?: DocumentCreateManyCompanyInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -18167,6 +19752,13 @@ export namespace Prisma {
     connectOrCreate?: SalesReportCreateOrConnectWithoutCompanyInput | SalesReportCreateOrConnectWithoutCompanyInput[]
     createMany?: SalesReportCreateManyCompanyInputEnvelope
     connect?: SalesReportWhereUniqueInput | SalesReportWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput> | DocumentCreateWithoutCompanyInput[] | DocumentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCompanyInput | DocumentCreateOrConnectWithoutCompanyInput[]
+    createMany?: DocumentCreateManyCompanyInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18313,6 +19905,20 @@ export namespace Prisma {
     deleteMany?: SalesReportScalarWhereInput | SalesReportScalarWhereInput[]
   }
 
+  export type DocumentUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput> | DocumentCreateWithoutCompanyInput[] | DocumentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCompanyInput | DocumentCreateOrConnectWithoutCompanyInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutCompanyInput | DocumentUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: DocumentCreateManyCompanyInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutCompanyInput | DocumentUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutCompanyInput | DocumentUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -18453,6 +20059,20 @@ export namespace Prisma {
     deleteMany?: SalesReportScalarWhereInput | SalesReportScalarWhereInput[]
   }
 
+  export type DocumentUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput> | DocumentCreateWithoutCompanyInput[] | DocumentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCompanyInput | DocumentCreateOrConnectWithoutCompanyInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutCompanyInput | DocumentUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: DocumentCreateManyCompanyInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutCompanyInput | DocumentUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutCompanyInput | DocumentUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
   export type CompanyCreateNestedOneWithoutUsersInput = {
     create?: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutUsersInput
@@ -18479,6 +20099,13 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type DocumentCreateNestedManyWithoutUserInput = {
+    create?: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput> | DocumentCreateWithoutUserInput[] | DocumentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUserInput | DocumentCreateOrConnectWithoutUserInput[]
+    createMany?: DocumentCreateManyUserInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
   export type CustomerUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<CustomerCreateWithoutUserInput, CustomerUncheckedCreateWithoutUserInput> | CustomerCreateWithoutUserInput[] | CustomerUncheckedCreateWithoutUserInput[]
     connectOrCreate?: CustomerCreateOrConnectWithoutUserInput | CustomerCreateOrConnectWithoutUserInput[]
@@ -18497,6 +20124,13 @@ export namespace Prisma {
     connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
     createMany?: OrderCreateManyUserInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput> | DocumentCreateWithoutUserInput[] | DocumentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUserInput | DocumentCreateOrConnectWithoutUserInput[]
+    createMany?: DocumentCreateManyUserInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -18561,6 +20195,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type DocumentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput> | DocumentCreateWithoutUserInput[] | DocumentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUserInput | DocumentCreateOrConnectWithoutUserInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutUserInput | DocumentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DocumentCreateManyUserInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutUserInput | DocumentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutUserInput | DocumentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
   export type CustomerUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<CustomerCreateWithoutUserInput, CustomerUncheckedCreateWithoutUserInput> | CustomerCreateWithoutUserInput[] | CustomerUncheckedCreateWithoutUserInput[]
     connectOrCreate?: CustomerCreateOrConnectWithoutUserInput | CustomerCreateOrConnectWithoutUserInput[]
@@ -18599,6 +20247,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type DocumentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput> | DocumentCreateWithoutUserInput[] | DocumentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUserInput | DocumentCreateOrConnectWithoutUserInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutUserInput | DocumentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DocumentCreateManyUserInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutUserInput | DocumentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutUserInput | DocumentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
   export type CompanyCreateNestedOneWithoutCustomersInput = {
     create?: XOR<CompanyCreateWithoutCustomersInput, CompanyUncheckedCreateWithoutCustomersInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutCustomersInput
@@ -18632,6 +20294,13 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
+  export type DocumentCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput> | DocumentCreateWithoutCustomerInput[] | DocumentUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCustomerInput | DocumentCreateOrConnectWithoutCustomerInput[]
+    createMany?: DocumentCreateManyCustomerInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
   export type InvoiceUncheckedCreateNestedManyWithoutCustomerInput = {
     create?: XOR<InvoiceCreateWithoutCustomerInput, InvoiceUncheckedCreateWithoutCustomerInput> | InvoiceCreateWithoutCustomerInput[] | InvoiceUncheckedCreateWithoutCustomerInput[]
     connectOrCreate?: InvoiceCreateOrConnectWithoutCustomerInput | InvoiceCreateOrConnectWithoutCustomerInput[]
@@ -18651,6 +20320,13 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutCustomerInput | PaymentCreateOrConnectWithoutCustomerInput[]
     createMany?: PaymentCreateManyCustomerInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput> | DocumentCreateWithoutCustomerInput[] | DocumentUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCustomerInput | DocumentCreateOrConnectWithoutCustomerInput[]
+    createMany?: DocumentCreateManyCustomerInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -18727,6 +20403,20 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
+  export type DocumentUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput> | DocumentCreateWithoutCustomerInput[] | DocumentUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCustomerInput | DocumentCreateOrConnectWithoutCustomerInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutCustomerInput | DocumentUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: DocumentCreateManyCustomerInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutCustomerInput | DocumentUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutCustomerInput | DocumentUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
   export type InvoiceUncheckedUpdateManyWithoutCustomerNestedInput = {
     create?: XOR<InvoiceCreateWithoutCustomerInput, InvoiceUncheckedCreateWithoutCustomerInput> | InvoiceCreateWithoutCustomerInput[] | InvoiceUncheckedCreateWithoutCustomerInput[]
     connectOrCreate?: InvoiceCreateOrConnectWithoutCustomerInput | InvoiceCreateOrConnectWithoutCustomerInput[]
@@ -18767,6 +20457,20 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutCustomerInput | PaymentUpdateWithWhereUniqueWithoutCustomerInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutCustomerInput | PaymentUpdateManyWithWhereWithoutCustomerInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput> | DocumentCreateWithoutCustomerInput[] | DocumentUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutCustomerInput | DocumentCreateOrConnectWithoutCustomerInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutCustomerInput | DocumentUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: DocumentCreateManyCustomerInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutCustomerInput | DocumentUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutCustomerInput | DocumentUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
   }
 
   export type CompanyCreateNestedOneWithoutProductsInput = {
@@ -19087,6 +20791,48 @@ export namespace Prisma {
     update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutSalesReportsInput, CompanyUpdateWithoutSalesReportsInput>, CompanyUncheckedUpdateWithoutSalesReportsInput>
   }
 
+  export type CompanyCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<CompanyCreateWithoutDocumentsInput, CompanyUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutDocumentsInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type CustomerCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<CustomerCreateWithoutDocumentsInput, CustomerUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutDocumentsInput
+    connect?: CustomerWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDocumentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CompanyUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<CompanyCreateWithoutDocumentsInput, CompanyUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutDocumentsInput
+    upsert?: CompanyUpsertWithoutDocumentsInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutDocumentsInput, CompanyUpdateWithoutDocumentsInput>, CompanyUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CustomerUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<CustomerCreateWithoutDocumentsInput, CustomerUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutDocumentsInput
+    upsert?: CustomerUpsertWithoutDocumentsInput
+    connect?: CustomerWhereUniqueInput
+    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutDocumentsInput, CustomerUpdateWithoutDocumentsInput>, CustomerUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDocumentsInput
+    upsert?: UserUpsertWithoutDocumentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDocumentsInput, UserUpdateWithoutDocumentsInput>, UserUncheckedUpdateWithoutDocumentsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -19385,6 +21131,7 @@ export namespace Prisma {
     customers?: CustomerCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    documents?: DocumentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCompanyInput = {
@@ -19414,6 +21161,7 @@ export namespace Prisma {
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCompanyInput = {
@@ -19443,6 +21191,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -19461,6 +21210,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     orders?: OrderCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutCompanyInput = {
@@ -19481,6 +21231,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -19498,6 +21249,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutCompanyInput = {
@@ -19806,6 +21558,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentCreateWithoutCompanyInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    customer: CustomerCreateNestedOneWithoutDocumentsInput
+    user: UserCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentUncheckedCreateWithoutCompanyInput = {
+    id?: string
+    customerId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentCreateOrConnectWithoutCompanyInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type DocumentCreateManyCompanyInputEnvelope = {
+    data: DocumentCreateManyCompanyInput | DocumentCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutCompanyInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
@@ -19890,6 +21680,7 @@ export namespace Prisma {
     grade?: StringNullableFilter<"Customer"> | string | null
     contactName?: StringNullableFilter<"Customer"> | string | null
     contactPhone?: StringNullableFilter<"Customer"> | string | null
+    nicNumber?: StringNullableFilter<"Customer"> | string | null
     startDate?: DateTimeNullableFilter<"Customer"> | Date | string | null
     creditLimit?: DecimalNullableFilter<"Customer"> | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: IntNullableFilter<"Customer"> | number | null
@@ -20172,6 +21963,40 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SalesReport"> | Date | string
   }
 
+  export type DocumentUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutCompanyInput, DocumentUncheckedUpdateWithoutCompanyInput>
+    create: XOR<DocumentCreateWithoutCompanyInput, DocumentUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutCompanyInput, DocumentUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutCompanyInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type DocumentScalarWhereInput = {
+    AND?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    OR?: DocumentScalarWhereInput[]
+    NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    id?: StringFilter<"Document"> | string
+    companyId?: StringFilter<"Document"> | string
+    customerId?: StringFilter<"Document"> | string
+    uploadedBy?: StringFilter<"Document"> | string
+    fileName?: StringFilter<"Document"> | string
+    originalName?: StringFilter<"Document"> | string
+    fileType?: StringFilter<"Document"> | string
+    fileSize?: IntFilter<"Document"> | number
+    fileUrl?: StringFilter<"Document"> | string
+    description?: StringNullableFilter<"Document"> | string | null
+    createdAt?: DateTimeFilter<"Document"> | Date | string
+    updatedAt?: DateTimeFilter<"Document"> | Date | string
+  }
+
   export type CompanyCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -20184,6 +22009,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -20198,6 +22024,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -20222,6 +22049,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -20240,6 +22068,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     orders?: OrderCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutUserInput = {
@@ -20260,6 +22089,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -20277,6 +22107,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutUserInput = {
@@ -20348,6 +22179,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentCreateWithoutUserInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutDocumentsInput
+    customer: CustomerCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentUncheckedCreateWithoutUserInput = {
+    id?: string
+    companyId: string
+    customerId: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentCreateOrConnectWithoutUserInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput>
+  }
+
+  export type DocumentCreateManyUserInputEnvelope = {
+    data: DocumentCreateManyUserInput | DocumentCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CompanyUpsertWithoutUsersInput = {
     update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
     create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
@@ -20371,6 +22240,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -20385,6 +22255,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CustomerUpsertWithWhereUniqueWithoutUserInput = {
@@ -20446,6 +22317,22 @@ export namespace Prisma {
     data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type DocumentUpsertWithWhereUniqueWithoutUserInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutUserInput, DocumentUncheckedUpdateWithoutUserInput>
+    create: XOR<DocumentCreateWithoutUserInput, DocumentUncheckedCreateWithoutUserInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutUserInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutUserInput, DocumentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutUserInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutUserInput>
+  }
+
   export type CompanyCreateWithoutCustomersInput = {
     id?: string
     name: string
@@ -20458,6 +22345,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutCustomersInput = {
@@ -20472,6 +22360,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutCustomersInput = {
@@ -20506,6 +22395,7 @@ export namespace Prisma {
     company: CompanyCreateNestedOneWithoutUsersInput
     documentNumbering?: DocumentNumberingCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    documents?: DocumentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCustomersInput = {
@@ -20535,6 +22425,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCustomersInput = {
@@ -20652,6 +22543,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentCreateWithoutCustomerInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutDocumentsInput
+    user: UserCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentUncheckedCreateWithoutCustomerInput = {
+    id?: string
+    companyId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentCreateOrConnectWithoutCustomerInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type DocumentCreateManyCustomerInputEnvelope = {
+    data: DocumentCreateManyCustomerInput | DocumentCreateManyCustomerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CompanyUpsertWithoutCustomersInput = {
     update: XOR<CompanyUpdateWithoutCustomersInput, CompanyUncheckedUpdateWithoutCustomersInput>
     create: XOR<CompanyCreateWithoutCustomersInput, CompanyUncheckedCreateWithoutCustomersInput>
@@ -20675,6 +22604,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutCustomersInput = {
@@ -20689,6 +22619,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type UserUpsertWithoutCustomersInput = {
@@ -20729,6 +22660,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
     documentNumbering?: DocumentNumberingUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    documents?: DocumentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCustomersInput = {
@@ -20758,6 +22690,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -20808,6 +22741,22 @@ export namespace Prisma {
     data: XOR<PaymentUpdateManyMutationInput, PaymentUncheckedUpdateManyWithoutCustomerInput>
   }
 
+  export type DocumentUpsertWithWhereUniqueWithoutCustomerInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutCustomerInput, DocumentUncheckedUpdateWithoutCustomerInput>
+    create: XOR<DocumentCreateWithoutCustomerInput, DocumentUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutCustomerInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutCustomerInput, DocumentUncheckedUpdateWithoutCustomerInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutCustomerInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutCustomerInput>
+  }
+
   export type CompanyCreateWithoutProductsInput = {
     id?: string
     name: string
@@ -20820,6 +22769,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutProductsInput = {
@@ -20834,6 +22784,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutProductsInput = {
@@ -20896,6 +22847,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutProductsInput = {
@@ -20910,6 +22862,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutProductInput = {
@@ -20940,6 +22893,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutOrdersInput = {
@@ -20954,6 +22908,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutOrdersInput = {
@@ -21010,6 +22965,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21028,6 +22984,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutCustomersInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutOrdersInput = {
@@ -21049,6 +23006,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21065,6 +23023,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutOrdersInput = {
@@ -21099,6 +23058,7 @@ export namespace Prisma {
     company: CompanyCreateNestedOneWithoutUsersInput
     customers?: CustomerCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingCreateNestedOneWithoutUserInput
+    documents?: DocumentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -21128,6 +23088,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
     documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -21158,6 +23119,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutOrdersInput = {
@@ -21172,6 +23134,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -21218,6 +23181,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21236,6 +23200,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutCustomersNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutOrdersInput = {
@@ -21257,6 +23222,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21273,6 +23239,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type UserUpsertWithoutOrdersInput = {
@@ -21313,6 +23280,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
     customers?: CustomerUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUpdateOneWithoutUserNestedInput
+    documents?: DocumentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -21342,6 +23310,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CompanyCreateWithoutOrderItemsInput = {
@@ -21356,6 +23325,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutOrderItemsInput = {
@@ -21370,6 +23340,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutOrderItemsInput = {
@@ -21476,6 +23447,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutOrderItemsInput = {
@@ -21490,6 +23462,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type OrderUpsertWithoutOrderItemsInput = {
@@ -21592,6 +23565,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutInvoicesInput = {
@@ -21606,6 +23580,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutInvoicesInput = {
@@ -21630,6 +23605,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21648,6 +23624,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutCustomersInput
     orders?: OrderCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutInvoicesInput = {
@@ -21669,6 +23646,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21685,6 +23663,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutInvoicesInput = {
@@ -21715,6 +23694,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutInvoicesInput = {
@@ -21729,6 +23709,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CustomerUpsertWithoutInvoicesInput = {
@@ -21759,6 +23740,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21777,6 +23759,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutCustomersNestedInput
     orders?: OrderUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutInvoicesInput = {
@@ -21798,6 +23781,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21814,6 +23798,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CompanyCreateWithoutPaymentsInput = {
@@ -21828,6 +23813,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPaymentsInput = {
@@ -21842,6 +23828,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPaymentsInput = {
@@ -21866,6 +23853,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21884,6 +23872,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutCustomersInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     orders?: OrderCreateNestedManyWithoutCustomerInput
+    documents?: DocumentCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutPaymentsInput = {
@@ -21905,6 +23894,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -21921,6 +23911,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutPaymentsInput = {
@@ -21951,6 +23942,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPaymentsInput = {
@@ -21965,6 +23957,7 @@ export namespace Prisma {
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CustomerUpsertWithoutPaymentsInput = {
@@ -21995,6 +23988,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22013,6 +24007,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutCustomersNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     orders?: OrderUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutPaymentsInput = {
@@ -22034,6 +24029,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22050,6 +24046,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
     orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CompanyCreateWithoutDocumentNumberingsInput = {
@@ -22064,6 +24061,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutDocumentNumberingsInput = {
@@ -22078,6 +24076,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutDocumentNumberingsInput = {
@@ -22112,6 +24111,7 @@ export namespace Prisma {
     company: CompanyCreateNestedOneWithoutUsersInput
     customers?: CustomerCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    documents?: DocumentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDocumentNumberingInput = {
@@ -22141,6 +24141,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDocumentNumberingInput = {
@@ -22171,6 +24172,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutDocumentNumberingsInput = {
@@ -22185,6 +24187,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type UserUpsertWithoutDocumentNumberingInput = {
@@ -22225,6 +24228,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
     customers?: CustomerUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    documents?: DocumentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentNumberingInput = {
@@ -22254,6 +24258,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CompanyCreateWithoutUserLocationsInput = {
@@ -22268,6 +24273,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutCompanyInput
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutUserLocationsInput = {
@@ -22282,6 +24288,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutUserLocationsInput = {
@@ -22312,6 +24319,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutUserLocationsInput = {
@@ -22326,6 +24334,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateWithoutSalesReportsInput = {
@@ -22340,6 +24349,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutCompanyInput
     documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutSalesReportsInput = {
@@ -22354,6 +24364,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
     documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
     userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutSalesReportsInput = {
@@ -22384,6 +24395,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
     documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutSalesReportsInput = {
@@ -22398,6 +24410,391 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
     documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
     userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    users?: UserCreateNestedManyWithoutCompanyInput
+    customers?: CustomerCreateNestedManyWithoutCompanyInput
+    orders?: OrderCreateNestedManyWithoutCompanyInput
+    products?: ProductCreateNestedManyWithoutCompanyInput
+    orderItems?: OrderItemCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceCreateNestedManyWithoutCompanyInput
+    payments?: PaymentCreateNestedManyWithoutCompanyInput
+    documentNumberings?: DocumentNumberingCreateNestedManyWithoutCompanyInput
+    userLocations?: UserLocationCreateNestedManyWithoutCompanyInput
+    salesReports?: SalesReportCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    name: string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    customers?: CustomerUncheckedCreateNestedManyWithoutCompanyInput
+    orders?: OrderUncheckedCreateNestedManyWithoutCompanyInput
+    products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
+    orderItems?: OrderItemUncheckedCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    documentNumberings?: DocumentNumberingUncheckedCreateNestedManyWithoutCompanyInput
+    userLocations?: UserLocationUncheckedCreateNestedManyWithoutCompanyInput
+    salesReports?: SalesReportUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutDocumentsInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutDocumentsInput, CompanyUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type CustomerCreateWithoutDocumentsInput = {
+    id?: string
+    customerId: string
+    customerName: string
+    addr1?: string | null
+    addr2?: string | null
+    addr3?: string | null
+    city?: string | null
+    route?: string | null
+    phone1?: string | null
+    phone2?: string | null
+    phone3?: string | null
+    additional?: string | null
+    isActive?: boolean
+    grade?: string | null
+    contactName?: string | null
+    contactPhone?: string | null
+    nicNumber?: string | null
+    startDate?: Date | string | null
+    creditLimit?: Decimal | DecimalJsLike | number | string | null
+    creditPeriod?: number | null
+    comments?: string | null
+    lastInvoiceDate?: Date | string | null
+    lastInvoiceAmt?: Decimal | DecimalJsLike | number | string | null
+    lastPaymentDate?: Date | string | null
+    lastPaymentAmt?: Decimal | DecimalJsLike | number | string | null
+    isInactive?: boolean
+    isHold?: boolean
+    followupStatus?: string | null
+    location?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutCustomersInput
+    user: UserCreateNestedOneWithoutCustomersInput
+    invoices?: InvoiceCreateNestedManyWithoutCustomerInput
+    orders?: OrderCreateNestedManyWithoutCustomerInput
+    payments?: PaymentCreateNestedManyWithoutCustomerInput
+  }
+
+  export type CustomerUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    customerId: string
+    exeId: string
+    companyId: string
+    customerName: string
+    addr1?: string | null
+    addr2?: string | null
+    addr3?: string | null
+    city?: string | null
+    route?: string | null
+    phone1?: string | null
+    phone2?: string | null
+    phone3?: string | null
+    additional?: string | null
+    isActive?: boolean
+    grade?: string | null
+    contactName?: string | null
+    contactPhone?: string | null
+    nicNumber?: string | null
+    startDate?: Date | string | null
+    creditLimit?: Decimal | DecimalJsLike | number | string | null
+    creditPeriod?: number | null
+    comments?: string | null
+    lastInvoiceDate?: Date | string | null
+    lastInvoiceAmt?: Decimal | DecimalJsLike | number | string | null
+    lastPaymentDate?: Date | string | null
+    lastPaymentAmt?: Decimal | DecimalJsLike | number | string | null
+    isInactive?: boolean
+    isHold?: boolean
+    followupStatus?: string | null
+    location?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+  }
+
+  export type CustomerCreateOrConnectWithoutDocumentsInput = {
+    where: CustomerWhereUniqueInput
+    create: XOR<CustomerCreateWithoutDocumentsInput, CustomerUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type UserCreateWithoutDocumentsInput = {
+    id?: string
+    exeId: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
+    leader?: string | null
+    areaCode?: string | null
+    exeName?: string | null
+    exeNameOrig?: string | null
+    role?: string | null
+    areaName?: string | null
+    region?: string | null
+    subdivisionCode?: string | null
+    imageLocation?: string | null
+    isActive?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutUsersInput
+    customers?: CustomerCreateNestedManyWithoutUserInput
+    documentNumbering?: DocumentNumberingCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    exeId: string
+    companyId: string
+    firstName?: string | null
+    lastName?: string | null
+    email?: string | null
+    phone?: string | null
+    username?: string | null
+    password?: string | null
+    userType?: string
+    androidId?: string | null
+    leader?: string | null
+    areaCode?: string | null
+    exeName?: string | null
+    exeNameOrig?: string | null
+    role?: string | null
+    areaName?: string | null
+    region?: string | null
+    subdivisionCode?: string | null
+    imageLocation?: string | null
+    isActive?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    customers?: CustomerUncheckedCreateNestedManyWithoutUserInput
+    documentNumbering?: DocumentNumberingUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutDocumentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type CompanyUpsertWithoutDocumentsInput = {
+    update: XOR<CompanyUpdateWithoutDocumentsInput, CompanyUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<CompanyCreateWithoutDocumentsInput, CompanyUncheckedCreateWithoutDocumentsInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutDocumentsInput, CompanyUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CompanyUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUpdateManyWithoutCompanyNestedInput
+    orders?: OrderUpdateManyWithoutCompanyNestedInput
+    products?: ProductUpdateManyWithoutCompanyNestedInput
+    orderItems?: OrderItemUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    documentNumberings?: DocumentNumberingUpdateManyWithoutCompanyNestedInput
+    userLocations?: UserLocationUpdateManyWithoutCompanyNestedInput
+    salesReports?: SalesReportUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUncheckedUpdateManyWithoutCompanyNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutCompanyNestedInput
+    products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
+    orderItems?: OrderItemUncheckedUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    documentNumberings?: DocumentNumberingUncheckedUpdateManyWithoutCompanyNestedInput
+    userLocations?: UserLocationUncheckedUpdateManyWithoutCompanyNestedInput
+    salesReports?: SalesReportUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CustomerUpsertWithoutDocumentsInput = {
+    update: XOR<CustomerUpdateWithoutDocumentsInput, CustomerUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<CustomerCreateWithoutDocumentsInput, CustomerUncheckedCreateWithoutDocumentsInput>
+    where?: CustomerWhereInput
+  }
+
+  export type CustomerUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: CustomerWhereInput
+    data: XOR<CustomerUpdateWithoutDocumentsInput, CustomerUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CustomerUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    addr1?: NullableStringFieldUpdateOperationsInput | string | null
+    addr2?: NullableStringFieldUpdateOperationsInput | string | null
+    addr3?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: NullableStringFieldUpdateOperationsInput | string | null
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    phone3?: NullableStringFieldUpdateOperationsInput | string | null
+    additional?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableStringFieldUpdateOperationsInput | string | null
+    lastInvoiceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastInvoiceAmt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lastPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastPaymentAmt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    isInactive?: BoolFieldUpdateOperationsInput | boolean
+    isHold?: BoolFieldUpdateOperationsInput | boolean
+    followupStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
+    user?: UserUpdateOneRequiredWithoutCustomersNestedInput
+    invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
+    orders?: OrderUpdateManyWithoutCustomerNestedInput
+    payments?: PaymentUpdateManyWithoutCustomerNestedInput
+  }
+
+  export type CustomerUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    exeId?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    addr1?: NullableStringFieldUpdateOperationsInput | string | null
+    addr2?: NullableStringFieldUpdateOperationsInput | string | null
+    addr3?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: NullableStringFieldUpdateOperationsInput | string | null
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    phone3?: NullableStringFieldUpdateOperationsInput | string | null
+    additional?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    contactName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableStringFieldUpdateOperationsInput | string | null
+    lastInvoiceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastInvoiceAmt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lastPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastPaymentAmt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    isInactive?: BoolFieldUpdateOperationsInput | boolean
+    isHold?: BoolFieldUpdateOperationsInput | boolean
+    followupStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+  }
+
+  export type UserUpsertWithoutDocumentsInput = {
+    update: XOR<UserUpdateWithoutDocumentsInput, UserUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDocumentsInput, UserUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type UserUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exeId?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
+    leader?: NullableStringFieldUpdateOperationsInput | string | null
+    areaCode?: NullableStringFieldUpdateOperationsInput | string | null
+    exeName?: NullableStringFieldUpdateOperationsInput | string | null
+    exeNameOrig?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    areaName?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutUsersNestedInput
+    customers?: CustomerUpdateManyWithoutUserNestedInput
+    documentNumbering?: DocumentNumberingUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exeId?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    userType?: StringFieldUpdateOperationsInput | string
+    androidId?: NullableStringFieldUpdateOperationsInput | string | null
+    leader?: NullableStringFieldUpdateOperationsInput | string | null
+    areaCode?: NullableStringFieldUpdateOperationsInput | string | null
+    exeName?: NullableStringFieldUpdateOperationsInput | string | null
+    exeNameOrig?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    areaName?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    subdivisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    imageLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
+    documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyCompanyInput = {
@@ -22444,6 +24841,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -22566,6 +24964,20 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type DocumentCreateManyCompanyInput = {
+    id?: string
+    customerId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     exeId?: StringFieldUpdateOperationsInput | string
@@ -22593,6 +25005,7 @@ export namespace Prisma {
     customers?: CustomerUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    documents?: DocumentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -22622,6 +25035,7 @@ export namespace Prisma {
     customers?: CustomerUncheckedUpdateManyWithoutUserNestedInput
     documentNumbering?: DocumentNumberingUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -22667,6 +25081,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22685,6 +25100,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     orders?: OrderUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutCompanyInput = {
@@ -22705,6 +25121,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22722,6 +25139,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
     orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateManyWithoutCompanyInput = {
@@ -22742,6 +25160,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23080,6 +25499,48 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DocumentUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer?: CustomerUpdateOneRequiredWithoutDocumentsNestedInput
+    user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CustomerCreateManyUserInput = {
     id?: string
     customerId: string
@@ -23098,6 +25559,7 @@ export namespace Prisma {
     grade?: string | null
     contactName?: string | null
     contactPhone?: string | null
+    nicNumber?: string | null
     startDate?: Date | string | null
     creditLimit?: Decimal | DecimalJsLike | number | string | null
     creditPeriod?: number | null
@@ -23127,6 +25589,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type DocumentCreateManyUserInput = {
+    id?: string
+    companyId: string
+    customerId: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CustomerUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     customerId?: StringFieldUpdateOperationsInput | string
@@ -23144,6 +25620,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23162,6 +25639,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     orders?: OrderUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutUserInput = {
@@ -23182,6 +25660,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23199,6 +25678,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
     orders?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateManyWithoutUserInput = {
@@ -23219,6 +25699,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     contactName?: NullableStringFieldUpdateOperationsInput | string | null
     contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    nicNumber?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creditLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     creditPeriod?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23276,6 +25757,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DocumentUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutDocumentsNestedInput
+    customer?: CustomerUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    customerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type InvoiceCreateManyCustomerInput = {
     id?: string
     companyId: string
@@ -23311,6 +25834,20 @@ export namespace Prisma {
     transDate: Date | string
     amtBc: Decimal | DecimalJsLike | number | string
     remUnappl: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DocumentCreateManyCustomerInput = {
+    id?: string
+    companyId: string
+    uploadedBy: string
+    fileName: string
+    originalName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23430,6 +25967,48 @@ export namespace Prisma {
     transDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amtBc?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     remUnappl?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutDocumentsNestedInput
+    user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23591,6 +26170,10 @@ export namespace Prisma {
      * @deprecated Use SalesReportDefaultArgs instead
      */
     export type SalesReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SalesReportDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DocumentDefaultArgs instead
+     */
+    export type DocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DocumentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

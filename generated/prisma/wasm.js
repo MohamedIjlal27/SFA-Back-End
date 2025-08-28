@@ -173,6 +173,7 @@ exports.Prisma.CustomerScalarFieldEnum = {
   grade: 'grade',
   contactName: 'contactName',
   contactPhone: 'contactPhone',
+  nicNumber: 'nicNumber',
   startDate: 'startDate',
   creditLimit: 'creditLimit',
   creditPeriod: 'creditPeriod',
@@ -303,6 +304,21 @@ exports.Prisma.SalesReportScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.DocumentScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  customerId: 'customerId',
+  uploadedBy: 'uploadedBy',
+  fileName: 'fileName',
+  originalName: 'originalName',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  fileUrl: 'fileUrl',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -330,7 +346,8 @@ exports.Prisma.ModelName = {
   Payment: 'Payment',
   DocumentNumbering: 'DocumentNumbering',
   UserLocation: 'UserLocation',
-  SalesReport: 'SalesReport'
+  SalesReport: 'SalesReport',
+  Document: 'Document'
 };
 
 /**
