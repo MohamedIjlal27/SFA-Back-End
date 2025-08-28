@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UseInterceptors, Delete } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Request, Post, Body, UploadedFile, UseInterceptors, Delete, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
@@ -11,6 +11,8 @@ import {
   DocumentResponseDto,
   UploadDocumentDto,
 } from '../common/dto/customer.dto';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @ApiTags('Customers')
 @Controller('ar')
@@ -68,7 +70,44 @@ export class CustomersController {
   }
 
   @Post('documents/upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/documents',
+        filename: (req, file, cb) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          return cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        // Allow common document and image types
+        const allowedMimeTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
+          'text/plain',
+        ];
+        
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('Invalid file type. Only documents and images are allowed.'), false);
+        }
+      },
+    })
+  )
   @ApiOperation({ summary: 'Upload customer document' })
   @ApiConsumes('multipart/form-data')
   @ApiResponse({
@@ -92,5 +131,15 @@ export class CustomersController {
   })
   async deleteDocument(@Param('documentId') documentId: string, @Request() req): Promise<{ message: string }> {
     return this.customersService.deleteDocument(documentId, req.user.companyId);
+  }
+
+  @Get('documents/:documentId/download')
+  @ApiOperation({ summary: 'Download customer document' })
+  @ApiResponse({
+    status: 200,
+    description: 'Document file',
+  })
+  async downloadDocument(@Param('documentId') documentId: string, @Request() req, @Res() res) {
+    return this.customersService.downloadDocument(documentId, req.user.companyId, res);
   }
 } 

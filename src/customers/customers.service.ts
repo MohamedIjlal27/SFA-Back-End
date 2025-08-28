@@ -8,8 +8,8 @@ import {
   DocumentResponseDto,
   UploadDocumentDto,
 } from '../common/dto/customer.dto';
-import * as FormData from 'form-data';
-import axios from 'axios';
+import { join } from 'path';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class CustomersService {
@@ -245,28 +245,10 @@ export class CustomersService {
       throw new NotFoundException('Customer not found');
     }
 
-    // Upload to UploadThing (similar to products upload)
-    const UPLOADTHING_TOKEN = process.env.UPLOADTHING_TOKEN;
-    const UPLOADTHING_URL = 'https://uploadthing.com/api/uploadFiles';
-
-    if (!UPLOADTHING_TOKEN) {
-      throw new HttpException('UploadThing token not configured', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     try {
-      const formData = new FormData();
-      formData.append('file', file.buffer, file.originalname);
-      
-      const response = await axios.post(UPLOADTHING_URL, formData, {
-        headers: {
-          'Authorization': `Bearer ${UPLOADTHING_TOKEN}`,
-          ...formData.getHeaders(),
-        },
-      });
-
-      if (!response.data || !response.data.url) {
-        throw new HttpException('Failed to upload file', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
+      // Generate file URL for local storage
+      const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+      const fileUrl = `${baseUrl}/uploads/documents/${file.filename}`;
 
       // Save document record to database
       const document = await this.prisma.document.create({
@@ -274,11 +256,11 @@ export class CustomersService {
           companyId: user.companyId,
           customerId,
           uploadedBy: user.exeId,
-          fileName: file.originalname,
+          fileName: file.filename,
           originalName: file.originalname,
           fileType: file.mimetype,
           fileSize: file.size,
-          fileUrl: response.data.url,
+          fileUrl: fileUrl,
           description,
         },
       });
@@ -313,10 +295,38 @@ export class CustomersService {
       throw new NotFoundException('Document not found');
     }
 
+    // Delete the physical file
+    const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
+    try {
+      await unlink(filePath);
+    } catch (error) {
+      // File might not exist, continue with database deletion
+      console.warn(`File not found for deletion: ${filePath}`);
+    }
+
+    // Delete from database
     await this.prisma.document.delete({
       where: { id: documentId },
     });
 
     return { message: 'Document deleted successfully' };
+  }
+
+  async downloadDocument(documentId: string, companyId: string, res: any): Promise<void> {
+    const document = await this.prisma.document.findFirst({
+      where: { id: documentId, companyId },
+    });
+
+    if (!document) {
+      throw new NotFoundException('Document not found');
+    }
+
+    const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
+    
+    res.download(filePath, document.originalName, (err) => {
+      if (err) {
+        throw new HttpException('File not found', HttpStatus.NOT_FOUND);
+      }
+    });
   }
 } 
