@@ -249,7 +249,7 @@ export class CustomersService {
       let fileUrl: string;
       let fileName: string;
 
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.VERCEL === '1') {
         // For production (Vercel), we'll use a placeholder URL since we can't store files locally
         // In a real production environment, you'd want to use a cloud storage service like AWS S3, Cloudinary, etc.
         fileName = `${Date.now()}_${file.originalname}`;
@@ -306,7 +306,7 @@ export class CustomersService {
       throw new NotFoundException('Document not found');
     }
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.VERCEL !== '1') {
       // Delete the physical file only in development
       const filePath = join(__dirname, '..', '..', 'uploads', 'documents', document.fileName);
       try {
@@ -334,7 +334,7 @@ export class CustomersService {
       throw new NotFoundException('Document not found');
     }
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.VERCEL === '1') {
       // For production, redirect to the stored URL
       res.redirect(document.fileUrl);
     } else {

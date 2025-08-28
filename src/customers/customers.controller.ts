@@ -72,7 +72,7 @@ export class CustomersController {
   @Post('documents/upload')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: process.env.NODE_ENV === 'production' ? undefined : diskStorage({
+      storage: process.env.VERCEL === '1' ? undefined : diskStorage({
         destination: './uploads/documents',
         filename: (req, file, cb) => {
           const randomName = Array(32)

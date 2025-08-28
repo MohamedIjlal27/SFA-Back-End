@@ -25,7 +25,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Serve static files only in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.VERCEL !== '1') {
     app.useStaticAssets(join(__dirname, '..', 'uploads'), {
       prefix: '/uploads/',
     });
