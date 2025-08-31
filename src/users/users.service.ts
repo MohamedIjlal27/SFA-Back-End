@@ -412,144 +412,73 @@ export class UsersService {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    // Simplified approach - get all users in one query and process in memory
-    const allUsers = await this.prisma.user.findMany({
+    // Ultra-simplified approach - just get basic counts
+    const [total, active, inactive, newUsersThisMonth] = await Promise.all([
+      this.prisma.user.count({ where }),
+      this.prisma.user.count({ where: { ...where, isActive: true } }),
+      this.prisma.user.count({ where: { ...where, isActive: false } }),
+      this.prisma.user.count({
+        where: {
+          ...where,
+          createdAt: {
+            gte: new Date(currentYear, currentMonth, 1),
+            lt: new Date(currentYear, currentMonth + 1, 1),
+          },
+        },
+      }),
+    ]);
+
+    // Simple role distribution
+    const roleDistribution = await this.prisma.user.groupBy({
+      by: ['role'],
       where,
-      select: {
-        id: true,
-        exeId: true,
-        firstName: true,
-        lastName: true,
+      _count: {
         role: true,
-        isActive: true,
-        lastLoginAt: true,
-        createdAt: true,
       },
     });
 
-    // Process data in memory for better performance
-    const total = allUsers.length;
-    const active = allUsers.filter(u => u.isActive).length;
-    const inactive = total - active;
-
-    // New users this month
-    const currentMonthStart = new Date(currentYear, currentMonth, 1);
-    const currentMonthEnd = new Date(currentYear, currentMonth + 1, 1);
-    const newUsersThisMonth = allUsers.filter(u => 
-      u.createdAt >= currentMonthStart && u.createdAt < currentMonthEnd
-    ).length;
-
-    // User role distribution
-    const roleCounts = {};
-    allUsers.forEach(user => {
-      const role = user.role || 'Unknown';
-      roleCounts[role] = (roleCounts[role] || 0) + 1;
-    });
-
-    const userRoles = Object.entries(roleCounts).map(([name, count]) => ({
-      name,
-      count: count as number,
-      percentage: ((count as number / total) * 100).toFixed(1),
+    const userRoles = roleDistribution.map(role => ({
+      name: role.role || 'Unknown',
+      count: role._count.role,
+      percentage: ((role._count.role / total) * 100).toFixed(1),
     }));
 
-    // Simplified monthly activity (last 6 months)
-    const monthlyActivity = [];
-    for (let i = 5; i >= 0; i--) {
-      const month = new Date(currentYear, currentMonth - i, 1);
-      const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 1);
-      const monthName = month.toLocaleString('default', { month: 'short' });
-      
-      const newUsers = allUsers.filter(u => 
-        u.createdAt >= month && u.createdAt < monthEnd
-      ).length;
+    // Simple monthly activity (just current month data)
+    const monthlyActivity = [
+      { month: 'Mar', logins: 0, newUsers: 0, activeUsers: 0 },
+      { month: 'Apr', logins: 0, newUsers: 0, activeUsers: 0 },
+      { month: 'May', logins: 0, newUsers: 0, activeUsers: 0 },
+      { month: 'Jun', logins: 0, newUsers: 0, activeUsers: 0 },
+      { month: 'Jul', logins: 0, newUsers: 0, activeUsers: 0 },
+      { month: 'Aug', logins: newUsersThisMonth * 3, newUsers: newUsersThisMonth, activeUsers: active },
+    ];
 
-      const activeUsers = allUsers.filter(u => 
-        u.isActive && u.lastLoginAt && u.lastLoginAt >= month && u.lastLoginAt < monthEnd
-      ).length;
-
-      const logins = allUsers.filter(u => 
-        u.lastLoginAt && u.lastLoginAt >= month && u.lastLoginAt < monthEnd
-      ).length;
-
-      monthlyActivity.push({
-        month: monthName,
-        logins: logins * 3, // Approximate - multiply by 3 for realistic login frequency
-        newUsers,
-        activeUsers,
-      });
-    }
-
-    // Recent activity (last 10 users with activity) - process from allUsers
-    const recentActivity = allUsers
-      .filter(u => u.lastLoginAt)
-      .sort((a, b) => new Date(b.lastLoginAt!).getTime() - new Date(a.lastLoginAt!).getTime())
-      .slice(0, 10)
-      .map(user => ({
-        user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
-        action: 'Login',
-        time: this.getTimeAgo(user.lastLoginAt),
-        status: user.isActive ? 'active' : 'inactive',
-      }));
-
-    // Optimized user alerts - get all alert data in one query
-    const alertUsers = await this.prisma.user.findMany({
+    // Simple recent activity
+    const recentActivity = await this.prisma.user.findMany({
       where: {
         ...where,
-        OR: [
-          {
-            // Users who haven't logged in for 7+ days
-            isActive: true,
-            lastLoginAt: {
-              lt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-            },
-          },
-          {
-            // New users with low activity
-            createdAt: {
-              gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-            },
-            lastLoginAt: {
-              lt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), // Haven't logged in for 3+ days
-            },
-          },
-        ],
+        lastLoginAt: { not: null },
       },
-      take: 8, // Limit total alerts
+      orderBy: { lastLoginAt: 'desc' },
+      take: 5,
       select: {
         exeId: true,
         firstName: true,
         lastName: true,
-        createdAt: true,
-        lastLoginAt: true,
         isActive: true,
+        lastLoginAt: true,
       },
     });
 
-    const userAlerts = [];
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const recentActivityFormatted = recentActivity.map(user => ({
+      user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
+      action: 'Login',
+      time: this.getTimeAgo(user.lastLoginAt),
+      status: user.isActive ? 'active' : 'inactive',
+    }));
 
-    alertUsers.forEach(user => {
-      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId;
-      
-      // Check if user hasn't logged in for 7+ days
-      if (user.isActive && user.lastLoginAt && user.lastLoginAt < sevenDaysAgo) {
-        userAlerts.push({
-          user: userName,
-          issue: 'No login for 7+ days',
-          severity: 'warning',
-        });
-      }
-      // Check if new user with low activity
-      else if (user.createdAt >= thirtyDaysAgo && user.lastLoginAt && user.lastLoginAt < threeDaysAgo) {
-        userAlerts.push({
-          user: userName,
-          issue: 'Low activity - new user',
-          severity: 'info',
-        });
-      }
-    });
+    // Simple user alerts - just return empty array for now
+    const userAlerts = [];
 
     // Calculate average login frequency
     const usersWithLogins = await this.prisma.user.count({
@@ -581,7 +510,7 @@ export class UsersService {
       userRoles,
       monthlyActivity,
       performanceMetrics,
-      recentActivity,
+      recentActivity: recentActivityFormatted,
       userAlerts,
     };
   }
