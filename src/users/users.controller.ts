@@ -44,6 +44,16 @@ export class UsersController {
     return this.usersService.getAnalytics(companyId);
   }
 
+  @Get('analytics/comprehensive')
+  async getComprehensiveAnalytics(@Query('companyId') companyId?: string) {
+    return this.usersService.getComprehensiveAnalytics(companyId);
+  }
+
+  @Get('analytics/top-users')
+  async getTopUsersWithSales(@Query('companyId') companyId?: string) {
+    return this.usersService.getTopUsersWithSales(companyId);
+  }
+
   @Get('exe/:exeId')
   async findByExeId(
     @Param('exeId') exeId: string,

@@ -726,6 +726,79 @@ async function main() {
       exeId: 'SALES001',
       refNo: 'REF030',
     },
+    // Next Month (September 2025) Invoices
+    {
+      companyId: 'COMP001',
+      customerId: 'WP03520',
+      documentNo: 'SP25-0001',
+      docDate: new Date('2025-09-05'),
+      docAmount: 25000.00,
+      daysDue: -15,
+      docType: 'Invoice',
+      dueAmount: 25000.00,
+      exeId: 'SALES001',
+      refNo: 'REF031',
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'WP03520',
+      documentNo: 'SP25-0002',
+      docDate: new Date('2025-09-12'),
+      docAmount: 18750.00,
+      daysDue: -22,
+      docType: 'Invoice',
+      dueAmount: 18750.00,
+      exeId: 'SALES001',
+      refNo: 'REF032',
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'SA02355',
+      documentNo: 'SP25-0003',
+      docDate: new Date('2025-09-08'),
+      docAmount: 125000.00,
+      daysDue: -18,
+      docType: 'Invoice',
+      dueAmount: 125000.00,
+      exeId: 'SALES001',
+      refNo: 'REF033',
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'SA02355',
+      documentNo: 'SP25-0004',
+      docDate: new Date('2025-09-15'),
+      docAmount: 87500.00,
+      daysDue: -25,
+      docType: 'Invoice',
+      dueAmount: 87500.00,
+      exeId: 'SALES001',
+      refNo: 'REF034',
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'OK03747',
+      documentNo: 'SP25-0005',
+      docDate: new Date('2025-09-10'),
+      docAmount: 32000.00,
+      daysDue: -20,
+      docType: 'Invoice',
+      dueAmount: 32000.00,
+      exeId: 'SALES001',
+      refNo: 'REF035',
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'OK03747',
+      documentNo: 'SP25-0006',
+      docDate: new Date('2025-09-18'),
+      docAmount: 15600.00,
+      daysDue: -28,
+      docType: 'Invoice',
+      dueAmount: 15600.00,
+      exeId: 'SALES001',
+      refNo: 'REF036',
+    },
   ];
 
   for (const invoice of invoices) {
@@ -868,6 +941,31 @@ async function main() {
       transNo: 'PAY016',
       transDate: new Date(currentDate.getTime() - 75 * 24 * 60 * 60 * 1000), // 75 days ago
       amtBc: 27991.00, // Returned cheque amount from image
+      remUnappl: 0,
+    },
+    // Next Month (September 2025) Payments
+    {
+      companyId: 'COMP001',
+      customerId: 'WP03520',
+      transNo: 'PAY017',
+      transDate: new Date('2025-09-20'),
+      amtBc: 43750.00, // Payment for September invoices
+      remUnappl: 0,
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'SA02355',
+      transNo: 'PAY018',
+      transDate: new Date('2025-09-22'),
+      amtBc: 212500.00, // Payment for September invoices
+      remUnappl: 0,
+    },
+    {
+      companyId: 'COMP001',
+      customerId: 'OK03747',
+      transNo: 'PAY019',
+      transDate: new Date('2025-09-25'),
+      amtBc: 47600.00, // Payment for September invoices
       remUnappl: 0,
     },
   ];
@@ -1027,6 +1125,109 @@ async function main() {
       discount: 15.00,
       netSales: 254.97,
     },
+    // Next Month (September 2025) Sales Reports
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 5), // 5th of next month
+      customerId: 'WP03520',
+      customerName: 'WELCOME HARDWARE',
+      city: 'Panadura',
+      province: 'Western',
+      productId: 'PROD001',
+      productName: 'Laptop Computer - Dell XPS 13',
+      category: 'Electronics',
+      subCategory: 'Computers',
+      quantity: 1,
+      unitPrice: 1299.99,
+      totalSales: 1299.99,
+      discount: 0,
+      netSales: 1299.99,
+    },
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 12), // 12th of next month
+      customerId: 'WP03520',
+      customerName: 'WELCOME HARDWARE',
+      city: 'Panadura',
+      province: 'Western',
+      productId: 'PROD005',
+      productName: 'Desk Lamp - LED Adjustable',
+      category: 'Furniture',
+      subCategory: 'Lighting',
+      quantity: 15,
+      unitPrice: 49.99,
+      totalSales: 749.85,
+      discount: 0,
+      netSales: 749.85,
+    },
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 8), // 8th of next month
+      customerId: 'SA02355',
+      customerName: 'STAR GLASS HOUSE',
+      city: 'Anuradhapura',
+      province: 'North Central',
+      productId: 'PROD003',
+      productName: 'Office Chair - Ergonomic Design',
+      category: 'Furniture',
+      subCategory: 'Office',
+      quantity: 5,
+      unitPrice: 299.99,
+      totalSales: 1499.95,
+      discount: 100.00,
+      netSales: 1399.95,
+    },
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 15), // 15th of next month
+      customerId: 'SA02355',
+      customerName: 'STAR GLASS HOUSE',
+      city: 'Anuradhapura',
+      province: 'North Central',
+      productId: 'PROD004',
+      productName: 'Printer - HP LaserJet Pro',
+      category: 'Electronics',
+      subCategory: 'Printers',
+      quantity: 3,
+      unitPrice: 399.99,
+      totalSales: 1199.97,
+      discount: 50.00,
+      netSales: 1149.97,
+    },
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 10), // 10th of next month
+      customerId: 'OK03747',
+      customerName: 'ORIENT HARDWARE & ELECTRICALS',
+      city: 'Kalutara',
+      province: 'Western',
+      productId: 'PROD001',
+      productName: 'Laptop Computer - Dell XPS 13',
+      category: 'Electronics',
+      subCategory: 'Computers',
+      quantity: 2,
+      unitPrice: 1299.99,
+      totalSales: 2599.98,
+      discount: 0,
+      netSales: 2599.98,
+    },
+    {
+      companyId: 'COMP001',
+      date: new Date(reportYear, reportMonth, 18), // 18th of next month
+      customerId: 'OK03747',
+      customerName: 'ORIENT HARDWARE & ELECTRICALS',
+      city: 'Kalutara',
+      province: 'Western',
+      productId: 'PROD002',
+      productName: 'Wireless Mouse - Logitech MX Master',
+      category: 'Electronics',
+      subCategory: 'Accessories',
+      quantity: 8,
+      unitPrice: 89.99,
+      totalSales: 719.92,
+      discount: 40.00,
+      netSales: 679.92,
+    },
   ];
 
   for (const report of salesReports) {
@@ -1049,9 +1250,9 @@ async function main() {
   console.log('   • 3 Customers (WELCOME HARDWARE, STAR GLASS HOUSE & ORIENT HARDWARE)');
   console.log('   • 5 Products');
   console.log('   • 2 Orders with Items');
-  console.log('   • 30 Invoices (matching real-world data)');
-  console.log('   • 16 Payments (various types)');
-  console.log('   • Sales Reports');
+  console.log('   • 36 Invoices (30 current + 6 next month)');
+  console.log('   • 19 Payments (16 current + 3 next month)');
+  console.log('   • Sales Reports (current month + next month)');
   console.log('');
   console.log('💰 WELCOME HARDWARE Financial Summary:');
   console.log('   • Total Outstanding: 136,662.16');
