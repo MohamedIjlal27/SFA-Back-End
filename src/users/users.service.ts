@@ -413,23 +413,21 @@ export class UsersService {
     const currentYear = now.getFullYear();
     const sixMonthsAgo = new Date(currentYear, currentMonth - 6, 1);
 
-    // Basic user counts
-    const [total, active, inactive] = await Promise.all([
+    // Basic user counts - optimized with single query
+    const [total, active, inactive, newUsersThisMonth] = await Promise.all([
       this.prisma.user.count({ where }),
       this.prisma.user.count({ where: { ...where, isActive: true } }),
       this.prisma.user.count({ where: { ...where, isActive: false } }),
-    ]);
-
-    // New users this month
-    const newUsersThisMonth = await this.prisma.user.count({
-      where: {
-        ...where,
-        createdAt: {
-          gte: new Date(currentYear, currentMonth, 1),
-          lt: new Date(currentYear, currentMonth + 1, 1),
+      this.prisma.user.count({
+        where: {
+          ...where,
+          createdAt: {
+            gte: new Date(currentYear, currentMonth, 1),
+            lt: new Date(currentYear, currentMonth + 1, 1),
+          },
         },
-      },
-    });
+      }),
+    ]);
 
     // User role distribution
     const roleDistribution = await this.prisma.user.groupBy({
@@ -440,45 +438,56 @@ export class UsersService {
       },
     });
 
-    // Monthly activity (last 6 months)
+    // Optimized monthly activity - get all data in one query
+    const monthlyActivityData = await this.prisma.user.findMany({
+      where: {
+        ...where,
+        OR: [
+          {
+            createdAt: {
+              gte: sixMonthsAgo,
+            },
+          },
+          {
+            lastLoginAt: {
+              gte: sixMonthsAgo,
+            },
+          },
+        ],
+      },
+      select: {
+        createdAt: true,
+        lastLoginAt: true,
+        isActive: true,
+      },
+    });
+
+    // Process monthly activity data
     const monthlyActivity = [];
     for (let i = 5; i >= 0; i--) {
       const month = new Date(currentYear, currentMonth - i, 1);
+      const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 1);
       const monthName = month.toLocaleString('default', { month: 'short' });
       
-      // Count users created in this month
-      const newUsers = await this.prisma.user.count({
-        where: {
-          ...where,
-          createdAt: {
-            gte: month,
-            lt: new Date(month.getFullYear(), month.getMonth() + 1, 1),
-          },
-        },
+      const monthData = monthlyActivityData.filter(user => {
+        const createdInMonth = user.createdAt >= month && user.createdAt < monthEnd;
+        const activeInMonth = user.isActive && user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd;
+        const loggedInMonth = user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd;
+        
+        return createdInMonth || activeInMonth || loggedInMonth;
       });
 
-      // Count active users (users who logged in this month)
-      const activeUsers = await this.prisma.user.count({
-        where: {
-          ...where,
-          isActive: true,
-          lastLoginAt: {
-            gte: month,
-            lt: new Date(month.getFullYear(), month.getMonth() + 1, 1),
-          },
-        },
-      });
+      const newUsers = monthlyActivityData.filter(user => 
+        user.createdAt >= month && user.createdAt < monthEnd
+      ).length;
 
-      // Count total logins (approximate based on lastLoginAt)
-      const logins = await this.prisma.user.count({
-        where: {
-          ...where,
-          lastLoginAt: {
-            gte: month,
-            lt: new Date(month.getFullYear(), month.getMonth() + 1, 1),
-          },
-        },
-      });
+      const activeUsers = monthlyActivityData.filter(user => 
+        user.isActive && user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd
+      ).length;
+
+      const logins = monthlyActivityData.filter(user => 
+        user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd
+      ).length;
 
       monthlyActivity.push({
         month: monthName,
@@ -507,59 +516,64 @@ export class UsersService {
       },
     });
 
-    // User alerts
-    const userAlerts = [];
-    
-    // Users who haven't logged in for 7+ days
-    const inactiveUsers = await this.prisma.user.findMany({
+    // Optimized user alerts - get all alert data in one query
+    const alertUsers = await this.prisma.user.findMany({
       where: {
         ...where,
+        OR: [
+          {
+            // Users who haven't logged in for 7+ days
+            isActive: true,
+            lastLoginAt: {
+              lt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+            },
+          },
+          {
+            // New users with low activity
+            createdAt: {
+              gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+            },
+            lastLoginAt: {
+              lt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), // Haven't logged in for 3+ days
+            },
+          },
+        ],
+      },
+      take: 8, // Limit total alerts
+      select: {
+        exeId: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+        lastLoginAt: true,
         isActive: true,
-        lastLoginAt: {
-          lt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-        },
-      },
-      take: 5,
-      select: {
-        exeId: true,
-        firstName: true,
-        lastName: true,
       },
     });
 
-    inactiveUsers.forEach(user => {
-      userAlerts.push({
-        user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
-        issue: 'No login for 7+ days',
-        severity: 'warning',
-      });
-    });
+    const userAlerts = [];
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
 
-    // New users with low activity
-    const newUsers = await this.prisma.user.findMany({
-      where: {
-        ...where,
-        createdAt: {
-          gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        },
-        lastLoginAt: {
-          lt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), // Haven't logged in for 3+ days
-        },
-      },
-      take: 3,
-      select: {
-        exeId: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
-
-    newUsers.forEach(user => {
-      userAlerts.push({
-        user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
-        issue: 'Low activity - new user',
-        severity: 'info',
-      });
+    alertUsers.forEach(user => {
+      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId;
+      
+      // Check if user hasn't logged in for 7+ days
+      if (user.isActive && user.lastLoginAt && user.lastLoginAt < sevenDaysAgo) {
+        userAlerts.push({
+          user: userName,
+          issue: 'No login for 7+ days',
+          severity: 'warning',
+        });
+      }
+      // Check if new user with low activity
+      else if (user.createdAt >= thirtyDaysAgo && user.lastLoginAt && user.lastLoginAt < threeDaysAgo) {
+        userAlerts.push({
+          user: userName,
+          issue: 'Low activity - new user',
+          severity: 'info',
+        });
+      }
     });
 
     // Calculate average login frequency
