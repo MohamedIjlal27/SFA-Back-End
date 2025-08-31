@@ -411,82 +411,64 @@ export class UsersService {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
-    const sixMonthsAgo = new Date(currentYear, currentMonth - 6, 1);
 
-    // Basic user counts - optimized with single query
-    const [total, active, inactive, newUsersThisMonth] = await Promise.all([
-      this.prisma.user.count({ where }),
-      this.prisma.user.count({ where: { ...where, isActive: true } }),
-      this.prisma.user.count({ where: { ...where, isActive: false } }),
-      this.prisma.user.count({
-        where: {
-          ...where,
-          createdAt: {
-            gte: new Date(currentYear, currentMonth, 1),
-            lt: new Date(currentYear, currentMonth + 1, 1),
-          },
-        },
-      }),
-    ]);
+    // Simplified approach - get all users in one query and process in memory
+    const allUsers = await this.prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        exeId: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        isActive: true,
+        lastLoginAt: true,
+        createdAt: true,
+      },
+    });
+
+    // Process data in memory for better performance
+    const total = allUsers.length;
+    const active = allUsers.filter(u => u.isActive).length;
+    const inactive = total - active;
+
+    // New users this month
+    const currentMonthStart = new Date(currentYear, currentMonth, 1);
+    const currentMonthEnd = new Date(currentYear, currentMonth + 1, 1);
+    const newUsersThisMonth = allUsers.filter(u => 
+      u.createdAt >= currentMonthStart && u.createdAt < currentMonthEnd
+    ).length;
 
     // User role distribution
-    const roleDistribution = await this.prisma.user.groupBy({
-      by: ['role'],
-      where,
-      _count: {
-        role: true,
-      },
+    const roleCounts = {};
+    allUsers.forEach(user => {
+      const role = user.role || 'Unknown';
+      roleCounts[role] = (roleCounts[role] || 0) + 1;
     });
 
-    // Optimized monthly activity - get all data in one query
-    const monthlyActivityData = await this.prisma.user.findMany({
-      where: {
-        ...where,
-        OR: [
-          {
-            createdAt: {
-              gte: sixMonthsAgo,
-            },
-          },
-          {
-            lastLoginAt: {
-              gte: sixMonthsAgo,
-            },
-          },
-        ],
-      },
-      select: {
-        createdAt: true,
-        lastLoginAt: true,
-        isActive: true,
-      },
-    });
+    const userRoles = Object.entries(roleCounts).map(([name, count]) => ({
+      name,
+      count: count as number,
+      percentage: ((count as number / total) * 100).toFixed(1),
+    }));
 
-    // Process monthly activity data
+    // Simplified monthly activity (last 6 months)
     const monthlyActivity = [];
     for (let i = 5; i >= 0; i--) {
       const month = new Date(currentYear, currentMonth - i, 1);
       const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 1);
       const monthName = month.toLocaleString('default', { month: 'short' });
       
-      const monthData = monthlyActivityData.filter(user => {
-        const createdInMonth = user.createdAt >= month && user.createdAt < monthEnd;
-        const activeInMonth = user.isActive && user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd;
-        const loggedInMonth = user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd;
-        
-        return createdInMonth || activeInMonth || loggedInMonth;
-      });
-
-      const newUsers = monthlyActivityData.filter(user => 
-        user.createdAt >= month && user.createdAt < monthEnd
+      const newUsers = allUsers.filter(u => 
+        u.createdAt >= month && u.createdAt < monthEnd
       ).length;
 
-      const activeUsers = monthlyActivityData.filter(user => 
-        user.isActive && user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd
+      const activeUsers = allUsers.filter(u => 
+        u.isActive && u.lastLoginAt && u.lastLoginAt >= month && u.lastLoginAt < monthEnd
       ).length;
 
-      const logins = monthlyActivityData.filter(user => 
-        user.lastLoginAt && user.lastLoginAt >= month && user.lastLoginAt < monthEnd
+      const logins = allUsers.filter(u => 
+        u.lastLoginAt && u.lastLoginAt >= month && u.lastLoginAt < monthEnd
       ).length;
 
       monthlyActivity.push({
@@ -497,24 +479,17 @@ export class UsersService {
       });
     }
 
-    // Recent activity (last 10 users with activity)
-    const recentActivity = await this.prisma.user.findMany({
-      where: {
-        ...where,
-        lastLoginAt: { not: null },
-      },
-      orderBy: { lastLoginAt: 'desc' },
-      take: 10,
-      select: {
-        id: true,
-        exeId: true,
-        firstName: true,
-        lastName: true,
-        isActive: true,
-        lastLoginAt: true,
-        role: true,
-      },
-    });
+    // Recent activity (last 10 users with activity) - process from allUsers
+    const recentActivity = allUsers
+      .filter(u => u.lastLoginAt)
+      .sort((a, b) => new Date(b.lastLoginAt!).getTime() - new Date(a.lastLoginAt!).getTime())
+      .slice(0, 10)
+      .map(user => ({
+        user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
+        action: 'Login',
+        time: this.getTimeAgo(user.lastLoginAt),
+        status: user.isActive ? 'active' : 'inactive',
+      }));
 
     // Optimized user alerts - get all alert data in one query
     const alertUsers = await this.prisma.user.findMany({
@@ -603,19 +578,10 @@ export class UsersService {
       averageLoginFrequency: parseFloat(averageLoginFrequency),
       topPerformers: Math.floor(active * 0.2),
       usersNeedingAttention: userAlerts.length,
-      userRoles: roleDistribution.map(role => ({
-        name: role.role || 'Unknown',
-        count: role._count.role,
-        percentage: ((role._count.role / total) * 100).toFixed(1),
-      })),
+      userRoles,
       monthlyActivity,
       performanceMetrics,
-      recentActivity: recentActivity.map(user => ({
-        user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
-        action: 'Login',
-        time: this.getTimeAgo(user.lastLoginAt),
-        status: user.isActive ? 'active' : 'inactive',
-      })),
+      recentActivity,
       userAlerts,
     };
   }
