@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Delete, UseGuards, Request, Res } from '@nestjs/common';
+import { Controller, Post, Get, Body, HttpCode, HttpStatus, Delete, UseGuards, Request, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
@@ -114,6 +114,29 @@ export class AuthController {
     // Clear the isAuthenticated cookie
     res.cookie('isAuthenticated', '', { path: '/', expires: new Date(0) });
     return res.status(HttpStatus.OK).json({ message: 'Logout successful' });
+  }
+
+  @Get('validate')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Validate authentication token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Token is valid',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token is invalid or expired',
+  })
+  async validateToken(@Request() req): Promise<any> {
+    return { 
+      valid: true, 
+      user: {
+        exeId: req.user.exeId,
+        companyId: req.user.companyId,
+        userType: req.user.userType
+      }
+    };
   }
 
   @Post('location/store')
