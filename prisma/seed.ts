@@ -162,6 +162,9 @@ async function main() {
       discountAmount: 0,
       discountPercentage: 0,
       isActive: true,
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
     },
     {
       itemCode: 'PROD002',
@@ -176,6 +179,9 @@ async function main() {
       discountAmount: 0,
       discountPercentage: 0,
       isActive: true,
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
     },
     {
       itemCode: 'PROD003',
@@ -190,6 +196,9 @@ async function main() {
       discountAmount: 0,
       discountPercentage: 0,
       isActive: true,
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
     },
     {
       itemCode: 'PROD004',
@@ -204,6 +213,9 @@ async function main() {
       discountAmount: 0,
       discountPercentage: 0,
       isActive: true,
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
     },
     {
       itemCode: 'PROD005',
@@ -218,6 +230,9 @@ async function main() {
       discountAmount: 0,
       discountPercentage: 0,
       isActive: true,
+      isSaved: false,
+      isSold: false,
+      isNewShipment: false,
     },
   ];
 

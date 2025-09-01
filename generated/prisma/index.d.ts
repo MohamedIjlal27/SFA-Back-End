@@ -5944,6 +5944,9 @@ export namespace Prisma {
     discountAmount: Decimal | null
     discountPercentage: Decimal | null
     isActive: boolean | null
+    isSaved: boolean | null
+    isSold: boolean | null
+    isNewShipment: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5963,6 +5966,9 @@ export namespace Prisma {
     discountAmount: Decimal | null
     discountPercentage: Decimal | null
     isActive: boolean | null
+    isSaved: boolean | null
+    isSold: boolean | null
+    isNewShipment: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5982,6 +5988,9 @@ export namespace Prisma {
     discountAmount: number
     discountPercentage: number
     isActive: number
+    isSaved: number
+    isSold: number
+    isNewShipment: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6017,6 +6026,9 @@ export namespace Prisma {
     discountAmount?: true
     discountPercentage?: true
     isActive?: true
+    isSaved?: true
+    isSold?: true
+    isNewShipment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6036,6 +6048,9 @@ export namespace Prisma {
     discountAmount?: true
     discountPercentage?: true
     isActive?: true
+    isSaved?: true
+    isSold?: true
+    isNewShipment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6055,6 +6070,9 @@ export namespace Prisma {
     discountAmount?: true
     discountPercentage?: true
     isActive?: true
+    isSaved?: true
+    isSold?: true
+    isNewShipment?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6161,6 +6179,9 @@ export namespace Prisma {
     discountAmount: Decimal
     discountPercentage: Decimal
     isActive: boolean
+    isSaved: boolean
+    isSold: boolean
+    isNewShipment: boolean
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
@@ -6199,6 +6220,9 @@ export namespace Prisma {
     discountAmount?: boolean
     discountPercentage?: boolean
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -6221,6 +6245,9 @@ export namespace Prisma {
     discountAmount?: boolean
     discountPercentage?: boolean
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -6241,6 +6268,9 @@ export namespace Prisma {
     discountAmount?: boolean
     discountPercentage?: boolean
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -6275,6 +6305,9 @@ export namespace Prisma {
       discountAmount: Prisma.Decimal
       discountPercentage: Prisma.Decimal
       isActive: boolean
+      isSaved: boolean
+      isSold: boolean
+      isNewShipment: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["product"]>
@@ -6686,6 +6719,9 @@ export namespace Prisma {
     readonly discountAmount: FieldRef<"Product", 'Decimal'>
     readonly discountPercentage: FieldRef<"Product", 'Decimal'>
     readonly isActive: FieldRef<"Product", 'Boolean'>
+    readonly isSaved: FieldRef<"Product", 'Boolean'>
+    readonly isSold: FieldRef<"Product", 'Boolean'>
+    readonly isNewShipment: FieldRef<"Product", 'Boolean'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
   }
@@ -15524,6 +15560,9 @@ export namespace Prisma {
     discountAmount: 'discountAmount',
     discountPercentage: 'discountPercentage',
     isActive: 'isActive',
+    isSaved: 'isSaved',
+    isSold: 'isSold',
+    isNewShipment: 'isNewShipment',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16237,6 +16276,9 @@ export namespace Prisma {
     discountAmount?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     isActive?: BoolFilter<"Product"> | boolean
+    isSaved?: BoolFilter<"Product"> | boolean
+    isSold?: BoolFilter<"Product"> | boolean
+    isNewShipment?: BoolFilter<"Product"> | boolean
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     company?: XOR<CompanyRelationFilter, CompanyWhereInput>
@@ -16258,6 +16300,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     discountPercentage?: SortOrder
     isActive?: SortOrder
+    isSaved?: SortOrder
+    isSold?: SortOrder
+    isNewShipment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     company?: CompanyOrderByWithRelationInput
@@ -16283,6 +16328,9 @@ export namespace Prisma {
     discountAmount?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     isActive?: BoolFilter<"Product"> | boolean
+    isSaved?: BoolFilter<"Product"> | boolean
+    isSold?: BoolFilter<"Product"> | boolean
+    isNewShipment?: BoolFilter<"Product"> | boolean
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     company?: XOR<CompanyRelationFilter, CompanyWhereInput>
@@ -16304,6 +16352,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     discountPercentage?: SortOrder
     isActive?: SortOrder
+    isSaved?: SortOrder
+    isSold?: SortOrder
+    isNewShipment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -16331,6 +16382,9 @@ export namespace Prisma {
     discountAmount?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
     isActive?: BoolWithAggregatesFilter<"Product"> | boolean
+    isSaved?: BoolWithAggregatesFilter<"Product"> | boolean
+    isSold?: BoolWithAggregatesFilter<"Product"> | boolean
+    isNewShipment?: BoolWithAggregatesFilter<"Product"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
@@ -17612,6 +17666,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutProductsInput
@@ -17633,6 +17690,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -17652,6 +17712,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutProductsNestedInput
@@ -17673,6 +17736,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -17693,6 +17759,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17711,6 +17780,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17730,6 +17802,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19069,6 +19144,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     discountPercentage?: SortOrder
     isActive?: SortOrder
+    isSaved?: SortOrder
+    isSold?: SortOrder
+    isNewShipment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19095,6 +19173,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     discountPercentage?: SortOrder
     isActive?: SortOrder
+    isSaved?: SortOrder
+    isSold?: SortOrder
+    isNewShipment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19114,6 +19195,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     discountPercentage?: SortOrder
     isActive?: SortOrder
+    isSaved?: SortOrder
+    isSold?: SortOrder
+    isNewShipment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -21314,6 +21398,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
@@ -21333,6 +21420,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -21764,6 +21854,9 @@ export namespace Prisma {
     discountAmount?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     isActive?: BoolFilter<"Product"> | boolean
+    isSaved?: BoolFilter<"Product"> | boolean
+    isSold?: BoolFilter<"Product"> | boolean
+    isNewShipment?: BoolFilter<"Product"> | boolean
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
   }
@@ -23395,6 +23488,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutProductsInput
@@ -23415,6 +23511,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23529,6 +23628,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutProductsNestedInput
@@ -23549,6 +23651,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24885,6 +24990,9 @@ export namespace Prisma {
     discountAmount?: Decimal | DecimalJsLike | number | string
     discountPercentage?: Decimal | DecimalJsLike | number | string
     isActive?: boolean
+    isSaved?: boolean
+    isSold?: boolean
+    isNewShipment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25232,6 +25340,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
@@ -25251,6 +25362,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -25270,6 +25384,9 @@ export namespace Prisma {
     discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     discountPercentage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isSaved?: BoolFieldUpdateOperationsInput | boolean
+    isSold?: BoolFieldUpdateOperationsInput | boolean
+    isNewShipment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

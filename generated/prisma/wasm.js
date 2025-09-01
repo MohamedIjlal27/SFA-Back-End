@@ -205,6 +205,9 @@ exports.Prisma.ProductScalarFieldEnum = {
   discountAmount: 'discountAmount',
   discountPercentage: 'discountPercentage',
   isActive: 'isActive',
+  isSaved: 'isSaved',
+  isSold: 'isSold',
+  isNewShipment: 'isNewShipment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
