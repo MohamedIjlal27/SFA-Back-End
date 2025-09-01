@@ -1,14 +1,17 @@
-import { Controller, Get, Query, Param, UseGuards, Request, Post, Body, UploadedFile, UseInterceptors, HttpException, HttpStatus, Put, Delete } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import axios from 'axios';
-import * as FormData from 'form-data';
+import { Controller, Get, Query, Param, UseGuards, Request, Post, Body, Put, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { ProductDto, PaginationDto, PaginatedProductsResponseDto } from '../common/dto/product.dto';
-
-const UPLOADTHING_TOKEN = process.env.UPLOADTHING_TOKEN;
-const UPLOADTHING_URL = 'https://uploadthing.com/api/uploadFiles';
+import { 
+  ProductDto, 
+  PaginationDto, 
+  PaginatedProductsResponseDto, 
+  CreateProductDto, 
+  UpdateProductDto, 
+  BulkCreateProductDto, 
+  ProductSearchDto, 
+  ProductStatsDto
+} from '../common/dto/product.dto';
 
 @ApiTags('Products')
 @Controller('ic')
@@ -77,6 +80,17 @@ export class ProductsController {
     return this.productsService.searchProducts(query, req.user.companyId);
   }
 
+  @Post('items/advanced-search')
+  @ApiOperation({ summary: 'Advanced product search with filters' })
+  @ApiResponse({
+    status: 200,
+    description: 'Advanced search completed',
+    type: [ProductDto],
+  })
+  async advancedSearch(@Body() searchDto: ProductSearchDto, @Request() req): Promise<ProductDto[]> {
+    return this.productsService.advancedSearch(searchDto, req.user.companyId);
+  }
+
   @Get('items/category/:category')
   @ApiOperation({ summary: 'Get products by category' })
   @ApiResponse({
@@ -139,56 +153,81 @@ export class ProductsController {
     return this.productsService.getTotalCount(req.user.companyId);
   }
 
-  @Post('upload-image')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Upload product image using UploadThing' })
-  @ApiResponse({ status: 201, description: 'Image uploaded successfully', type: String })
-  async uploadImage(@UploadedFile() file: any): Promise<{ url: string }> {
-    if (!file) {
-      throw new HttpException('No file uploaded', HttpStatus.BAD_REQUEST);
-    }
-    if (!UPLOADTHING_TOKEN) {
-      throw new HttpException('UploadThing token not configured', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    // Upload to UploadThing
-    const formData = new FormData();
-    formData.append('file', file.buffer, file.originalname);
-    const response = await axios.post(UPLOADTHING_URL, formData, {
-      headers: {
-        'Authorization': `Bearer ${UPLOADTHING_TOKEN}`,
-        ...formData.getHeaders(),
-      },
-    });
-    if (!response.data || !response.data.url) {
-      throw new HttpException('Failed to upload image', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    return { url: response.data.url };
+  @Get('stats')
+  @ApiOperation({ summary: 'Get product statistics' })
+  @ApiResponse({
+    status: 200,
+    description: 'Product statistics retrieved successfully',
+    type: ProductStatsDto,
+  })
+  async getProductStats(@Request() req): Promise<ProductStatsDto> {
+    return this.productsService.getProductStats(req.user.companyId);
   }
+
+
 
   @Post('items')
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({ status: 201, description: 'Product created successfully', type: ProductDto })
-  async createProduct(@Body() productData: any, @Request() req): Promise<ProductDto> {
+  @ApiResponse({ status: 409, description: 'Product with item code already exists' })
+  async createProduct(@Body() productData: CreateProductDto, @Request() req): Promise<ProductDto> {
     // Attach companyId from JWT
     const data = { ...productData, companyId: req.user.companyId };
     return this.productsService.createProduct(data);
   }
 
+  @Post('items/bulk')
+  @ApiOperation({ summary: 'Create multiple products in bulk' })
+  @ApiResponse({ status: 201, description: 'Products created successfully', type: [ProductDto] })
+  @ApiResponse({ status: 409, description: 'Some products with item codes already exist' })
+  async bulkCreateProducts(@Body() bulkData: BulkCreateProductDto, @Request() req): Promise<ProductDto[]> {
+    // Attach companyId from JWT
+    const data = { ...bulkData, companyId: req.user.companyId };
+    return this.productsService.bulkCreateProducts(data);
+  }
+
   @Put('items/:itemCode')
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 200, description: 'Product updated successfully', type: ProductDto })
+  @ApiResponse({ status: 404, description: 'Product not found' })
   async updateProduct(
     @Param('itemCode') itemCode: string,
-    @Body() productData: any,
+    @Body() productData: UpdateProductDto,
     @Request() req
   ): Promise<ProductDto> {
     const data = { ...productData, companyId: req.user.companyId };
     return this.productsService.updateProduct(itemCode, data);
   }
 
+  @Put('items/:itemCode/image')
+  @ApiOperation({ summary: 'Update product image' })
+  @ApiResponse({ status: 200, description: 'Product image updated successfully', type: ProductDto })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  async updateProductImage(
+    @Param('itemCode') itemCode: string,
+    @Body('imageUrl') imageUrl: string,
+    @Request() req
+  ): Promise<ProductDto> {
+    return this.productsService.updateProductImage(itemCode, imageUrl, req.user.companyId);
+  }
+
+  @Put('items/:itemCode/stock')
+  @ApiOperation({ summary: 'Update product stock quantity' })
+  @ApiResponse({ status: 200, description: 'Product stock updated successfully', type: ProductDto })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  @ApiResponse({ status: 400, description: 'Invalid quantity' })
+  async updateProductStock(
+    @Param('itemCode') itemCode: string,
+    @Body('qty') qty: number,
+    @Request() req
+  ): Promise<ProductDto> {
+    return this.productsService.updateProductStock(itemCode, qty, req.user.companyId);
+  }
+
   @Delete('items/:itemCode')
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 200, description: 'Product deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Product not found' })
   async deleteProduct(
     @Param('itemCode') itemCode: string,
     @Request() req
