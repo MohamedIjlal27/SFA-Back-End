@@ -412,8 +412,8 @@ export class UsersService {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    // Ultra-simplified approach - just get basic counts
-    const [total, active, inactive, newUsersThisMonth] = await Promise.all([
+    // Optimized: Execute all database queries in parallel to reduce total time
+    const [total, active, inactive, newUsersThisMonth, usersWithLogins, roleDistribution, recentActivity] = await Promise.all([
       this.prisma.user.count({ where }),
       this.prisma.user.count({ where: { ...where, isActive: true } }),
       this.prisma.user.count({ where: { ...where, isActive: false } }),
@@ -426,16 +426,35 @@ export class UsersService {
           },
         },
       }),
+      this.prisma.user.count({
+        where: {
+          ...where,
+          lastLoginAt: { not: null },
+        },
+      }),
+      this.prisma.user.groupBy({
+        by: ['role'],
+        where,
+        _count: {
+          role: true,
+        },
+      }),
+      this.prisma.user.findMany({
+        where: {
+          ...where,
+          lastLoginAt: { not: null },
+        },
+        orderBy: { lastLoginAt: 'desc' },
+        take: 5,
+        select: {
+          exeId: true,
+          firstName: true,
+          lastName: true,
+          isActive: true,
+          lastLoginAt: true,
+        },
+      }),
     ]);
-
-    // Simple role distribution
-    const roleDistribution = await this.prisma.user.groupBy({
-      by: ['role'],
-      where,
-      _count: {
-        role: true,
-      },
-    });
 
     const userRoles = roleDistribution.map(role => ({
       name: role.role || 'Unknown',
@@ -453,23 +472,6 @@ export class UsersService {
       { month: 'Aug', logins: newUsersThisMonth * 3, newUsers: newUsersThisMonth, activeUsers: active },
     ];
 
-    // Simple recent activity
-    const recentActivity = await this.prisma.user.findMany({
-      where: {
-        ...where,
-        lastLoginAt: { not: null },
-      },
-      orderBy: { lastLoginAt: 'desc' },
-      take: 5,
-      select: {
-        exeId: true,
-        firstName: true,
-        lastName: true,
-        isActive: true,
-        lastLoginAt: true,
-      },
-    });
-
     const recentActivityFormatted = recentActivity.map(user => ({
       user: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.exeId,
       action: 'Login',
@@ -479,14 +481,6 @@ export class UsersService {
 
     // Simple user alerts - just return empty array for now
     const userAlerts = [];
-
-    // Calculate average login frequency
-    const usersWithLogins = await this.prisma.user.count({
-      where: {
-        ...where,
-        lastLoginAt: { not: null },
-      },
-    });
 
     const averageLoginFrequency = usersWithLogins > 0 ? (active / usersWithLogins * 7).toFixed(1) : '0';
 
