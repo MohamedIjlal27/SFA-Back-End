@@ -20,8 +20,19 @@ import {
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @Get('items')
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({
+    status: 200,
+    description: 'Products retrieved successfully',
+    type: [ProductDto],
+  })
+  async getAllProducts(@Request() req): Promise<ProductDto[]> {
+    return this.productsService.getProducts(req.user.companyId);
+  }
+
   @Get('items/list')
-  @ApiOperation({ summary: 'Get all products (deprecated - use /items/paginated)' })
+  @ApiOperation({ summary: 'Get all products (deprecated - use /items)' })
   @ApiResponse({
     status: 200,
     description: 'Products retrieved successfully',
