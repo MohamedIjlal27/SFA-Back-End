@@ -93,6 +93,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   itemCode: string;
 
+  @ApiProperty({ description: 'Company ID for multi-tenancy (optional - will be overridden by authenticated user)', required: false })
+  @IsString()
+  @IsOptional()
+  companyId?: string;
+
   @ApiProperty({ description: 'Product description/name' })
   @IsString()
   @IsNotEmpty()
