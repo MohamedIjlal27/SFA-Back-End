@@ -96,7 +96,6 @@ export class ProductsService {
   async getProducts(companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
-        isActive: true,
         companyId,
       },
       orderBy: {
@@ -252,7 +251,6 @@ export class ProductsService {
     const categories = await this.prisma.product.groupBy({
       by: ['category'],
       where: {
-        isActive: true,
         companyId,
         category: {
           not: null,
@@ -270,7 +268,6 @@ export class ProductsService {
 
   async getSubCategories(category: string | undefined, companyId: string): Promise<string[]> {
     const whereClause: any = {
-      isActive: true,
       companyId,
       subCategory: {
         not: null,
