@@ -57,6 +57,10 @@ export class ProductDto {
   @IsOptional()
   imageUrl?: string;
 
+  @ApiProperty({ description: 'Product variations (e.g., Color, Size)', required: false, type: [Object] })
+  @IsOptional()
+  variants?: { name: string; value: string }[];
+
   @ApiProperty({ description: 'Discount amount' })
   @IsNumber()
   @Min(0)
@@ -148,6 +152,10 @@ export class CreateProductDto {
   @IsOptional()
   imageUrl?: string;
 
+  @ApiProperty({ description: 'Product variations (e.g., Color, Size)', required: false, type: [Object] })
+  @IsOptional()
+  variants?: { name: string; value: string }[];
+
   @ApiProperty({ description: 'Discount amount', default: 0 })
   @IsNumber()
   @Min(0)
@@ -214,6 +222,10 @@ export class UpdateProductDto {
   @IsUrl()
   @IsOptional()
   imageUrl?: string;
+
+  @ApiProperty({ description: 'Product variations (e.g., Color, Size)', required: false, type: [Object] })
+  @IsOptional()
+  variants?: { name: string; value: string }[];
 
   @ApiProperty({ description: 'Discount amount' })
   @IsNumber()

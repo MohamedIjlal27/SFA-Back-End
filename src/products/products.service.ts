@@ -384,7 +384,7 @@ export class ProductsService {
     }
 
     const product = await this.prisma.product.create({
-      data: {
+      data: ({
         itemCode,
         name: data.name,
         description: data.description,
@@ -395,11 +395,12 @@ export class ProductsService {
         price: data.price,
         qty: data.qty,
         imageUrl: data.imageUrl,
+        variants: (data as any).variants,
         discountAmount: data.discountAmount ?? 0,
         discountPercentage: data.discountPercentage ?? 0,
         isActive: data.isActive ?? true,
         companyId: data.companyId,
-      },
+      } as any),
     });
 
     return this.mapToProductDto(product);
@@ -470,7 +471,7 @@ export class ProductsService {
           companyId: data.companyId,
         },
       },
-      data: {
+      data: ({
         description: data.description,
         category: data.category,
         subCategory: data.subCategory,
@@ -479,10 +480,11 @@ export class ProductsService {
         price: data.price,
         qty: data.qty,
         imageUrl: data.imageUrl,
+        variants: (data as any).variants,
         discountAmount: data.discountAmount,
         discountPercentage: data.discountPercentage,
         isActive: data.isActive,
-      },
+      } as any),
     });
 
     return this.mapToProductDto(product);
@@ -618,6 +620,7 @@ export class ProductsService {
       price: Number(product.price),
       qty: product.qty,
       imageUrl: product.imageUrl,
+      variants: product.variants as any,
       discountAmount: Number(product.discountAmount),
       discountPercentage: Number(product.discountPercentage),
       isSaved: false,

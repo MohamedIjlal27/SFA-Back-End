@@ -129,6 +129,7 @@ model Product {
   price              Decimal     @db.Decimal(15, 2)
   qty                Int         @default(0)
   imageUrl           String?
+  variants           Json?
   discountAmount     Decimal     @default(0) @db.Decimal(15, 2)
   discountPercentage Decimal     @default(0) @db.Decimal(5, 2)
   isActive           Boolean     @default(true)
