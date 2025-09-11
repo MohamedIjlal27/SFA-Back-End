@@ -623,6 +623,7 @@ export class ProductsService {
       variants: product.variants as any,
       discountAmount: Number(product.discountAmount),
       discountPercentage: Number(product.discountPercentage),
+      isActive: product.isActive,
       isSaved: false,
       isSold: false,
       isNewShipment: false,

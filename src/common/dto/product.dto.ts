@@ -72,6 +72,10 @@ export class ProductDto {
   @Max(100)
   discountPercentage: number;
 
+  @ApiProperty({ description: 'Whether product is active', default: true })
+  @IsBoolean()
+  isActive: boolean;
+
   @ApiProperty({ description: 'Whether product is saved', default: false })
   @IsBoolean()
   @IsOptional()
