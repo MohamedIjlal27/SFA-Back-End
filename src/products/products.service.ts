@@ -20,10 +20,7 @@ export class ProductsService {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const whereClause: any = {
-      isActive: true,
-      companyId,
-    };
+    const whereClause: any = { companyId };
 
     // Add search filter
     if (search) {
@@ -122,7 +119,6 @@ export class ProductsService {
   async searchProducts(query: string, companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
-        isActive: true,
         companyId,
         OR: [
           {
@@ -156,10 +152,7 @@ export class ProductsService {
   async advancedSearch(searchDto: ProductSearchDto, companyId: string): Promise<ProductDto[]> {
     const { query, category, subcategory, minPrice, maxPrice, inStockOnly } = searchDto;
 
-    const whereClause: any = {
-      isActive: true,
-      companyId,
-    };
+    const whereClause: any = { companyId };
 
     // Add search query
     if (query) {
@@ -232,7 +225,6 @@ export class ProductsService {
   async getProductsByCategory(category: string, companyId: string): Promise<ProductDto[]> {
     const products = await this.prisma.product.findMany({
       where: {
-        isActive: true,
         companyId,
         category: {
           contains: category,
