@@ -12,7 +12,12 @@ export class ProductDto {
   @IsNotEmpty()
   companyId: string;
 
-  @ApiProperty({ description: 'Product description/name' })
+  @ApiProperty({ description: 'Product name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: 'Product description' })
   @IsString()
   @IsNotEmpty()
   description: string;
@@ -98,7 +103,12 @@ export class CreateProductDto {
   @IsOptional()
   companyId?: string;
 
-  @ApiProperty({ description: 'Product description/name' })
+  @ApiProperty({ description: 'Product name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: 'Product description' })
   @IsString()
   @IsNotEmpty()
   description: string;
@@ -158,7 +168,12 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto {
-  @ApiProperty({ description: 'Product description/name' })
+  @ApiProperty({ description: 'Product name' })
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @ApiProperty({ description: 'Product description' })
   @IsString()
   @IsOptional()
   description?: string;

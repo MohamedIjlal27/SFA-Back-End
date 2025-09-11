@@ -5933,6 +5933,7 @@ export namespace Prisma {
     id: string | null
     companyId: string | null
     itemCode: string | null
+    name: string | null
     description: string | null
     category: string | null
     subCategory: string | null
@@ -5955,6 +5956,7 @@ export namespace Prisma {
     id: string | null
     companyId: string | null
     itemCode: string | null
+    name: string | null
     description: string | null
     category: string | null
     subCategory: string | null
@@ -5977,6 +5979,7 @@ export namespace Prisma {
     id: number
     companyId: number
     itemCode: number
+    name: number
     description: number
     category: number
     subCategory: number
@@ -6015,6 +6018,7 @@ export namespace Prisma {
     id?: true
     companyId?: true
     itemCode?: true
+    name?: true
     description?: true
     category?: true
     subCategory?: true
@@ -6037,6 +6041,7 @@ export namespace Prisma {
     id?: true
     companyId?: true
     itemCode?: true
+    name?: true
     description?: true
     category?: true
     subCategory?: true
@@ -6059,6 +6064,7 @@ export namespace Prisma {
     id?: true
     companyId?: true
     itemCode?: true
+    name?: true
     description?: true
     category?: true
     subCategory?: true
@@ -6168,6 +6174,7 @@ export namespace Prisma {
     id: string
     companyId: string
     itemCode: string
+    name: string
     description: string
     category: string | null
     subCategory: string | null
@@ -6209,6 +6216,7 @@ export namespace Prisma {
     id?: boolean
     companyId?: boolean
     itemCode?: boolean
+    name?: boolean
     description?: boolean
     category?: boolean
     subCategory?: boolean
@@ -6234,6 +6242,7 @@ export namespace Prisma {
     id?: boolean
     companyId?: boolean
     itemCode?: boolean
+    name?: boolean
     description?: boolean
     category?: boolean
     subCategory?: boolean
@@ -6257,6 +6266,7 @@ export namespace Prisma {
     id?: boolean
     companyId?: boolean
     itemCode?: boolean
+    name?: boolean
     description?: boolean
     category?: boolean
     subCategory?: boolean
@@ -6294,6 +6304,7 @@ export namespace Prisma {
       id: string
       companyId: string
       itemCode: string
+      name: string
       description: string
       category: string | null
       subCategory: string | null
@@ -6708,6 +6719,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Product", 'String'>
     readonly companyId: FieldRef<"Product", 'String'>
     readonly itemCode: FieldRef<"Product", 'String'>
+    readonly name: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly category: FieldRef<"Product", 'String'>
     readonly subCategory: FieldRef<"Product", 'String'>
@@ -15549,6 +15561,7 @@ export namespace Prisma {
     id: 'id',
     companyId: 'companyId',
     itemCode: 'itemCode',
+    name: 'name',
     description: 'description',
     category: 'category',
     subCategory: 'subCategory',
@@ -16265,6 +16278,7 @@ export namespace Prisma {
     id?: StringFilter<"Product"> | string
     companyId?: StringFilter<"Product"> | string
     itemCode?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     category?: StringNullableFilter<"Product"> | string | null
     subCategory?: StringNullableFilter<"Product"> | string | null
@@ -16289,6 +16303,7 @@ export namespace Prisma {
     id?: SortOrder
     companyId?: SortOrder
     itemCode?: SortOrder
+    name?: SortOrder
     description?: SortOrder
     category?: SortOrderInput | SortOrder
     subCategory?: SortOrderInput | SortOrder
@@ -16317,6 +16332,7 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     companyId?: StringFilter<"Product"> | string
     itemCode?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     category?: StringNullableFilter<"Product"> | string | null
     subCategory?: StringNullableFilter<"Product"> | string | null
@@ -16341,6 +16357,7 @@ export namespace Prisma {
     id?: SortOrder
     companyId?: SortOrder
     itemCode?: SortOrder
+    name?: SortOrder
     description?: SortOrder
     category?: SortOrderInput | SortOrder
     subCategory?: SortOrderInput | SortOrder
@@ -16371,6 +16388,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Product"> | string
     companyId?: StringWithAggregatesFilter<"Product"> | string
     itemCode?: StringWithAggregatesFilter<"Product"> | string
+    name?: StringWithAggregatesFilter<"Product"> | string
     description?: StringWithAggregatesFilter<"Product"> | string
     category?: StringNullableWithAggregatesFilter<"Product"> | string | null
     subCategory?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -17655,6 +17673,7 @@ export namespace Prisma {
   export type ProductCreateInput = {
     id?: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -17679,6 +17698,7 @@ export namespace Prisma {
     id?: string
     companyId: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -17701,6 +17721,7 @@ export namespace Prisma {
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17725,6 +17746,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17748,6 +17770,7 @@ export namespace Prisma {
     id?: string
     companyId: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -17769,6 +17792,7 @@ export namespace Prisma {
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17791,6 +17815,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19133,6 +19158,7 @@ export namespace Prisma {
     id?: SortOrder
     companyId?: SortOrder
     itemCode?: SortOrder
+    name?: SortOrder
     description?: SortOrder
     category?: SortOrder
     subCategory?: SortOrder
@@ -19162,6 +19188,7 @@ export namespace Prisma {
     id?: SortOrder
     companyId?: SortOrder
     itemCode?: SortOrder
+    name?: SortOrder
     description?: SortOrder
     category?: SortOrder
     subCategory?: SortOrder
@@ -19184,6 +19211,7 @@ export namespace Prisma {
     id?: SortOrder
     companyId?: SortOrder
     itemCode?: SortOrder
+    name?: SortOrder
     description?: SortOrder
     category?: SortOrder
     subCategory?: SortOrder
@@ -21387,6 +21415,7 @@ export namespace Prisma {
   export type ProductCreateWithoutCompanyInput = {
     id?: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -21409,6 +21438,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutCompanyInput = {
     id?: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -21843,6 +21873,7 @@ export namespace Prisma {
     id?: StringFilter<"Product"> | string
     companyId?: StringFilter<"Product"> | string
     itemCode?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     category?: StringNullableFilter<"Product"> | string | null
     subCategory?: StringNullableFilter<"Product"> | string | null
@@ -23477,6 +23508,7 @@ export namespace Prisma {
   export type ProductCreateWithoutOrderItemsInput = {
     id?: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -23500,6 +23532,7 @@ export namespace Prisma {
     id?: string
     companyId: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -23617,6 +23650,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23640,6 +23674,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     companyId?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24979,6 +25014,7 @@ export namespace Prisma {
   export type ProductCreateManyCompanyInput = {
     id?: string
     itemCode: string
+    name: string
     description: string
     category?: string | null
     subCategory?: string | null
@@ -25329,6 +25365,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25351,6 +25388,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25373,6 +25411,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     subCategory?: NullableStringFieldUpdateOperationsInput | string | null

@@ -380,6 +380,7 @@ export class ProductsService {
     const product = await this.prisma.product.create({
       data: {
         itemCode: data.itemCode,
+        name: data.name,
         description: data.description,
         category: data.category || '',
         subCategory: data.subCategory || '',
@@ -421,6 +422,7 @@ export class ProductsService {
         this.prisma.product.create({
           data: {
             itemCode: productData.itemCode,
+            name: productData.name,
             description: productData.description,
             category: productData.category || '',
             subCategory: productData.subCategory || '',
@@ -569,6 +571,7 @@ export class ProductsService {
   private mapToProductDto(product: any): ProductDto {
     return {
       itemCode: product.itemCode,
+      name: product.name,
       description: product.description,
       category: product.category || '',
       subCategory: product.subCategory || '',

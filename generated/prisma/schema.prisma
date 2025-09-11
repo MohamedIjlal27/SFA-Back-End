@@ -120,6 +120,7 @@ model Product {
   companyId          String
   company            Company     @relation(fields: [companyId], references: [id])
   itemCode           String
+  name               String
   description        String
   category           String?
   subCategory        String?
