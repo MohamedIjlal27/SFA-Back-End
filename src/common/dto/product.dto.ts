@@ -93,10 +93,10 @@ export class ProductDto {
 }
 
 export class CreateProductDto {
-  @ApiProperty({ description: 'Unique product item code' })
+  @ApiProperty({ description: 'Unique product item code (optional - will be auto-generated if not provided)', required: false })
   @IsString()
-  @IsNotEmpty()
-  itemCode: string;
+  @IsOptional()
+  itemCode?: string;
 
   @ApiProperty({ description: 'Company ID for multi-tenancy (optional - will be overridden by authenticated user)', required: false })
   @IsString()

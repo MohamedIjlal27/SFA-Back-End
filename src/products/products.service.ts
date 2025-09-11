@@ -363,23 +363,29 @@ export class ProductsService {
   }
 
   async createProduct(data: CreateProductDto & { companyId: string }): Promise<ProductDto> {
+    // Generate item code if not provided
+    let itemCode = data.itemCode;
+    if (!itemCode) {
+      itemCode = await this.generateItemCode(data.category, data.companyId);
+    }
+
     // Check if product with same itemCode already exists
     const existingProduct = await this.prisma.product.findUnique({
       where: {
         itemCode_companyId: {
-          itemCode: data.itemCode,
+          itemCode,
           companyId: data.companyId,
         },
       },
     });
 
     if (existingProduct) {
-      throw new ConflictException(`Product with item code ${data.itemCode} already exists`);
+      throw new ConflictException(`Product with item code ${itemCode} already exists`);
     }
 
     const product = await this.prisma.product.create({
       data: {
-        itemCode: data.itemCode,
+        itemCode,
         name: data.name,
         description: data.description,
         category: data.category || '',
@@ -566,6 +572,38 @@ export class ProductsService {
     });
 
     return this.mapToProductDto(product);
+  }
+
+  private async generateItemCode(category: string | undefined, companyId: string): Promise<string> {
+    // Get category prefix (first 3 letters, uppercase)
+    const categoryPrefix = category 
+      ? category.substring(0, 3).toUpperCase().padEnd(3, 'X')
+      : 'PRD';
+    
+    // Generate timestamp-based suffix
+    const timestamp = Date.now().toString().slice(-6); // Last 6 digits of timestamp
+    
+    // Generate random 2-digit number
+    const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+    
+    const generatedCode = `${categoryPrefix}-${timestamp}-${randomNum}`;
+    
+    // Check if this code already exists
+    const existingProduct = await this.prisma.product.findUnique({
+      where: {
+        itemCode_companyId: {
+          itemCode: generatedCode,
+          companyId,
+        },
+      },
+    });
+
+    // If code exists, generate a new one recursively
+    if (existingProduct) {
+      return this.generateItemCode(category, companyId);
+    }
+
+    return generatedCode;
   }
 
   private mapToProductDto(product: any): ProductDto {
